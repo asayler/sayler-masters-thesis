@@ -1,0 +1,9 @@
+# LaTeX Cruff
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+
+# Output
+custos_hotstorage2013.pdf

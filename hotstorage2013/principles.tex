@@ -1,0 +1,149 @@
+\section{Principles of Custos}
+\label{sec:principles}
+
+We feel that there are three core principles necessary for
+successfully building a usable encryption key storage and access
+control system. The absence of these principles in existing data
+encryption systems has lead to the usability issues discussed in \S
+\ref{sec:intro}. In an effort to address these deficiencies and
+provide an alternative, we have designed Custos based around these
+core principles.
+
+\subsection{Decoupled Key Storage}
+
+Existing encryption systems almost always bundle their own key storage
+and access control components. This practice unnecessarily couples the
+authentication and authorization models used to protect encrypted
+files with the actual encryption itself. Such a coupling not only
+duplicates efforts across a wide range of encryption systems, but also
+reduces the user's flexibility to select encryption requirements
+separately from her selection of authentication and authorization
+requirements.
+
+Custos breaks this unnecessary coupling by providing ``Key Storage as
+a Service''. Custos's sole responsibility is to store the keys
+required to encrypt or decrypt specific files, and to control who may
+access each key. Custos exposes a key access API that provides a
+standardized interface through which a variety of file encryption
+systems may read, write, add, or delete keys. This allows Custos to
+focus on key storage and access management, while individual
+encryption systems focus on the actual file encryption. Key storage
+and access control is a fundamentally different problem than file
+encryption, and it requires a fundamentally separate service-oriented
+solution.
+
+Decoupling key storage and access control from the underlying
+encryption systems and exposing it via a well-defined interface is the
+key Custos principle, making all the other principals possible. The
+separation of responsibilities encouraged by well defined interfaces
+has been the catalyst for innovation in a variety of computing fields,
+from operating systems to networking and beyond. We believe that such
+a separation will have the same effect on encryption and data
+security. We thus see Custos as a component in a wider Software
+Defined Storage (SDS) ecosystem where it provides software-defined
+mechanisms for controlling key access on a fine grained scale.
+
+\subsection{Flexible Security Models}
+
+Not all data is equal, and neither is the means with which we must
+protect it. A highly sensitive personal file has very different
+authentication requirements and threat models than a document that is
+being composed by a team of trusted collaborating
+individuals. Likewise, different systems have different authentication
+capabilities. An interactive desktop application can partake in a
+separate set of authentication techniques than a non-interactive
+autonomous server is capable of using. The methods by which we
+authenticate actors wishing to access our data and the authorizations
+granted to each actor vary for each file we wish to protect. Any data
+encryption system that forces a single authentication model on all
+data it is designed to protect is inherently limiting.
+
+Custos strives to overcome this issue by providing a flexible and
+extensible authentication and requirements framework capable of
+supporting separate access and threat models for each individual
+file. Not unlike the Pluggable Authentication Module
+(PAM)~\cite{linux-pam} system used in many POSIX operating systems,
+Custos supports an extensible authentication and requirements module
+framework. Each module requires an actor wishing to access a key in
+the Custos system to satisfy a particular set of requirements before
+being allowed to proceed with its access request. Modules can be used
+to impose both authentication requirements on requesting actors as
+well as ``process'' requirements on client file systems. An example of
+the later would be requiring a new key to be provided with each file
+access in situations where forced re-keying of encrypted data is
+desirable. Each key in the Custos system has an associated module or
+list of modules that must be satisfied by the actor prior to being
+granted access to the key. Modules may be enabled, disabled, or
+chained together on a per-key basis. This system provides the user
+with a wide range of flexibility in selecting which access and threat
+models are appropriate for a particular file: allowing Custos to
+support a variety of use cases on the security vs accessibility
+spectrum.
+
+\subsection{Global Access and Centralization}
+
+The modern Internet not only allows us to move and share data at
+levels never before possible, in many instances it requires it. Our
+data is no longer limited to a single machine, or even a single
+user. It is highly mobile and often shared. We are used to storing our
+data in globally accessible locations (e.g. the Cloud) or
+synchronizing it across machines so that we may access it from a
+variety of devices in a variety of situations. Furthermore, sharing
+data with other users via a myriad of means (e-mail, file lockers,
+etc) is a natural and everyday occurrence. The key storage and access
+control mechanisms built into existing encryption system are not good
+at dealing with this lose model of data location or access domain.
+
+Custos addresses these issues via its design as a logically
+centralized, globally accessible ``Cloud'' service. Regardless of
+where an encrypted file system happens to be running, such systems can
+always access Custos via the Internet and attempt to obtain the
+encryption keys they require\footnote{This is not to imply that there
+  can only ever be a single instance of ``Custos'' available on the
+  public Internet. We envision many individuals operating their own
+  ``Custos'' servers for practical or compliance related reasons. But
+  all of these instance should be accessible from the public Internet,
+  facilitating Custos use regardless of location.}. This also extends
+to shared data available to multiple users. It does not matter if all
+users are located in a single domain or whether or not they can all
+make connections to a local trusted server. Any user with access to
+the Internet can request access to a key via Custos\footnote{The
+  principle that any user on the Internet should be able to request
+  access to any Custos-held key by no means implies that this request
+  should always be granted. The authentication and requirements
+  modules associated with each key will dictate the response to such a
+  request. But global accessibility ensures that access control
+  limitation are imposed by intentionally crafted policies and not by
+  limitations in the key storage system.}.
+
+In addition to global accessibility, the logically centralized nature
+of Custos provides it with audit, logging, and centralized management
+capabilities. Since access to an encrypted file must by nature begin
+with a Custos request for the associated key, Custos can be configured
+to log these requests. These logs may then be used to audit file
+access, revealing when and by which authentication means actors are
+accessing Custos-protected files. In addition to logging, Custos's
+centralized nature also makes it a simple choke point at which access
+to encrypted files distributed across a multitude of devices can by
+revoked or modified without needing to modify the files at each
+location directly. As suggested in \cite{Geambasu2011}, this
+capability can prove very useful in cases where devices storing data
+are lost or stolen, allowing the data to be effectively ``deleted''
+(or at least rendered unreadable) via the deletion of the associated
+centrally-managed encryption key.
+
+% Andy's Note: IS it worth addressing the somewhat in-depth point that
+% this form of key-based access logging and ``deletion'' only applies
+% to the access of a file on a securely implement client-system
+% (i.e. non key caching, etc)? Yes, an adversely-designed Custos
+% client only needs to hit Custos once per file, after which it can
+% either store a decrypted copy of the file or a local copy of the
+% key. But for the user wishing to secure their own data, a client
+% that avoids these behaviors would still allow key-based file access
+% revocation and logging in the event that the legitimate user losses
+% control of the device. Since we assume users wishing to use
+% encryption in the first case are also committed to the security of
+% their own data, I don't know that the adversarial-client'' threat
+% vector necessarily needs to be addressed at this time. Any user
+% wishing to employ an adversarial client might as well just forgo
+% using encryption in the first place...
