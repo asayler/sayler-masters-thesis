@@ -9,8 +9,9 @@ We use systems like Dropbox to store, sync, and
 share our files, but few existing encryption schemes support this
 usage. Cloud storage systems like Amazon S3 are in
 growing demand, but encrypting files stored on such system while also
-allowing access at a variety of end points is a major challenge. Many
-of our modern (and legacy) computing services, that are being migrated
+allowing access at a variety of end points is a major challenge -- 
+particularly for hybrid clouds.
+Many of our modern (and legacy) computing services, that are being migrated
 to public and private clouds, are designed to run in
 the background, devoid of interactive input.  Yet, most existing
 encryption solutions require interactive input in order to securely
@@ -22,7 +23,7 @@ system being largely unusable. This inflexibility is not due to the
 underlying encryption itself, but to the methods by which encryption
 keys are managed and stored. Today, most file encryption solutions
 tightly couple key storage with the underlying encryption. This is a
-mistake that has lead to a growing usability gap and the corresponding
+mistake that has led to a growing usability gap and the corresponding
 underutilization of encryption as a tool for securing and controlling
 our data \cite{Whitten1999, Sweikata2009, Kher2005, Geambasu2011}, and
 will carry over to the datacenter and cloud infrastructure.
@@ -48,7 +49,7 @@ Existing local encrypted file system solutions like
 dm-crypt~\cite{dm-crypt} and eCryptfs~\cite{Halcrow} suffer from a
 number of limitations related to their tightly-coupled local key
 storage and access management components. These systems work fine for an
-individual user like Alice wishing to secure file like her mail or
+individual user like Alice wishing to secure a file like her mail or
 documents and access them from a single machine. But they quickly
 break down when trying to move beyond the simple single-user,
 single-device use case. Alice can not access her encrypted mail file
@@ -151,16 +152,20 @@ centralized, globally accessible service.
 
 \section{Relation to VMWare}
 
+VMWare is at the center of the infrastructure in supporting our
+modern needs -- exactly the target of Custos.  Importantly,
 VMWare's product range extends far beyond virtualization technology.
 The security of the hypervisor has been studied by researchers and 
 industry alike.  The security of the
 network has received attention, and with the acquisition of Nicira and 
 the use of software-defined networking, VMWare is well positioned to
 isolate tenants.  We argue that enabling technology for encrypted file systems,
-beyond the encryption technology itself, has received little attention.
+beyond the encryption technology itself, has received little attention and
+VMWare is in great position to be at the forefront of this charge.
 Custos would be a great compliment to products such as vSphere Storage 
 Appliance.  In supporting this proposal, VMWare will be supporting 
-the research behind Custos, including the building of Custos and 
-more fully studying the variety of security models that will be
-needed.  With collaboration with VMWare, we will gain invaluable 
-insight into these security models.
+the research behind Custos, including support for the student(s) building 
+Custos and more fully studying the variety of security models that will be
+needed.  Given VMWares central role in datacenters and the cloud, 
+it is an ideal partnership for us in building Custos as we will gain invaluable 
+insight into the security needs of real users.
