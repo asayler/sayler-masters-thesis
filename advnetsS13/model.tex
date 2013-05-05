@@ -1,2 +1,52 @@
 \section{Threat Model and Limitations}
 \label{sec:model}
+
+The Custos threat model assumes that your Custos server is trusted. If
+the server is compromised, an adversary will have access to all of the
+keys stored there. We believe, however, that this is not as bad as it
+might sound for a few reasons:
+
+\begin{packed_item}
+\item The Custos server stores only keys, not data. Thus an adversary
+  would have to compromise your data store in addition to compromising
+  a Custos server in order to access your data.
+\item File systems may split up a single key into a variety of parts,
+  or may encrypt a single file multiple times using different keys,
+  and then store each separate key or each separate piece of a key on
+  a different Custos server. This allows the user to hedge against a
+  single compromised Custos server leading to the unauthorized
+  decryption of her data.
+\end{packed_item}
+
+It's also possible for clients to locally encrypt keys before shipping
+them off to Custos, although this action would negate many of the
+benefits Custos provides and reintroduce the inflexible-use-case
+problems inherent in existing encryption system. The Custos server
+could encrypt keys on a user's behalf using a user provided PSK, but
+again, this would limit Custos's flexibility in autonomous and
+sharing-related use cases. We are also exploring whether or not Custos
+could leverage trusted computing systems like TPM chips to provided
+additional server-side key storage security.
+
+Beyond the security of the Custos server and the keys stored there,
+the threat model for a given encrypted file with it's key stored in
+Custos is largely a function of the authentication modules associated
+with the key and the implementation of the encrypted file system using
+Custos. For example, a Custos-integrated file system may opt to
+maintain a local cache of Custos keys to allow offline file
+access. Such behavior, however, would open an additional attack vector
+whereby an adversary must only compromise a local key cache to gain
+file access without ever having to compromise a Custos server
+itself. Custos, however, is designed to be flexible, which means
+leaving such trade-offs up to each individual file system.
+
+Like most encrypted file systems, key-access in Custos is a one-time
+play: once a user or system has been granted access to a key, it must
+be assumed that the user or system will always have access to that key
+since they can copy and store the key indefinitely. Thus, there is no
+reliable way to revoke access to a key once access is granted. This
+limitation can be mitigated by having the file system rotate the
+encryption key each time a file is updated. Thus, each version of a
+file has it's own encryption key. While we can not revoke access to a
+version of a file once granted, we can revoke access to all future
+versions of the file. Custos supports this usage natively.
