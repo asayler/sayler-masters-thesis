@@ -1,0 +1,31 @@
+\section{Conclusions and Future Work}
+\label{sec:conclusion}
+
+Encryption key storage is too tightly coupled with existing encrypted
+file system solutions. This tight coupling makes these systems
+inflexible and thus unsuitable for many of our required use cases.
+Such inflexibility leads to the underutilization of data encryption by
+vast portions of the user base at a time when encryption is becoming a
+more and more important tool for retaining control of our data. We
+believe that this issue can be solved by providing a ``Key Storage as
+a Service'' system that separates encryption key storage and access
+control from the underlying encryption mechanisms that use these
+keys. Custos provides this flexible Cloud-based key storage service.
+
+We are currently working on building a full Custos prototype that
+integrates with a basic encrypted file system~\cite{sayler-os-encfs}
+built atop the Linux FUSE API. We hope to use this prototype to refine
+the structure of both the management and key access APIs and to prove
+out our modular authentication and requirements framework. Going
+forward, we hope to provide example Custos integrations with a variety
+of existing secure file systems, from systems like eCryptfs to systems
+like OceanStore. We plan to use these implementations to demonstrate
+how Custos can extend the flexibility and usability of a variety of
+encryption solutions across a variety of use cases. We also plan to
+further analyze the threat vectors inherent to a ``Key Storage as a
+Service'' system and provide suggestions for practically mitigating
+these threats in Custos deployments. We have plans to explore a
+multi-provider Custos system that reduces the trust required for each
+Custos server in favor of distributing portions of each key across
+multiple servers. We hope to investigate the usability of Custos in a
+variety of real-world use cases.
