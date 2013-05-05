@@ -1,2 +1,58 @@
 \section{Implementation}
 \label{sec:implementation}
+
+We have built a basic Custos prototype that interfaces with a simple
+FUSE-based encrypted file system~\cite{sayler-os-encfs} running on
+Linux. Our Custos server is programmed in the Go programming language
+and runs on any internet-accessible server supporting Go. In this
+section, we'll provide a brief overview of the server, file system,
+and manner in which they interact.
+
+Our FUSE file system uses the OpenSSL crypto libraries to provide
+AES-256 encryption on a per-file basis. At this time, only files, not
+directory structure, are encrypted. Each file contains an unencrypted
+header that stores the UUID used to associate the file with the
+corresponding key in Custos as well as the URI of the Custos server
+currently storing this key. When a file is opened, the file system
+strips off this headers and parses it in order to generate a Custos
+``Get key'' request using the UUID and URI. The file system performs
+the Custos ``Get Key'' request to the RESTful Custos HTTP
+interface. Custos responds with a list of required authentication
+parameters. The file system then makes a second ``Get Key'' request
+proving the required authentication parameters (assuming they are
+available). If the authentication parameters satisfy the requirements,
+Custos responds by providing the key associated with the file. The
+file system then decrypt the file using this key to a temporary
+location and continues processing the user's post-open file actions.
+
+When the user closes the file, roughly the same process occurs in
+order to obtain the file key and re-encrypt the file. The file system
+may optional cache the key while the file is open to avoid this second
+Custos request. It's also possible for the file system to simply
+generate a new key and UUID each time a file must be re-encrypted and
+store it in Custos. This form of ``re-key on change'' system provides
+the user with the option of not only controlling access on a per-file
+basis, but on a per-file-version basis as well.
+
+The Custos server provides a user-facing RESTful API, secured via
+mutual SSL. The server is capable of supporting a variety of back-end
+systems for storing keys and associating them with UUIDs from
+SQL-based system to modern object stores. The current prototype uses
+MySQL as the backing store. When the Custos server receives a key
+request for a specific UUID, it looks up all of the authorized module
+chains associated with the UUID. It then uses these chains to generate
+a response listing which of the supported Custos authentication
+modules is required (included in all possible chains), which are
+optional (included in at least one possible chain), and which are
+ignored (not present in any chains). The client then makes a second
+key request providing the necessary authentication information. If the
+provided information satisfies one of the associated module chains,
+Custos responds with a copy of the key.
+
+At this stage, Custos only supports a handful of basic authentication
+modules (pre-shared key/password, public key certificate, etc) and
+does not yet support a generalized module interface for adding
+arbitrary modules. The management interfaces, which allows users to
+configure modules, ownership, etc is also only minimally defined. We
+are actively building out our prototype implementation to support
+additional features.
