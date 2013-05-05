@@ -1,4 +1,4 @@
-REPORT=custos_hotstorage2013
+REPORT=custos_advnetsS13
 LATEX=pdflatex
 BIBTEX=bibtex --min-crossrefs=1000
 REF1=ref
