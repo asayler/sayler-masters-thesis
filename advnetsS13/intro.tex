@@ -65,20 +65,21 @@ local files.
 \end{figure}
 
 While distributed encrypted file systems such as
-OceanStore~\cite{Kubiatowicz2000}, Plutus~\cite{Kallahalla2003} or
-Tahoe~\cite{Wilcox-O'Hearn2008} tend to succeed in solving some of the
-sharing and distribution problems inherent in local secure file
-systems, they still lack the flexibility required to address the full
-range of desired use cases. Figure \ref{fig:problem-integrated} shows
-some of the remaining issues inherent in distributed
-solutions. Notably, while multi-user use cases are better supported,
-non-interactive use cases are still a challenge. Furthermore, full
-stack distributed file systems tend to be wedded with specific storage
-systems and thus lack support for Cloud-based Storage as a Service
-offerings or alternate underlying storage technologies. These systems
-also lack support for most forms of ``out-of-band'' file sharing (via
-e-mail, USB flash drives, etc) due to the inability of actors outside
-of the integrated stack to access the necessary encryption keys.
+OceanStore~\cite{Kubiatowicz2000}, Plutus~\cite{Kallahalla2003},
+Cumulus4j~\cite{cumulus4j}, or Tahoe~\cite{Wilcox-O'Hearn2008} tend to
+succeed in solving some of the sharing and distribution problems
+inherent in local secure file systems, they still lack the flexibility
+required to address the full range of desired use cases. Figure
+\ref{fig:problem-integrated} shows some of the remaining issues
+inherent in distributed solutions. Notably, while multi-user use cases
+are better supported, non-interactive use cases are still a
+challenge. Furthermore, full stack distributed file systems tend to be
+wedded with specific storage systems and thus lack support for
+Cloud-based Storage as a Service offerings or alternate underlying
+storage technologies. These systems also lack support for most forms
+of ``out-of-band'' file sharing (via e-mail, USB flash drives, etc)
+due to the inability of actors outside of the integrated stack to
+access the necessary encryption keys.
 
 Existing systems force the user into a very specific security model,
 appropriate for certain use cases, but useless for many others. These
