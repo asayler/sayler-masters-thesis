@@ -17,5 +17,5 @@ pdf: $(SRCS) $(CLS)
 	$(LATEX) $(REPORT)
 
 clean:
-	$(RM) *.dvi *.aux *.log *.blg *.bbl *.out
+	$(RM) *.dvi *.aux *.log *.blg *.bbl *.out *.lof *.lot *.toc
 	$(RM) *~
