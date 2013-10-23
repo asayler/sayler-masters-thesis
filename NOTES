@@ -1,0 +1,9 @@
+Trust as a Service
+Security as  Service
+
+Custos Features:
+   + Decouples trust from application
+     (e.g. facebook the app from facebook the company)
+   + Provides standard interface for flexible, secure storage
+   + promtes switching between trust providers,
+     shardins across providers, etc

@@ -1,0 +1,11 @@
+# LaTeX Cruft
+*.aux
+*.bbl
+*.blg
+*.lof
+*.log
+*.lot
+*.toc
+
+# LaTeX Output
+masters.pdf
