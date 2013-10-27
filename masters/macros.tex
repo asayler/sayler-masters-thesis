@@ -1,6 +1,4 @@
-
 \newtheorem{theorem}{Theorem}
-
 
 \newcommand{\diff}[2]{\frac{\partial #1}{\partial #2}}
 \newcommand{\diffr}[1]{\diff{#1}{r}}
@@ -19,7 +17,30 @@
 \newcommand{\fourchoices}[4]{\left\{ \begin{array}{lcc}
         #1 \\ #2 \\ #3 \\ #4 \end{array} \right. }      %}
 
-\newcommand{\twovec}[2]{\left(\begin{array}{c} #1 \\ #2 \end{array}\right)}
-\newcommand{\threevec}[3]{\left(\begin{array}{c} #1 \\ #2 \\ #3 \end{array}\right)}
-\newcommand{\twomatrix}[4]{\left(\begin{array}{cc} #1 & #2 \\ #3 & #4 \end{array}\right)}
+\newcommand{\twovec}[2]{\left(\begin{array}{c} #1 \\
+#2 \end{array}\right)}
+\newcommand{\threevec}[3]{\left(\begin{array}{c} #1 \\ #2 \\
+#3 \end{array}\right)}
+\newcommand{\twomatrix}[4]{\left(\begin{array}{cc} #1 & #2 \\ #3 &
+#4 \end{array}\right)}
 
+\newenvironment{packed_enum}{
+\begin{enumerate}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{\end{enumerate}}
+
+\newenvironment{packed_item}{
+\begin{itemize}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{\end{itemize}}
+
+\newenvironment{packed_desc}{
+\begin{description}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{\end{description}}

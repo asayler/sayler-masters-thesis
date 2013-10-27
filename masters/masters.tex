@@ -2,6 +2,11 @@
 
 \usepackage{amssymb}		% to get all AMS symbols
 \usepackage{graphicx}		% to insert figures
+\usepackage{epsfig}
+\usepackage{url}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
 
 %%%%%%%%%%%%   All the preamble material:   %%%%%%%%%%%%
 
@@ -82,8 +87,11 @@
 \begin{document}
 
 \input macros.tex
-\input chapter1.tex
-\input chapter2.tex
+\input intro.tex
+\input uses.tex
+\input platform.tex
+\input clients.tex
+\input conclusion.tex
 
 %%%%%%%%%   then the Bibliography, if any   %%%%%%%%%
 \bibliographystyle{plain}	% or "siam", or "alpha", etc.
@@ -91,8 +99,8 @@
 \bibliography{refs}		% Bib database in "refs.bib"
 
 %%%%%%%%%   then the Appendices, if any   %%%%%%%%%
-\appendix
-\input appendixA.tex
-\input appendixB.tex
+%\appendix
+%\input appendixA.tex
+%\input appendixB.tex
 
 \end{document}
