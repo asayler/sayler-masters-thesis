@@ -87,11 +87,12 @@
 \begin{document}
 
 \input macros.tex
-\input intro.tex
-\input uses.tex
-\input platform.tex
-\input clients.tex
-\input conclusion.tex
+
+\input chap_intro.tex
+\input chap_uses.tex
+\input chap_platform.tex
+\input chap_clients.tex
+\input chap_conclusion.tex
 
 %%%%%%%%%   then the Bibliography, if any   %%%%%%%%%
 \bibliographystyle{plain}	% or "siam", or "alpha", etc.
@@ -99,8 +100,7 @@
 \bibliography{refs}		% Bib database in "refs.bib"
 
 %%%%%%%%%   then the Appendices, if any   %%%%%%%%%
-%\appendix
-%\input appendixA.tex
-%\input appendixB.tex
+\appendix
+\input appx_messages.tex
 
 \end{document}
