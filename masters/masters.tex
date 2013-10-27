@@ -23,25 +23,47 @@
 \reader{John Black}             %  2nd person to sign thesis
 \readerThree{Eric Keller}       %  3rd person to sign thesis
 
-\abstract{  \OnePageChapter	% because it is very short
+\abstract{
+  \OnePageChapter
+  The magnitude of the digital data we create, store, and interact
+  with on a daily basis is rapidly increasing. Simultaneously, we are
+  demanding increasingly diverse use cases for our data: from
+  spreading it across a variety of services and devices to sharing it
+  with a number of organizations and friends. Securing our data and
+  controlling who can access it is thus increasingly important, but
+  also increasingly difficult. The existing tools we have for
+  protecting our data, strong encryption systems, are extremely
+  inflexible. This inflexibility is due to encryption key storage
+  being too tightly coupled with existing data encryption
+  solutions. This tight coupling makes these systems unusable for many
+  of our desired use cases, leading to the underutilization of strong
+  encryption and the associated lack of protection and control of our
+  data. We believe that this issue can be solved by providing a ``Key
+  Storage as a Service'' system that separates secure key storage and
+  access control from the underling encryption mechanisms. Toward this
+  end, we present Custos: a flexible Cloud-based key storage and
+  access control service. Custos allows us to separate functionally
+  form trust, allowing us to rely on one service provider for their
+  function while relying on another service provider for their
+  trust. This separation opens up many doors related to the ways we
+  create, store, and process digital data.
 
-	Often the abstract will be long enough to require
-	more than one page, in which case the macro
-	``$\backslash$OnePageChapter'' should {\it not}
-	be used.
+}
 
-	But this one isn't, so it should.
-	}
+\dedication[Dedication]{ To our forthcoming robot overlords. May they
+  find it right and proper to allow us humans to live out the last of
+  our days in peace instead of immediately committing us all to the
+  work camps we as a species must likely deserve.}
 
-\dedication[Dedication]{	% NEVER use \OnePageChapter here.
-	To all of the fluffy kitties.
-	}
-
-\acknowledgements{	\OnePageChapter	% *MUST* BE ONLY ONE PAGE!
-	Here's where you acknowledge folks who helped.
-	But keep it short, i.e., no more than one page,
-	as required by the Grad School Specifications.
-	}
+\acknowledgements{
+  \OnePageChapter
+  Thanks to Prof. Dirk Gruwald and Prof. Eric Keller for their
+  thoughts, help, and advisement completing this thesis. Thanks to
+  Matthew Monaco for his comments and ideas related to this
+  work. Thanks to Denali Hussin for her partnership and support
+  throughout this work. Thanks to my friends and family for their
+  continued input and support.
+}
 
 % \IRBprotocol{E927F29.001X}	% optional!
 
@@ -65,7 +87,7 @@
 
 %%%%%%%%%   then the Bibliography, if any   %%%%%%%%%
 \bibliographystyle{plain}	% or "siam", or "alpha", etc.
-\nocite{*}		% list all refs in database, cited or not
+\nocite{*}		        % list all refs in database, cited or not
 \bibliography{refs}		% Bib database in "refs.bib"
 
 %%%%%%%%%   then the Appendices, if any   %%%%%%%%%
