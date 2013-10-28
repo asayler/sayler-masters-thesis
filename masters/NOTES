@@ -7,3 +7,5 @@ Custos Features:
    + Provides standard interface for flexible, secure storage
    + promtes switching between trust providers,
      shardins across providers, etc
+
+conflating mechanism and policy
