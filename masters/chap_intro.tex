@@ -9,9 +9,9 @@ while preventing those who we do not from doing the same?
 
 Fortunately, there are methods for securing our data: strong
 cryptography systems like AES or RSA are perfectly capable of allowing
-us to control exactly who can read our data. Unfortunately, these systems
-are often difficult if not impossible for the average end user to
-employ properly. Other times, they are simply treated like ``magic
+us to control exactly who can read our data. Unfortunately, these
+systems are often difficult if not impossible for the average end user
+to employ properly. Other times, they are simply treated like ``magic
 fairy dust'' to be applied to various products in the name of
 ``just-add-crypto'' security with little heed paid to the security of
 the implementation or components of the system.
@@ -25,14 +25,90 @@ key-storage as a service platform.
 
 \section{Overview}
 
-
+At it's core, Custos is just another key value store. Actually, it's
+not even that. It's just a wrapper around one of several existing
+key-value stores. It is not the method of key-value storage that makes
+it unique. Instead, it is it's ability to provide flexible,
+fine-grained access control to key-value pairs that make it
+interesting. These access control capabilities make Custos an ideal
+system for implementing a secure encryption key storage service. For
+it is not encryption itself that leads to usability issue, but the
+need to secure manage and store encryption keys. Custos aims to solve
+the key-storage problem inherent in many modern applications on
+cryptographic security. In this section, we'll discuss the basics of
+the Custos rational and goals.
 
 \subsection{Separating Functionality from Trust}
 
-Discuss separating what we use from who we trust. E.g. ``Using
-facebook'' vs ``trusting Facebook''
+Data security is an issue of trust. Who do we trust to access our
+data? Who do we trust not to misuse it? Who do we trust not to share
+it without permission? Today, we have very little practical ability to
+make decisions regarding who we should trust with our data. DO you
+want to use Facebook to communicate with family and friends? Great,
+but you must trust Facebook with your personal data. Want to use Gmail
+for it's sleek web interface and cloud-based accessibility? Fine, but
+you must trust Google with all of your email. Sure, you could forgo
+Facebook or Google or any of a wide variety of web services to avoid
+trusting them with you data, but as you drift toward the hermitage of
+self-imposed digital exile, the last of your former friends slowly
+fading from memory as they cease to even recall your existence absent
+their normal methods of web based contact, fumbling through the
+vestigial pages of a phone book vainly hoping to find a number for
+someone's cell phone that has never, and will never, be listed there,
+you may decide that giving up control over whom you trust with your
+data is a perfectly fair price to pay to rejoin the 21st century land
+of living, breathing, digitally exposed souls.
+
+And even if you could live without modern cloud-based services, even
+good old fashioned computing technology involves placing trust in
+systems or parties beyond our control. Do you trust your computer
+manufacture not to have installed a hardware key logger that sends
+back data to it's parent? Do you trust your operating system not to
+have a government-mandated back door for covert third party access?
+Do you trust yourself not to loss your laptop, exposing all of the
+data on it to whomever might find it?
+
+This is the crux of the problem. In order to benefit from many of the
+modern features and amenities of the digital world, you must pay the
+entry price of deference of trust to organizations, technologies, and
+individuals whether you would like to or not.
+
+So how can we solve this problem? This disconnect between the services
+we desire and the trust we'd prefer not to cede? It seems unlikely
+that we can eliminate trust form the equation all together. Systems
+are too fragile and technology tied to human action; we will always
+require some level of trust in some part of the system we rely on.
+
+We might not be able to remove trust, but what if we could at least
+isolate it. Separate trust from features. Disentangle what we use from
+who we trust. What if we could have one company we trusted with
+storing and controlling access to our data and another company we
+relied on to take that data provide us with a useful service using it:
+the ability to use Facebook or Google without trusting (or at least
+unrestrictedly trusting) Facebook or Google.
+
+With such an ecosystem, we might be able to rely on markets or similar
+means to provide us with the basic platform for securing our
+data. Trustworthiness would become a service; a commodity to be bought
+and sold. We could chose and pay the companies responsible for
+securing our data based on their level of trustworthiness, while
+choosing and paying the companies that use our data and us it provide
+us with relevant features on the basis of the feature they
+provide. This would remove the current coupling of features and trust
+we see today, a coupling that often leads to a conflict of interest
+between the features we desire and the trust we're willing to
+provide. Instead we'd assign trust on the basis of perceived
+trustworthiness while selecting untrusted services on the basis of
+feature sets; the trusted party acting as a gatekeeper between the
+untrusted party and our data. We could even distribute trust across
+multiple parties to avoid having to trust any single party
+completely. Such a decoupling of trust and services would provide a
+lot of flexibility to maximize both the security, and the utility, of
+our data.
 
 \subsection{Key Storage as a Service}
+
+Encryption provides the
 
 Discuss separating key storage from encryption.
 
