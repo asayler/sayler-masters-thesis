@@ -23,6 +23,18 @@ growing demand? Custos aims to provide an answer to these questions by
 providing a secure key-value store that can be used to implement a
 key-storage as a service platform.
 
+The work presented in this document provides the following:
+
+\begin{packed_item}
+\item An overview of the Custos architecture, rational, and design goals
+\item A discussion of various use cases in which Custos can be used to
+  improve security, privacy, and usability.
+\item A definition of the Custos protocol and message exchange formats.
+\item A prototype Custos server reference implementation.
+\item Several prototype type client implementations that leverage Custos to
+  add security and features not previously available.
+\end{packed_item}
+
 \section{Overview}
 
 At it's core, Custos is just another key value store. Actually, it's
@@ -33,10 +45,12 @@ fine-grained access control to key-value pairs that make it
 interesting. These access control capabilities make Custos an ideal
 system for implementing a secure encryption key storage service. For
 it is not encryption itself that leads to usability issue, but the
-need to secure manage and store encryption keys. Custos aims to solve
-the key-storage problem inherent in many modern applications on
-cryptographic security. In this section, we'll discuss the basics of
-the Custos rational and goals.
+inadequate methods available to manage and store encryption
+keys. Custos aims to solve the key-storage problem inherent in many
+modern applications on cryptographic security. In doing so, it strives
+to enable a variety of new use cases and data security paradigms not
+readily available today. In this section, we'll discuss the basics of the
+Custos rational and goals.
 
 \subsection{Separating Functionality from Trust}
 
@@ -194,13 +208,49 @@ is one of the best available tools for securing and protecting our
 data. We wish to reclaim it as a viable option for controlling our
 data in environments that are increasingly outside of our control. We
 wish to use encryption to secure our data, while designating trusted
-Key Storage as a Service Providers to control access to it.
+Key Storage as a Service providers to control access to it.
 
+In a Key Storage as a Service architecture, the underlying encryption
+systems delegate key storage and access control to a separate service
+instead of embedding these features directly. The key storage platform
+exposes a common API, capable of being used with a variety of
+encryption services. Encryption services tag encrypted data with a
+unique ID, and then store this ID and the corresponding encryption key
+with a key storage provider. When a system wishes to decrypt data, it
+queries the key storage service for the encryption key corresponding
+to the data's ID tag, and, assuming the system can satisfactorily
+authenticate to the key storage service and has permission to access the
+request keys, the key storage service returns the encryption key
+allowing the service to decrypt the data. This separation of encryption
+system and key storage allows to multiple encryption systems, or
+multiple instances of an encryption system, to all access a centralized
+key store. It also allows encryption systems to focus on encryption,
+while key storage systems can focus of access control and auditing.
 
-Discuss separating key storage from encryption.
+For a key storage a service architecture to meet our goals for
+security, usability, and functionality, it must support the following
+attributes:
 
-UUID : Data Encryption Key
+\begin{packed_item}
+\item A back-end key:value store for mapping encrypted data set
+  identifiers (e.g. via UUIDs) to the corresponding encryption key for
+  said data set.
+\item A standardized front-end API and message exchange format
+  promoting the creation and proliferation and multiple client and
+  server implementations and service providers.
+\item A flexible and programable access control layer,
+  ideally supporting an extensible variety of authentication schemes and
+  attributes and the ability to wrap access control rules around these
+  schemes and attributes.
+\item An auditing system for monitoring and recording
+  encryption key access data.
+\item A notion of per-provider logical centralization and public
+  accessibility to ensure service can be accessed from a range of
+  locations.
+\end{packed_item}
 
+We'll discuss these attributes in more details in Chapter
+\ref{chap:platform}.
 
 \section{Background}
 
