@@ -106,66 +106,68 @@ completely. Such a decoupling of trust and services would provide a
 lot of flexibility to maximize both the security, and the utility, of
 our data.
 
-\subsection{Flexibility and Usability}
+\subsection{The Importance Usability}
 
 Strong encryption provides the basis for a system of separating trust
-from features. With it, we can render data unusable to all but those
-to whom We grant access. Once data has been encrypted, access to the
-data ciphertext itself need no longer be granted or denied on the
-basis of trust. The ciphertext can be exposed to the world on the
-basis of the principle that it will be indecipherably useless without
-also having access to the corresponding encryption keys. It is then
-access to these keys that must be regulated on the basis of
-trust. Unfortunately, while encryption itself may be easy and well
-understood, securely storing, managing, and utilizing encryption keys
-is hard.
+from features. With it, we can lock-down our data, rendering it
+unusable to all but those to whom we grant access. Once data has been
+encrypted, access to the data ciphertext itself need no longer be
+granted or denied on the basis of trust. The ciphertext can be exposed
+to the world confident in the knowledge that it will be indecipherably
+useless without also having access to the corresponding encryption
+keys. But if encryption is the lock we place on our data, then trust
+becomes a matter of to whom we grant the keys. Unfortunately, while
+encryption itself may be easy and well understood, securely storing,
+managing, and utilizing encryption keys is hard.
 
 It is the key management challenges that leads to many of the known
 usability problems with modern encryption systems \cite{Whitten1999,
   Sweikata2009, Kher2005}. Modern encryption systems tend to be
-inflexible. They lock the user into a pre-defined security paradigm
-and specific use case. For example, Today, we use systems like
+inflexible. They force the user into a pre-defined security paradigm
+and specific use case. For example, today we use systems like
 Dropbox~\cite{dropbox} or Google Drive~\cite{google-drive} to store
-and sync our files while allowing access from a range of computers and
-mobile devices, but few existing encryption schemes support this
-multi-device usage. When we wish to transfer and share files, we often
-do it via e-mail attachments or removable media, but these forms of
-``out-of-band'' sharing are not supported by most existing secure
-storage systems. Many of our modern (and legacy) computing services
+and sync our files across a range of computers and mobile devices, but
+few existing encryption schemes support this kind multi-device
+access. When we wish to transfer and share files, we often do it via
+e-mail attachments or removable media, but these forms of
+``out-of-band'' sharing are not supported by most existing data
+encryption systems. Many of our modern (and legacy) computing services
 are designed to run in the background, devoid of interactive input,
 but most existing encryption solutions require interactive input in
-order to securely access encrypted files.
+order to securely access encrypted data.
 
 Most modern encryption systems are built around a ``one size fits
-all'' mentality, leaving the user with very little to control the
-manner in which their encrypted data might be used or shared. Nor do
-such systems acknowledged the fact that not all encrypted data need be
-protected with the same level of security. Some data, like social
-security numbers, must be to be shared with a multitude of 3rd
-parties. Other data, like personal photos, should be shared, but only
-with specific friends or family members. Still other data is
-completely private, and should never be shared at all. The user knows
-how data sensitive each piece of data is, and how it should be used,
-but most encryption systems fail to expose a flexible method for
+all'' mentality, leaving the user with very little flexibility to
+control the manner in which their encrypted data might be used or
+shared. Nor do such systems acknowledged the fact that not all
+encrypted data need be protected with the same level of security. Some
+data, like social security numbers, must be to be shared with a
+multitude of 3rd parties. Other data, like personal photos, should be
+shared, but only with specific friends or family members. Still other
+data is completely private, and should never be shared at all. The
+user knows how sensitive each piece of data is, and how it should be
+used, but most encryption systems fail to expose a flexible method for
 allowing the user to protect data on the basis of sensitivity and
 desired use.
 
 It is often said that security and accessibility are at odds. That one
-can not be improved except at the expense of the other. While we do
+can not be improved except at the expense of the other. And that this
+fact makes secure systems inherently challenging to use. While we do
 not believe that security vs accessibility is truly a zero sum game,
 there is some truth to the fact that security and accessibility are
-often at odds. Security and accessibility exist on a continuum, with fully
-open, minimally secure system on one side, and fully locked down,
-highly secure systems on the other. Many will say that this inherent
-security vs accessibility trade-off means that secure systems will never
-be easily usable. But it is not this security vs accessibility trade-off
-that leads to usability issues. It is the fact that many encryption
-systems lock the user into a specific value on the security vs
-accessibility spectrum that causes usability issues. Forcing a user to
-surmount unnecessary hurdles and forgo certain luxuries of access for
-data that need only be minimally secure while also denying users the
-means to fully lock down other data in a sure recipe for usability
-challenges.
+often at odds. Security and accessibility exist on a continuum, with
+fully accessible, minimally secure system on one side, and minimally
+accessible, highly secure systems on the other. Many will say that
+this inherent security vs accessibility trade-off means that secure
+systems will never be easily usable. But it is not this security vs
+accessibility trade-off that leads to usability issues. It is the fact
+that many secure systems lock the user into a specific value on the
+security vs accessibility spectrum that causes usability issues. Such
+inflexibility forces a user to surmount unnecessary hurdles and forgo
+certain ease of access for data that need only be minimally secure
+while also denying users the means to fully secure highly sensitive
+data. This mismatch between user requirements and system capabilities
+is a sure recipe for usability challenges.
 
 The inability of existing encryption systems to accommodate a diverse
 range of use cases and to grant the user the flexibility to properly
@@ -185,13 +187,14 @@ storage mechanism.
 
 We propose separating key storage and access management from the
 underlying encryption systems through a ``Key Storage as a Service''
-system. Such a service can make encryption systems far more flexible
-and accommodating of the diversity of modern use cases, and by
-extension, can make encryption far easier to use. Strong encryption is
-one of the best available tools for securing and protecting our
+architecture. Such a service can make encryption systems far more
+flexible and accommodating of the diversity of modern use cases, and
+by extension, can make encryption far easier to use. Strong encryption
+is one of the best available tools for securing and protecting our
 data. We wish to reclaim it as a viable option for controlling our
-data in environments that are increasingly outside of our control.
-
+data in environments that are increasingly outside of our control. We
+wish to use encryption to secure our data, while designating trusted
+Key Storage as a Service Providers to control access to it.
 
 
 Discuss separating key storage from encryption.
