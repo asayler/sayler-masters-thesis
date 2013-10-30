@@ -2,7 +2,7 @@
 \label{chap:intro}
 
 Data is everywhere. Our devises produce it. Our web sites consume
-it. Governments collect it~\cite{GreenwalPrism} and business request
+it. Governments collect it~\cite{GreenwaldPrism} and business request
 it. But in this ever present whirlpool of data exchange, how can we
 stay in control of our data? How can we ensure that those who we wish
 to can access it can while preventing those who we do not from doing
@@ -47,11 +47,11 @@ interesting. These access control capabilities make Custos an ideal
 system for implementing a secure encryption key storage service. For
 it is not encryption itself that leads to usability issue, but the
 inadequate methods available to manage and store encryption
-keys. Custos aims to solve the key-storage problem inherent in many
-modern applications on cryptographic security. In doing so, it strives
-to enable a variety of new use cases and data security paradigms not
-readily available today. In this section, we'll discuss the basics of the
-Custos rational and goals.
+keys~\cite{Kher2005}. Custos aims to solve the key-storage problem
+inherent in many modern applications on cryptographic security. In
+doing so, it strives to enable a variety of new use cases and data
+security paradigms not readily available today. In this section, we'll
+discuss the basics of the Custos rational and goals.
 
 \subsection{Separating Functionality from Trust}
 
@@ -253,7 +253,7 @@ attributes:
 We'll discuss these attributes in more details in Chapter
 \ref{chap:platform}.
 
-\section{Background}
+\section{Background and Related Work}
 
 Custos builds on a number of existing technologies and systems: from
 basic encryption systems to distributed storage technologies to
@@ -332,27 +332,75 @@ system normally afford.
 
 \subsection{Secure Storage}
 
+Early storage and file system technologies often neglected security,
+lacking encryption and access control primitives. Fortunately, today
+there are a variety of secure storage systems available. Some of them
+are full stack systems that bundle security, distribution, sharing,
+etc in a single system. Others are layered systems, designed to add
+security atop existing lower level file storage technologies. All of
+them have limitations that Custos strives to overcome.
 
+Many modern storage systems include cryptographic security as part of
+their design. Such full stack systems bundle cryptography, distributed
+usage, data storage, and other features into a single
+package. Tradition network storage systems like
+NFS~\cite{Sandberg1985} or AFS~\cite{Howard1988} provide support for
+encrypting data as it travels over the network, but lack support for
+encrypting data at rest, requiring users to fully trust the system on
+which their data is stored or cached. Systems like
+RFS~\cite{Dong2011}, Keypad~\cite{Geambasu2011}, or
+CryptoCache~\cite{Jensen2000} are optimized for modern mobile device
+usage, and include features like encryption, auditing, and
+multi-device support. Unfortunately, these systems lack support for
+multi-user sharing. Systems like OceanStore~\cite{Kubiatowicz2000} or
+Tahoe~\cite{Wilcox-O'Hearn2008} deal with securing data atop untrusted
+infrastructure, and include primitives for securely sharing and
+distributing files amongst users. These systems, however, lack support
+for the kinds of out-of-band (e.g. emailing files, transferring files
+on thumb drives, etc) sharing that are so common today. In general,
+full stack systems are only useful if you are willing and able to
+utilize them as the entirety of your storage stack, and are not easily
+extended or combined with other systems.
 
-Discuss existing approaches (full stack systems, layered systems),
-strengths, weaknesses, etc
+Otter modern secure storage systems follow in the Unix tradition of
+layered file systems, where each layer provides only a single function
+(e.g. redundancy, encryption, storage, etc). Systems like
+LUKS~\cite{luks} or eCryptfs~\cite{eCryptfs} are popular, widely
+deployed, layered encryption system. They are capable of operating
+atop a variety of underlying file systems and are thus well suited for
+use on personal computers. Neither of these systems, however, is well
+suited for supporting secure multi-device syncing or secure multi-user
+sharing.
+
+All of the above systems, however, suffer from the tradition
+entanglement of key management and the underlying encryption. As we
+stated in the previous section, conflating these two items is akin to
+conflating policy and mechanism, an well known sin in usable and
+maintainable systems design~\cite{Wulf1974}. Perhaps the system that
+comes closets to Custos's goal of separating key storage and access
+control from the underlying encryption is
+Plutus~\cite{Kallahalla2003}. But even Plutus fails to fully define a
+standardized external system for storing and managing keys.
+
+Custos aims to improve upon existing systems by separating key storage
+and access control from data storage and encryption. In doing so,
+Custos can support a variety of extensible authentication mechanisms,
+and can be compatible with a verity of encryption and storage
+systems. Its centralized nature also strives to simplify multi-device
+syncing and multi-user sharing, as well as provide support for a
+variety of modern and future use cases. Ho Custos accomplishes these
+goals is discussed in Chapter \ref{chap:platform}.
 
 \subsection{Human Factors}
 
-Disuses existing usability challenges
-
-\subsection{Web Technologies}
-
-\section{Related Work}
+Discuses existing usability challenges
 
 \subsection{Authentication Systems}
 
 PAM, Shibboleth, OAuth, OpenID, SAML, Etc
 
-\subsection{Encrypted File Systems}
-
-eCryptfs, LUKS, Oceanstore, Tahoe, AFS, Etc
-
 \subsection{Other Systems}
+
+Key-values store, etc
 
 Anything else?
