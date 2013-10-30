@@ -1,4 +1,4 @@
-\chapter{Introduction}
+refs\chapter{Introduction}
 \label{chap:intro}
 
 Data is everywhere. Our devises produce it. Our web sites consume
@@ -393,13 +393,68 @@ goals is discussed in Chapter \ref{chap:platform}.
 
 \subsection{Human Factors}
 
-Discuses existing usability challenges
+Security research and human factors research have not always been kind
+bedfellows. Fortunately, the last 15 years have seen a rise in human
+factors research related to the usability of security products and
+systems. This research has served to underline the growing
+understanding that security without usability isn't really security at
+all. If users refuse to utilize security systems because they are too
+much of a burden, or if the incorrectly use them do to lack of
+understanding, the security such systems provide is largely
+useless. The growing awareness of usability concerns related to
+security systems has led to an increased effort to build systems that
+are both secure and usable. Usability with respect to a security
+system like Custos comes in three flavors: usability as it relates to
+the end user of encryption systems leveraging Custos, utility of
+Custos itself to administer and control data access, and the usability
+of the Custos interface by other developers wishing to integrate with
+Custos.
+
+The end-user usability of existing encryption systems is one of the
+more commonly studied security and usability domains. One of the
+pinnacle works in the field, ``Why Johnny Can't
+Encrypt''~\cite{Whitten1998, Whitten1998}, discusses the usability
+challenges of public-key cryptography systems, in particular
+PGP~\cite{openpgp}. The work discusses both UI issues related to the
+PGP GUI, as well as more fundamental difficulties like the fact that
+security is normally a secondary user objective, making ti that much
+harder to convince users to put effort into attaining it. More recent
+work~\cite{Sweikata2009, Furnell2006, Ibrahim2010} expands on these
+concepts, mentioned the complexity often involved in performing key
+management and fitting cryptographic systems around existing usage
+patterns. Custos aims to help alleviate these issues by proving the
+flexibility to integrate more gracefully with a range of use cases and
+patterns.
+
+Custos is also concerned with usability from a management
+perspective. Configuration errors are a well known source of security
+holes~\cite{Bishop1996, kerravala2002configuration}. A good
+configuration system tends to be logically
+centralized~\cite{Casado2007}, easily manipulated, and provide direct
+mental mappings between user intent and configuration
+parameters~\cite{norman2002design}. Custos aims to achieve these goals
+by providing users with the ability to specific access on the basis of
+a variety of authentication parameters, creating a flexible
+straightforward system for controlling access to encryption keys, and
+by proxy, the data they protect.
+
+The third usability point Custos hopes to address involves the
+usability of Custos as an interface. How easy is it to integrate
+Custos into existing encryption systems? Hoe easy is it to mange
+Custos via a variety of contends? There is less formal research
+available on the usability of programming interfaces and APIs. That
+said, Custos aims to use standard protocols, patterns, and semantics
+to ensure ease of integration and developer access.
 
 \subsection{Authentication Systems}
 
 PAM, Shibboleth, OAuth, OpenID, SAML, Etc
 
 \subsection{Other Systems}
+
+Password mangers
+
+PGP
 
 Key-values store, etc
 
