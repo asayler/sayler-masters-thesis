@@ -120,7 +120,7 @@ completely. Such a decoupling of trust and services would provide a
 lot of flexibility to maximize both the security, and the utility, of
 our data.
 
-\subsection{The Importance Usability}
+\subsection{The Importance of Usability}
 
 Strong encryption provides the basis for a system of separating trust
 from features. With it, we can lock-down our data, rendering it
@@ -254,14 +254,80 @@ We'll discuss these attributes in more details in Chapter
 
 \section{Background}
 
+Custos builds on a number of existing technologies and systems: from
+basic encryption systems to distributed storage technologies to
+protocol and systems design principles. In some cases these
+technologies form the basis of the Custos architecture, in other,
+Custos is a direct reaction to the existing limitations of these
+systems. We discuss the background on which Custos is build in this
+section.
+
 \subsection{Encryption}
 
-Discuss symmetric and asymmetric encryption, uses, strengths,
-weaknesses, etc.
+Modern digital encryption systems come in two flavors: symmetric and
+asymmetric encryption. Symmetric encryption algorithms use the same
+key to both encrypt and decrypt data. Asymmetric systems use two keys;
+when one key is used to encrypt the data, the other can be used to
+decrypt it, and vice versa. Both encryption systems have a place in
+the modern security landscape: symmetric systems for their high
+resistance to cracking and quick encrypt/decrypt performance and
+asymmetric systems for their avoidance of the key exchange problem
+that makes them the basis of modern public-key cryptography
+technologies.
 
-Encryption = solved problem
+Symmetric encryption ciphers like AES (Rijndael)~\cite{Daemen1999},
+Twofish~\cite{Schneier1998}, or Camellia~\cite{Matsui2004} are
+well-established, fast, and secure method for encryption
+data. Systematic encryption ciphers use a single key for both
+encryption and decryption. This key must be securely stored, or if
+shared, securely exchanged between parties. Anyone with the key can
+decrypt the corresponding ciphertext the key was used to
+create. Symmetric encryption systems are the preferred means of
+encrypting files, hard disks, and other large chunks of data due to
+their speed and relative simplicity of implementation. They tend to be
+well understood, and generally considered highly secure. The security
+of a symmetric encryption cipher tends to be directly related to the
+length of the encryption key. Common keys lengths generally considered
+secure today include 128-bit keys, 256-bit keys, and 512-bit keys.
 
-Key Storage = The real challenge
+Asymmetric encryption systems, unlike systematic encryption systems,
+rely on two keys: when one key is used to encrypt the data, a second,
+related key is used to decrypt the data, and vice versa. This two key
+systems make asymmetric encryption systems ideal for sharing encrypted
+data: one key can be publicly released, and the other is Key privately
+secret. Anyone can use the public to encrypt data that only you can
+decrypt using your private key. Thus, asymmetric encryption systems
+like RSA~\cite{Rivest1978} form the basis for modern public-key
+cryptography systems. Asymmetric ciphers tend to be slower and more
+complex than symmetric ciphers. Like asymmetric ciphers, the security
+of an asymmetric cipher is related to the length of the keys in a key
+pair.
+
+Often symmetric and asymmetric cryptography are used together, each
+system playing to it';s straight. Symmetric ciphers are good at
+quickly and securely encryption data, making them appropriate for the
+core of an encryption system. Symmetric ciphers, however, suffer from
+a lack of natively secure method for exchanging the required
+encryption key. This is where asymmetric cryptography and related
+secure key exchange systems like Diffie-Hellman~\cite{Diffie1976} come
+in handy. Since they provide the basis for securely exchanging stat
+over insecure channels, they can be used to exchange the symmetric
+encryption key actually used to encrypt the underlying data. Such
+systems are common in many modern protocols like
+SSL~\cite{Freier2011}, TLS~\cite{Dierks2008}, and
+OpenPGP~\cite{Callas2007}.
+
+Custos uses and supports a verity of the above technologies. In
+general, we believe that Custos will be used to store and symmetric
+encryption keys, due to symmetric ciphers core place in data
+encryption. It is also symmetric keys that require the most management
+since they lack a built-in secure exchange method. Custos, however,
+leverages asymmetric technologies like TLS to implement the secure
+exchange of the stored symmetric encryption keys and related
+authentication data. Custos aims to improve upon existing systems for
+managing and exchanging encrypted data (e.g. OpenPGP) by providing
+more flexibility, extensible, and thus better usability than such
+system normally afford.
 
 \subsection{Secure Storage}
 
@@ -272,15 +338,17 @@ strengths, weaknesses, etc
 
 Disuses existing usability challenges
 
+\subsection{Web Technologies}
+
 \section{Related Work}
 
 \subsection{Authentication Systems}
 
 PAM, Shibboleth, OAuth, OpenID, SAML, Etc
 
-\subsection{File Systems}
+\subsection{Encrypted File Systems}
 
-eCryptFS, LUKS, Oceanstore, Tahoe, AFS, Etc
+eCryptfs, LUKS, Oceanstore, Tahoe, AFS, Etc
 
 \subsection{Other Systems}
 
