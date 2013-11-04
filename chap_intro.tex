@@ -275,31 +275,6 @@ multiple instances of an encryption system, to all access a centralized
 key store. It also allows encryption systems to focus on encryption,
 while key storage systems can focus of access control and auditing.
 
-For a key storage a service architecture to meet our goals for
-security, usability, and functionality, it must support the following
-attributes:
-
-\begin{packed_item}
-\item A back-end key:value store for mapping encrypted data set
-  identifiers (e.g. via UUIDs) to the corresponding encryption key for
-  said data set.
-\item A standardized front-end API and message exchange format
-  promoting the creation and proliferation and multiple client and
-  server implementations and service providers.
-\item A flexible and programable access control layer,
-  ideally supporting an extensible variety of authentication schemes and
-  attributes and the ability to wrap access control rules around these
-  schemes and attributes.
-\item An auditing system for monitoring and recording
-  encryption key access data.
-\item A notion of per-provider logical centralization and public
-  accessibility to ensure service can be accessed from a range of
-  locations.
-\end{packed_item}
-
-We'll discuss these attributes in more details in Chapter
-\ref{chap:platform}.
-
 \section{Background}
 
 Custos builds on a number of existing technologies and systems: from
@@ -377,7 +352,6 @@ managing and exchanging encrypted data (e.g. OpenPGP) by providing
 more flexibility, extensible, and thus better usability than such
 system normally afford.
 
-
 \subsection{Human Factors}
 
 Security research and human factors research have not always been kind
@@ -391,11 +365,10 @@ understanding, the security such systems provide is largely
 useless. The growing awareness of usability concerns related to
 security systems has led to an increased effort to build systems that
 are both secure and usable. Usability with respect to a security
-system like Custos comes in three flavors: usability as it relates to
-the end user of encryption systems leveraging Custos, utility of
-Custos itself to administer and control data access, and the usability
-of the Custos interface by other developers wishing to integrate with
-Custos.
+system like Custos comes in three flavors: usability of the end user
+of encryption systems leveraging Custos, usability of Custos itself
+when administering data access, and the usability of the Custos
+interface by other developers wishing to integrate with Custos.
 
 The end-user usability of existing encryption systems is one of the
 more commonly studied security and usability domains. One of the
@@ -409,9 +382,10 @@ harder to convince users to put effort into attaining it. More recent
 work~\cite{Sweikata2009, Furnell2006, Ibrahim2010} expands on these
 concepts, mentioned the complexity often involved in performing key
 management and fitting cryptographic systems around existing usage
-patterns. Custos aims to help alleviate these issues by proving the
-flexibility to integrate more gracefully with a range of use cases and
-patterns.
+patterns. The widespread consensus in existing usability of security
+research is that existing encryption systems are difficult to use, not
+well matched to modern user desires, and often ignored in favor if
+simpler, less secure, options.
 
 Custos is also concerned with usability from a management
 perspective. Configuration errors are a well known source of security
@@ -419,19 +393,17 @@ holes~\cite{Bishop1996, kerravala2002configuration}. A good
 configuration system tends to be logically
 centralized~\cite{Casado2007}, easily manipulated, and provide direct
 mental mappings between user intent and configuration
-parameters~\cite{norman2002design}. Custos aims to achieve these goals
-by providing users with the ability to specific access on the basis of
-a variety of authentication parameters, creating a flexible
-straightforward system for controlling access to encryption keys, and
-by proxy, the data they protect.
+parameters~\cite{norman2002design}.
 
 The third usability point Custos hopes to address involves the
 usability of Custos as an interface. How easy is it to integrate
-Custos into existing encryption systems? Hoe easy is it to mange
+Custos into existing encryption systems? How easy is it to mange
 Custos via a variety of contends? There is less formal research
 available on the usability of programming interfaces and APIs. That
-said, Custos aims to use standard protocols, patterns, and semantics
-to ensure ease of integration and developer access.
+said, industry best practices would suggest that a usable interface
+follows standard design patterns (e.g. RESTful), utilizes standard
+data formats (e.g. JSON), and maximizes capability while minimizing
+unnecessary complexity.
 
 \subsection{Authentication Systems}
 
@@ -499,7 +471,7 @@ Custos can support a variety of extensible authentication mechanisms,
 and can be compatible with a verity of encryption and storage
 systems. Its centralized nature also strives to simplify multi-device
 syncing and multi-user sharing, as well as provide support for a
-variety of modern and future use cases. Ho Custos accomplishes these
+variety of modern and future use cases. How Custos accomplishes these
 goals is discussed in Chapter \ref{chap:platform}.
 
 \subsection{Password and Secret Mangers}

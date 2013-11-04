@@ -3,6 +3,25 @@
 
 \section{Architecture}
 
+\begin{packed_item}
+\item A back-end key:value store for mapping encrypted data set
+  identifiers (e.g. via UUIDs) to the corresponding encryption key for
+  said data set.
+\item A standardized front-end API and message exchange format
+  promoting the creation and proliferation of multiple implementations
+  across a selection of providers.
+\item A flexible and programable key access control system, supporting
+  an extensible variety of authentication attributes and the ability
+  to craft access control rules from attributes.
+\item An auditing system for monitoring and recording
+  encryption key access data.
+\item A notion of per-provider logical centralization and public
+  accessibility to ensure service can be accessed from a range of
+  locations.
+\end{packed_item}
+
+We'll discuss these attributes in more details in below.
+
 \subsection{Server}
 
 Custos Server Blocks

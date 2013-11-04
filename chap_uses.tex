@@ -1,19 +1,184 @@
 \chapter{Purpose}
 \label{chap:purpose}
 
+As was mentioned in Chapter \ref{chap:intro}, Custos aims to solve the
+cryptographic key storage problem, making encryption easier to use and
+an available option for securing user data across a range of modern
+use cases. To accomplish this goal, Custos must be both usable and
+secure.  Furthermore, it must be flexible enough to overcome existing
+hurdles to utilizing encryption in modern situations.
+
+In this chapter, we'll discusses the goals Custos hopes to achieve, a
+number of possible application where Custos can make encryption a more
+usable primitive, and the threat model that Custos aims to defend
+against.
+
 \section{Goals}
 
+Custos's primary goal is as stated above: ``To solve existing key
+storage challenges and make encryption more easily utilized to secure
+modern data storage paradigms''. To achieve this goal, Custos aims
+to provide the basis of a Key Storage as a Service architecture. This,
+in turn, entails a handful of sub-goals. If we decompose the core
+Custos goal stated previously into it's primary components, we get:
+
+\begin{packed_desc}
+\item[Provide Key Storage:] ``To solve existing \emph{key storage}
+  challenges...''
+\item[Easily Usable:] ``...and make encryption more \emph{easily
+  utilized}...''
+\item[Secure:] ``...to \emph{secure} modern data storage paradigms.''
+\end{packed_desc}
+
+We'll discuss the sub-goals in each of these ares in the sections below.
+
+\subsection{Key Storage}
+
+Custos is a type of key:value store. As such, it had better be cable
+of storing key:value pairs. I expect must Custos implementations
+(including the ones described in this document) to defer the actual
+key:value storage aspect of Custos to existing key:value storage
+systems. Why reinvent the wheel? Instead, we must identify what
+aspects of key:value storage capabilities are desirable in a Custos
+back end. The primary drivers of this analysis are the type of data
+Custos will store, and the methods in which this data will be
+accessed. We already know that Custos will primary be used to store
+key:value pairs mapping data identifiers (the keys) to corresponding
+encryption keys (the values). As far as accessing this data goes, we
+would expect access patterns similar to that of the encrypted data
+that Custos is being used to protect. Most modern data, including the
+personal data that we'd expect users to use encryption and Custos to
+protect, follows an append-only, read-heavy
+workload~\cite{Ghemawat2003}.
+
+With these thoughts in mind, I propose the filling as desirable traits
+for a the key:value storage components of Custos.
+
+\begin{packed_desc}
+\item[Fast Access] \hfill \\ A user will likely not accept too much
+  overhead having to wait on Custos when wishing to access their
+  encrypted data. Thus, Custos should strive to provide quick access
+  to key:value pairs. If a compromise must be made between read and
+  write speed, read speed should be favored since reads will likely
+  outnumber writes.
+\item[Versioned Data] \hfill \\ When data is updated, it is likely
+  that the user may wish to re-encrypt it with a new key (more on this
+  in later sections). As such, Custos should support storing multiple
+  versions of the value associated with a given key.
+\item[Arbitrary Data] \hfill \\ Encryption keys come in a variety of
+  shapes, sizes, and formats. To support the maximum range of
+  encryption systems, Custos should allow the storage of arbitrary
+  binary data associated with a given UUID key.
+\end{packed_desc}
+
+\subsection{Usability}
+
+As we discussed in Chapter \ref{chap:intro}, Custos aims to achieve
+usability across three discreet usage types: the usability of
+encryption system leveraging Custos (end-user usability), the
+usability of Custos to access control mechanisms (administrative
+usability), and the ease with which Custos can be interfaced with
+other systems (developer usability).
+
+On the end user usability front, Custos aims to expand the
+accessibility of encryption systems be providing flexibility. It aims
+to provide a more natural match between desired uses for cryptography
+and attainable uses of cryptography, narrowing the intention vs
+capability divide. As such, Custos aims to enable encryption system to
+support the following attributes of successful modern storage systems.
+
+\begin{packed_desc}
+\item[Multi-Device Support] \hfill \\ Today a given users tends to
+  have multiple computing devises. And they expect to by able to sync
+  their data across these devices and access it from each regardless
+  of whether or not it is encrypted. Thus, Custos must support this
+  form of multi-device access where the data may be decrypted and read
+  from a device other than the one on which it was originally
+  encrypted.
+\item[Multi-User Support] \hfill \\ We like to share. User's today
+  expect to be able to share files or data with their friends or
+  coworkers and access data others have shared with them. Custos must
+  support the ability to share encrypted files with other users,
+  granting the necessary users access to the corresponding encryption
+  keys so that they might decrypt and access the shared data.
+\item[Flexible Protection Semantics] \hfill \\ Some data requires only
+  cursory protections and should allow wide ranging access, other data
+  requires moderate protection but should still allow access by a
+  large group of Friends. Still other data should never be accessed by
+  anyone other than its creator. Custos must support a range of
+  security levels, allowing the user to select the appropriate point
+  on the security burden vs accessibly risk gradient.
+\end{packed_desc}
+
+In addition to end-user usability, Custos also aims for administrative
+usability, making it easy to control access to one;s data. Custos aims
+to achieve this goal by providing users with the ability to grant
+access on the basis of a variety of authentication parameters,
+creating a flexible and straightforward system for controlling access
+to encryption keys, and by proxy, the data they protect. The following
+characteristics will help ensure Custos remains usable form an
+administrative perspective.
+
+\begin{packed_desc}
+\item[Flexible Authentication Mechanisms] \hfill \\ Some data need
+  only be protected by a simple check of what IP address wishes to
+  access it, other data requires an interactive password prompt to
+  access, still other data access may require a password prompt and
+  multi-factor device like a cell phone. Users should be able to
+  select how their data is protected and what hurdles must be jumped
+  to access it.
+\item[Simple Access Granting] \hfill \\ The semantics for granting a
+  specific actor access to specific data for a specific capability
+  should be simple and straightforward. It should be clear how to
+  grant access, what level of security that access entails, and what
+  the grantee is able to do with such access.
+\item[Simple Access Revocation] \hfill \\ Occasionally, you will need
+  to revoke access that has been previously granted. Doing so should
+  be simple and have well defined semantics to ensure the user knows
+  what effect revoking access is guaranteed or not guaranteed to have.
+\end{packed_desc}
+
+The final component of Custos usability is its developer usability. If
+we are to expect Custos to be integrated into existing cryptographic
+products, it must be easy for developers to accomplish this
+feat. Custos aims to maintain a high degree of developer usability via
+the following features.
+
+\begin{packed_desc}
+\item[Well Defined API] \hfill \\ Custos will expose a standard API
+  for data access and a standard API for administrative
+  management. These APIs will provide a well defined interface for
+  interacting with a Custos server.
+\item[Standard Design Patterns] \hfill \\ The Custos API will attempt
+  to follow standard web-based design patterns by following a
+  REST-based architecture. This bring all of the standard usability
+  benefits of RESTful systems (statelessness, etc) while also being a
+  well understood architecture to develop against.
+\item[Standard Data Formats] \hfill \\ Custos aims to support
+  arbitrary data storage. But it will do so using commonly deployed
+  data standards like JSON and Base64 encoding. Their a variety of
+  libraries available to deal with these formats, making it easy to
+  convert between Custos API messages and native internal data types
+  for a client system.
+\end{packed_desc}
+
 \subsection{Security}
+
+What does it mean to be a secure key value store? Does it mean that
+the key:value pairs are stored in a manner to ensure they remain
+secure in the event of a server breach? Does it mean that the server
+operator has no ability to access key:value pairs directly. Does it
+merely mean the access to key:value pairs is well controlled?
+
+We discuss Custos's security models in details later in this chapter,
+but Custos adopts the last of the previous questions as the basis for
+it's definition of a secure key:value store. A key value storage is
+secure if access to key:value pairs is well regulated. To achieve this
+level regulation, Custos requires
 
 Secure Key-Value Store
 
 Access Control, Auditing, Revocation, Etc
-
-\subsection{Usability}
-
-Flexibility, Sharing, Multi-user, Multi-device, Etc
-
-Centralization?
 
 \section{Applications}
 
