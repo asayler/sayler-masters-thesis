@@ -83,10 +83,32 @@ have a government-mandated back door for covert third party access?
 Do you trust yourself not to loss your laptop, exposing all of the
 data on it to whomever might find it?
 
+\begin{figure}[!tb]
+  \begin{center}
+    \begin{subfigure}{.32\textwidth}
+      \begin{center}
+        \includegraphics[height=200pt]{./figs/pdf/TrustModel-Traditional.pdf}
+        \caption{Traditional}
+        \label{fig:trust-traditional}
+      \end{center}
+    \end{subfigure}
+    \begin{subfigure}{.65\textwidth}
+      \begin{center}
+        \includegraphics[height=200pt]{./figs/pdf/TrustModel-Seperated.pdf}
+        \caption{Separated}
+        \label{fig:trust-seperated}
+      \end{center}
+    \end{subfigure}
+  \end{center}
+  \caption{Evolving Trust Models}
+  \label{fig:trust}
+\end{figure}
+
 This is the crux of the problem. In order to benefit from many of the
 modern features and amenities of the digital world, you must pay the
 entry price of deference of trust to organizations, technologies, and
-individuals whether you would like to or not.
+individuals whether you would like to or not (Figure
+\ref{fig:trust-traditional}).
 
 So how can we solve this problem? This disconnect between the services
 we desire and the trust we'd prefer not to cede? It seems unlikely
@@ -100,7 +122,8 @@ who we trust. What if we could have one company we trusted with
 storing and controlling access to our data and another company we
 relied on to take that data provide us with a useful service using it:
 the ability to use Facebook or Google without trusting (or at least
-unrestrictedly trusting) Facebook or Google.
+unrestrictedly trusting) Facebook or Google (Figure
+\ref{fig:trust-seperated}).
 
 With such an ecosystem, we might be able to rely on markets or similar
 means to provide us with the basic platform for securing our
@@ -164,6 +187,29 @@ user knows how sensitive each piece of data is, and how it should be
 used, but most encryption systems fail to expose a flexible method for
 allowing the user to protect data on the basis of sensitivity and
 desired use.
+
+\begin{figure}[!tb]
+  \begin{center}
+    \begin{subfigure}{\textwidth}
+      \begin{center}
+        \includegraphics[height=200pt]
+                        {./figs/pdf/SecuityToAccessibility-Traditional.pdf}
+        \caption{Traditional}
+        \label{fig:SvA-traditional}
+      \end{center}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+      \begin{center}
+        \includegraphics[height=200pt]
+                        {./figs/pdf/SecuityToAccessibility-Custos.pdf}
+        \caption{Custos}
+        \label{fig:SvA-custos}
+      \end{center}
+    \end{subfigure}
+  \end{center}
+  \caption{Balancing Security vs Accessibility}
+  \label{fig:SvA}
+\end{figure}
 
 It is often said that security and accessibility are at odds. That one
 can not be improved except at the expense of the other. And that this
