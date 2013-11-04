@@ -164,21 +164,44 @@ the following features.
 
 \subsection{Security}
 
-What does it mean to be a secure key value store? Does it mean that
-the key:value pairs are stored in a manner to ensure they remain
-secure in the event of a server breach? Does it mean that the server
-operator has no ability to access key:value pairs directly. Does it
-merely mean the access to key:value pairs is well controlled?
+Being a secure key-values tore means that Custos must be... secure.
+In addition to the increased security through increased usability
+items discussed above, what does it mean to be a secure key value
+store? Does it mean that the key:value pairs are stored in a manner to
+ensure they remain secure in the event of a server breach? Does it
+mean that the server operator has no ability to access key:value pairs
+directly. Does it merely mean the access to key:value pairs is well
+controlled?
 
 We discuss Custos's security models in details later in this chapter,
 but Custos adopts the last of the previous questions as the basis for
 it's definition of a secure key:value store. A key value storage is
 secure if access to key:value pairs is well regulated. To achieve this
-level regulation, Custos requires
+level regulation, Custos requires several traits:
 
-Secure Key-Value Store
+\begin{packed_desc}
+\item[Secure Communication Primitives] \hfill \\ The Custos API must
+  be protected against eavesdropping and Man-In-The-Middle attack
+  es. Custos leverages SSL and the existing PKI systems to achieve
+  these security.
+\item[Access Control] \hfill \\ Custos provides the ability to
+  regulate key access in a variety of flexible means (see above). It
+  provides access control at the create, read, and modify levels, and
+  provides support for versioning and revocation.
+\item[Access Auditing] \hfill \\ Custos logs access to all key:value
+  pairs, including successful and failed attempts. This allows the
+  user to view a record of who has had access to what version of a
+  specific key, proving the basis for damage assessment and revocation
+  analysis.
+\end{packed_desc}
 
-Access Control, Auditing, Revocation, Etc
+In addition to these times, a Custos server should also follow best
+practices to avoid compromise. A full list of standard server security
+techniques is outside the scope of this paper, but standard industry
+practices like securing physical access, keep software up to date, and
+using proper firewalls and server access controls all apply. Custos is
+only as secure as the server running it (details on this point and the
+full Custos threat model is discussed below).
 
 \section{Applications}
 
