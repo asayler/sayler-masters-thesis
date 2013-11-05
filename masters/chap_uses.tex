@@ -205,13 +205,112 @@ full Custos threat model is discussed below).
 
 \section{Applications}
 
+Custos's flexibility makes it appropriate for a wide range of
+application. In this section, we'll focus on several applications
+domains where we feel Custos's could have the greatest impact. These
+domains exhibit the ideal trifecta of Custos-suitability:
+
+\begin{packed_item}
+\item Features offered by these applications are desirable and relevant
+  to modern users
+\item Users could more effectively protect their data by leveraging
+  these applications features in conjunction with easily usable,
+  manageable, encryption.
+\item Existing implementations are challenging to protect with traditional
+  encryption while also remaining easily usable.
+\end{packed_item}
+
 \subsection{File Systems}
 
+Modern file systems come in many shapes and sizes. But to most users,
+they are transparent systems through with files are stored on a range
+of Medea from hard drives to flash sticks to optical disks. In
+addition to their role in storing user data, modern file systems often
+support features like multi-user access and data sharing, multi-device
+syncing, redundancy, and backup. The file system layer is the
+primary entry point to user-stored data. As such, providing a usable
+method for protecting file system data via strong encrypting is highly
+desirable. Such protections would help users in the event of the loss
+or theft of their devices, or in the event the forced confiscation of
+their devices.
+
+\begin{figure}[!tb]
+  \begin{center}
+    \begin{subfigure}{\textwidth}
+      \begin{center}
+        \includegraphics[height=200pt]
+                        {./figs/pdf/Problem-Layered.pdf}
+        \caption{Traditional Layered File System Encryption}
+        \label{fig:FS-traditional-layered}
+      \end{center}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+      \begin{center}
+        \includegraphics[height=200pt]
+                        {./figs/pdf/Problem-Integrated.pdf}
+        \caption{Traditional Full Stack File System Encryption}
+        \label{fig:FS-traditional-fullstack}
+      \end{center}
+    \end{subfigure}
+  \end{center}
+  \caption{Traditional File System Encryption Challenges}
+  \label{fig:FS-traditional}
+\end{figure}
+
+Unfortunately, existing encrypted file systems fail to provide
+encryption in a flexible manner appropriately matched to the ways in
+which users expect to utilize them. Layered encryption solutions like
+dm-crypt~\cite{dm-crypt} and eCryptfs~\cite{eCryptfs, Halcrow} suffer
+from a number of limitations related to their tightly-coupled local
+key storage and access management components. As Figure
+\ref{fig:FS-traditional-layered} shows, these systems work fine for an
+individual user like Alice wishing to secure items like her mail or
+documents and access them from a single machine. But they quickly
+break down when trying to move beyond the simple single-user,
+single-device use case. Alice can not access her encrypted mail file
+across a networked file system from System B since System B has no
+access to the encryption keys stored on System A. Furthermore, she can
+not share a work document with a trusted collaborator like Bob, since
+Bob neither has access to her encryption keys stored on System A nor
+the password required to unlock these keys. A non-interactive process
+like the Mail Daemon is also unable to leverage these encrypted file
+systems due to the inability of such services to securely and
+interactively provide a password to unlock the keys needed to decrypt
+local files.
+
+While full stack distributed encrypted file systems such as
+OceanStore~\cite{Kubiatowicz2000}, Plutus~\cite{Kallahalla2003},
+Cumulus4j~\cite{cumulus4j}, or Tahoe~\cite{Wilcox-O'Hearn2008} tend to
+succeed in solving some of the sharing and distribution problems
+inherent in local secure file systems, they still lack the flexibility
+required to address the full range of desired use cases. Figure
+\ref{fig:FS-traditional-fullstack} shows some of the remaining issues
+inherent in distributed solutions. Notably, while multi-user use cases
+are better supported, non-interactive use cases are still a
+challenge. Furthermore, full stack distributed file systems tend to be
+wedded with specific storage systems and thus lack support for
+Cloud-based Storage as a Service offerings or alternate underlying
+storage technologies. These systems also lack support for most forms
+of ``out-of-band'' file sharing (via e-mail, USB flash drives, etc)
+due to the inability of actors outside of the integrated stack to
+access the necessary encryption keys.
+
+Custos aims to improve upon existing encrypted file systems by
+separating key storage and access control from data storage and
+encryption. In doing so, Custos can support a variety of extensible
+authentication mechanisms enabling a range of access control
+rules. Its flexible, centralized nature also strives to simplify
+multi-device syncing and multi-user sharing, as well as provide
+support for a variety of modern and future use cases. How Custos
+accomplishes these goals is discussed in Chapter \ref{chap:platform}.
+
+\subsection{Secret Stores}
+
 Limitations of Current Systems vs Flexibility w/ Custos
 
-\subsection{Data Stores}
+\subsection{Social Media}
 
-Limitations of Current Systems vs Flexibility w/ Custos
+Facebook, Google, Etc
 
 \section{Threat Model}
 
