@@ -445,34 +445,25 @@ full stack systems are only useful if you are willing and able to
 utilize them as the entirety of your storage stack, and are not easily
 extended or combined with other systems.
 
-Otter modern secure storage systems follow in the Unix tradition of
+Other modern secure storage systems follow in the Unix tradition of
 layered file systems, where each layer provides only a single function
 (e.g. redundancy, encryption, storage, etc). Systems like
-LUKS~\cite{luks} or eCryptfs~\cite{eCryptfs} are popular, widely
-deployed, layered encryption system. They are capable of operating
-atop a variety of underlying file systems and are thus well suited for
-use on personal computers. Neither of these systems, however, is well
-suited for supporting secure multi-device syncing or secure multi-user
-sharing.
+LUKS~\cite{luks} or eCryptfs~\cite{eCryptfs, Halcrow} are popular,
+widely deployed, layered encryption system. They are capable of
+operating atop a variety of underlying file systems and are thus well
+suited for use on personal computers. Neither of these systems,
+however, is well suited for supporting secure multi-device syncing or
+secure multi-user sharing.
 
 All of the above systems, however, suffer from the tradition
 entanglement of key management and the underlying encryption. As we
 stated in the previous section, conflating these two items is akin to
-conflating policy and mechanism, an well known sin in usable and
+conflating policy and mechanism, a well known sin in usable and
 maintainable systems design~\cite{Wulf1974}. Perhaps the system that
 comes closets to Custos's goal of separating key storage and access
 control from the underlying encryption is
 Plutus~\cite{Kallahalla2003}. But even Plutus fails to fully define a
 standardized external system for storing and managing keys.
-
-Custos aims to improve upon existing systems by separating key storage
-and access control from data storage and encryption. In doing so,
-Custos can support a variety of extensible authentication mechanisms,
-and can be compatible with a verity of encryption and storage
-systems. Its centralized nature also strives to simplify multi-device
-syncing and multi-user sharing, as well as provide support for a
-variety of modern and future use cases. How Custos accomplishes these
-goals is discussed in Chapter \ref{chap:platform}.
 
 \subsection{Password and Secret Mangers}
 
