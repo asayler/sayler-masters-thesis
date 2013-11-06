@@ -1,3 +1,10 @@
+Add note about runnign Custos on self-hosted server
+(you are the trust provider)
+
+
+DONE:
+conflating mechanism and policy
+
 Trust as a Service
 Security as  Service
 
@@ -7,5 +14,3 @@ Custos Features:
    + Provides standard interface for flexible, secure storage
    + promtes switching between trust providers,
      shardins across providers, etc
-
-conflating mechanism and policy

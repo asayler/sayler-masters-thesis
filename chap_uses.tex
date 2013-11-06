@@ -239,7 +239,7 @@ their devices.
     \begin{subfigure}{\textwidth}
       \begin{center}
         \includegraphics[width=.5\linewidth]
-                        {./figs/pdf/Problem-Layered.pdf}
+                        {./figs/pdf/FS-Traditional-Layered.pdf}
         \caption{Traditional Layered File System Encryption}
         \label{fig:FS-traditional-layered}
       \end{center}
@@ -247,9 +247,9 @@ their devices.
     \begin{subfigure}{\textwidth}
       \begin{center}
         \includegraphics[width=.5\linewidth]
-                        {./figs/pdf/Problem-Integrated.pdf}
-        \caption{Traditional Full Stack File System Encryption}
-        \label{fig:FS-traditional-fullstack}
+                        {./figs/pdf/FS-Traditional-Integrated.pdf}
+        \caption{Traditional Integrated File System Encryption}
+        \label{fig:FS-traditional-integrated}
       \end{center}
     \end{subfigure}
   \end{center}
@@ -284,7 +284,7 @@ Cumulus4j~\cite{cumulus4j}, or Tahoe~\cite{Wilcox-O'Hearn2008} tend to
 succeed in solving some of the sharing and distribution problems
 inherent in local secure file systems, they still lack the flexibility
 required to address the full range of desired use cases. Figure
-\ref{fig:FS-traditional-fullstack} shows some of the remaining issues
+\ref{fig:FS-traditional-integrated} shows some of the remaining issues
 inherent in distributed solutions. Notably, while multi-user use cases
 are better supported, non-interactive use cases are still a
 challenge. Furthermore, full stack distributed file systems tend to be
@@ -295,16 +295,64 @@ of ``out-of-band'' file sharing (via e-mail, USB flash drives, etc)
 due to the inability of actors outside of the integrated stack to
 access the necessary encryption keys.
 
+\begin{figure}[!tb]
+  \begin{center}
+    \begin{subfigure}{\textwidth}
+      \begin{center}
+        \includegraphics[width=.5\linewidth]
+                        {./figs/pdf/FS-Custos-Layered.pdf}
+        \caption{Layered File System Encryption with Custos}
+        \label{fig:FS-custos-layered}
+      \end{center}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+      \begin{center}
+        \includegraphics[width=.5\linewidth]
+                        {./figs/pdf/FS-Custos-Integrated.pdf}
+        \caption{Integrated File System Encryption with Custos}
+        \label{fig:FS-custos-integrated}
+      \end{center}
+    \end{subfigure}
+  \end{center}
+  \caption{File System Encryption with Custos}
+  \label{fig:FS-custos}
+\end{figure}
+
 Custos aims to improve upon existing encrypted file systems by
 separating key storage and access control from data storage and
 encryption. In doing so, Custos can support a variety of extensible
 authentication mechanisms enabling a range of access control
 rules. Its flexible, centralized nature also strives to simplify
 multi-device syncing and multi-user sharing, as well as provide
-support for a variety of modern and future use cases. How Custos
-accomplishes these goals is discussed in Chapter \ref{chap:platform}.
+support for a variety of modern and future use cases.
+
+Figure \ref{fig:FS-custos-layered} shows how traditional layered files
+systems (Figure \ref{fig:FS-traditional-layered}) might be improved
+through incorporation with Custos. The logically centralized nature of
+Custos allows Alice to now access her files on a range of devices. It
+also allows her to grant access to Bod, her trusted
+collaborator. Custos's support for flexible authentication schemes
+including context-based authentication allows it to even support
+non-interactive key access by systems like a mail daemon. In all
+cases, Custos provides a single point for controlling, revoking, and
+auditing access.
+
+Figure \ref{fig:FS-custos-integrated} shows how traditional integrated
+file systems (Figure \ref{fig:FS-traditional-integrated}) might be
+improved through the incorporation of Custos. As in the layered case,
+the Custos's centralization and flexible authentication mechanisms
+allow for simple multi-user, multi-device, and non-interactive
+access. In addition, mechanisms like out-of-band sharing are now
+possible, since encrypted files may be moved around or stored on cloud
+services without having to worry about ensuring future access to their
+corresponding encryption keys. These keys are all stored in Custos,
+and will be potentially available wherever the file needs to be
+accessed.
 
 \subsection{Secret Stores}
+
+Anther possible use case for Custos is as a cloud-based secret
+manager. Such a service
 
 Limitations of Current Systems vs Flexibility w/ Custos
 
