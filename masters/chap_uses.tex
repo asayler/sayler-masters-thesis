@@ -235,6 +235,7 @@ or theft of their devices, or in the event the forced confiscation of
 their devices.
 
 \begin{figure}[!tb]
+  \vspace{5ex}
   \begin{center}
     \begin{subfigure}{\textwidth}
       \begin{center}
@@ -296,6 +297,7 @@ due to the inability of actors outside of the integrated stack to
 access the necessary encryption keys.
 
 \begin{figure}[!tb]
+  \vspace{5ex}
   \begin{center}
     \begin{subfigure}{\textwidth}
       \begin{center}
@@ -350,51 +352,53 @@ and will be potentially available wherever the file needs to be
 accessed.
 
 \begin{table}[!tb]
+  \vspace{5ex}
   \begin{center}
-    \begin{tabular}
-      { | >{\centering\arraybackslash} m{.19\textwidth}
-        | >{\centering\arraybackslash} m{.15\textwidth}
-        | >{\centering\arraybackslash} m{.15\textwidth}
-        | >{\centering\arraybackslash} m{.15\textwidth}
-        | >{\centering\arraybackslash} m{.15\textwidth}
+    \tabulinesep = 5pt
+    \begin{tabu} to \textwidth
+      { | X[1.5,c,m]
+        | X[1,c,m]
+        | X[1,c,m]
+        | X[1,c,m]
+        | X[1,c,m]
         | }
       \hline
-      & \textbf{Unencrypted \newline File System}
-      & \textbf{Local \newline Encrypted \newline File System}
-      & \textbf{Distributed \newline Encrypted \newline File System}
-      & \textbf{Custos \newline Encrypted \newline File System}
+      & \textbf{Unencrypted File System}
+      & \textbf{Local Encrypted File System}
+      & \textbf{Distributed Encrypted File System}
+      & \textbf{Custos Encrypted File System}
       \\ \hline
-      \textbf{Encrypt \newline Files}
+      \textbf{Encrypt Files}
       & No & Yes & Yes & Yes
       \\ \hline
-      \textbf{Local \newline Access Control}
+      \textbf{Local Access Control}
       & No & Yes & Maybe & No
       \\ \hline
-      \textbf{Remote \newline Access Control}
+      \textbf{Remote Access Control}
       & No & No & Maybe & Yes
       \\ \hline
-      \textbf{Local \newline Access Auditing}
+      \textbf{Local Access Auditing}
       & No & Maybe & Maybe & No
       \\ \hline
-      \textbf{Remote \newline Access Auditing}
+      \textbf{Remote Access Auditing}
       & No & No & Maybe & Yes
       \\ \hline
-      \textbf{Flexible \newline Authentication}
+      \textbf{Flexible Authentication}
       & N/A & No & No & Yes
       \\ \hline
-      \textbf{Share Files \newline (In-Band)}
+      \textbf{Share Files (In-Band)}
       & N/A & No & Yes & Yes
       \\ \hline
-      \textbf{Share Files \newline (Out-of-Band)}
+      \textbf{Share Files (Out-of-Band)}
       & Yes & No & No & Yes
       \\ \hline
-      \textbf{Multi-Device \newline Access}
+      \textbf{Multi-Device Access}
       & Yes & No & No & Yes
       \\ \hline
-      \textbf{Trusted \newline 3rd Party}
+      \textbf{Trusted 3rd Party}
       & No & No & Maybe & Maybe
       \\ \hline
-      \end{tabular}
+      \end{tabu}
   \end{center}
   \caption{Feature Comparison of Encrypted File System Architectures}
   \label{tab:comp-fs}
@@ -402,7 +406,7 @@ accessed.
 
 Table \ref{tab:comp-fs} shows a side-by-side comparison of the
 features of various encrypted file system architectures. In general,
-Custos is able to leverage it's flexibility and centralized nature to
+Custos is able to leverage its flexibility and centralized nature to
 enable use cases not possible in traditional file systems. We will
 discuss the manner in which Custos achieves these features in Chapter
 \ref{chap:platform}.
@@ -410,13 +414,125 @@ discuss the manner in which Custos achieves these features in Chapter
 \subsection{Secret Stores}
 
 Anther possible use case for Custos is as a cloud-based secret
-manager. Such a service
+manager. In reality, Custos is always a form of secret store. But in
+encryption-related use cases, the secretes Custos is storing are
+private encryption keys, not any actual user data directly. Forgoing
+the encryption-related use cases for a moment, Custos's secret store
+capabilities can be leveraged directly. While Custos has been designed
+to optimize the storage of encryption keys, it is perfectly capable of
+storing other secrets as well. In such a situation, Custos could be
+used to directly store passwords, personal data, or any other secrets.
 
-Limitations of Current Systems vs Flexibility w/ Custos
+In this arrangement Custos could be used to replace existing Password
+mangers like LastPass~\cite{lastpass}, 1Password~\cite{onepassword}, or
+iCloud's Keychain~\cite{icloud}. Instead of mapping encrypted data IDs
+to encryption keys as has been discussed thus far, Custos could be
+sued to map URLs of web services requesting password to the password
+itself. A Custos client could then be used to retrieve the password
+for a given site when necessary. Such a solution could leverage
+Custos's existing flexible authentication scheme and central key:value
+store to securely keep track of user passwords.
 
-\subsection{Social Media}
+A similar arrangement could be used to protect personal user data
+(i.e. SSN, DoB, name, email, phone, address, etc). Many websites
+request this data on a regular basis for everything from simple
+account creation to online commerce to secondary authentication
+(e.g. when you forget and reset your password). Today, users must
+manually enter this data when required, causing both a data entry
+burden and making it difficult to keep data in sync and up to date
+across disparate sites. Custos could solve these problems by creating
+a central repository of personal data. Instead of reentering this data
+on multiple sites, users could simply leverage the Custos access
+control semantics to grant access to specific pieces of data to
+specific sites. In addition to avoiding the need to constantly reenter
+this data, this system would also make it easy for user's to keep data
+up to date, allowing them to do things like update their mailing
+address in a single location and and allowing all sites to which they
+have granted address access to simply read the new address form Custos
+when required. Such a system might even disco urge services from
+storing copies of this kind of user data directly at all, as it would
+be easier to stay up-to-date with user data changes if the service
+simply required Custos for the most up to date version of the data
+each time it is required.
 
-Facebook, Google, Etc
+It is worth noting, however, that unlike the encryption key storage
+user cases, using Custos directly as a secret store reduces Custos to
+a single-point-of-trust-failure model. In most encryption key storage
+scenarios, an adversary would need to have access to both the
+encrypted data and the corresponding encryption keys stored on Custos
+to actually aces a user's information. In the direct secret store
+case, this multi-party attack is no longer necessary. Instead, any
+adversary who gains access to Custos will have direct access to any
+secrets stored there. Thus it might be desirable to keep Custos as a
+specialized encryption key store and defer to separate systems for
+storing actual secrets, which could then be encrypted with keys from
+Custos. We might even consider using two separate Custos providers to
+accomplish such a system: one provider would securely store a a set of
+encrypted secrets (passwords, user info, etc) while the other provider
+stores the encryption keys corresponding to these secrets. This would
+maintain the multi-party trust spread that more tradition Custos usage
+benefits from. It would also allow one service to optimize the storage
+of actual encrypted secretes (which may not necessarily require the
+same level of access control Custos provides) while Custos optimize
+the storage of encryption keys as in the prior use cases.
+
+\begin{table}[!tb]
+  \vspace{5ex}
+  \begin{center}
+    \tabulinesep = 5pt
+    \begin{tabu} to \textwidth
+      { | X[1.5,c,m]
+        | X[1,c,m]
+        | X[1,c,m]
+        | X[1,c,m]
+        | X[1,c,m]
+        | }
+      \hline
+      & \textbf{Per-Service Secret Store}
+      & \textbf{Traditional Cloud Secret Store}
+      & \textbf{Custos Direct Secret Store}
+      & \textbf{Custos Backed Secret Store}
+      \\ \hline
+      \textbf{Share Data Across Services}
+      & No & Maybe & Yes & Yes
+      \\ \hline
+      \textbf{Update Data Across Services}
+      & No & Maybe & Yes & Yes
+      \\ \hline
+      \textbf{Centralized Access Control}
+      & No & Maybe & Yes & Yes
+      \\ \hline
+      \textbf{Centralized Access Auditing}
+      & No & Maybe & Yes & Yes
+      \\ \hline
+      \textbf{Flexible Authentication}
+      & N/A & No & Yes & Yes
+      \\ \hline
+      \textbf{API-Based Secret Access}
+      & N/A & No & Yes & Maybe
+      \\ \hline
+      \textbf{Single-Point of Trust}
+      & Yes & Yes & Yes & No
+      \\ \hline
+      \textbf{Trusted 3rd Party}
+      & Yes & Maybe & Maybe & Maybe
+      \\ \hline
+      \end{tabu}
+  \end{center}
+  \caption{Feature Comparison of Secret Store Architectures}
+  \label{tab:comp-ss}
+\end{table}
+
+Table \ref{tab:comp-ss} shows a side-by-side comparison of the
+features of various secret store architectures. As you can see, Custos
+has many of the benefits of a tradition cloud secret store (password
+manager, etc), with the additional benefits of a standardized API and
+flexible authentication. Custos could be leveraged, either directly or
+as the encryption key access control element of a larger system, to
+greatly simply secret storage, reducing user effort while increasing
+user security.
+
+\subsection{Data Centers}
 
 \section{Threat Model}
 
