@@ -9,9 +9,8 @@ secure.  Furthermore, it must be flexible enough to overcome existing
 hurdles to utilizing encryption in modern situations.
 
 In this chapter, we'll discusses the goals Custos hopes to achieve, a
-number of possible application where Custos can make encryption a more
-usable primitive, and the threat model that Custos aims to defend
-against.
+number of possible application where Custos can help secure data, and
+the threat model that Custos aims to defend against.
 
 \section{Goals}
 
@@ -20,7 +19,7 @@ storage challenges and make encryption more easily utilized to secure
 modern data storage paradigms''. To achieve this goal, Custos aims
 to provide the basis of a Key Storage as a Service architecture. This,
 in turn, entails a handful of sub-goals. If we decompose the core
-Custos goal stated previously into it's primary components, we get:
+Custos goal stated previously into its primary components, we get:
 
 \begin{packed_desc}
 \item[Provide Key Storage:] ``To solve existing \emph{key storage}
@@ -35,14 +34,14 @@ We'll discuss the sub-goals in each of these ares in the sections below.
 \subsection{Key Storage}
 
 Custos is a type of key:value store. As such, it had better be cable
-of storing key:value pairs. I expect must Custos implementations
+of storing key:value pairs. I expect most Custos implementations
 (including the ones described in this document) to defer the actual
 key:value storage aspect of Custos to existing key:value storage
 systems. Why reinvent the wheel? Instead, we must identify what
 aspects of key:value storage capabilities are desirable in a Custos
 back end. The primary drivers of this analysis are the type of data
 Custos will store, and the methods in which this data will be
-accessed. We already know that Custos will primary be used to store
+accessed. We already know that Custos will primarily be used to store
 key:value pairs mapping data identifiers (the keys) to corresponding
 encryption keys (the values). As far as accessing this data goes, we
 would expect access patterns similar to that of the encrypted data
@@ -322,11 +321,14 @@ access the necessary encryption keys.
 
 Custos aims to improve upon existing encrypted file systems by
 separating key storage and access control from data storage and
-encryption. In doing so, Custos can support a variety of extensible
-authentication mechanisms enabling a range of access control
-rules. Its flexible, centralized nature also strives to simplify
-multi-device syncing and multi-user sharing, as well as provide
-support for a variety of modern and future use cases.
+encryption. Instead of storing keys themselves, a Custos-backed file
+system will hand off all key storage duties to a Custos server,
+leaving the file system to focus on data encryption and storage while
+Custos focuses on access control. In doing so, Custos can support a
+variety of extensible authentication mechanisms enabling a range of
+access control rules. Its flexible, centralized nature also strives to
+simplify multi-device syncing and multi-user sharing, as well as
+provide support for a variety of modern and future use cases.
 
 Figure \ref{fig:FS-custos-layered} shows how traditional layered files
 systems (Figure \ref{fig:FS-traditional-layered}) might be improved
@@ -411,13 +413,17 @@ enable use cases not possible in traditional file systems. We will
 discuss the manner in which Custos achieves these features in Chapter
 \ref{chap:platform}.
 
+\subsection{Data Centers}
+
+
+
 \subsection{Secret Stores}
 
-Anther possible use case for Custos is as a cloud-based secret
+Anther possible application for Custos is as a cloud-based secret
 manager. In reality, Custos is always a form of secret store. But in
-encryption-related use cases, the secretes Custos is storing are
+encryption-related applications, the secretes Custos is storing are
 private encryption keys, not any actual user data directly. Forgoing
-the encryption-related use cases for a moment, Custos's secret store
+the encryption-related applications for a moment, Custos's secret store
 capabilities can be leveraged directly. While Custos has been designed
 to optimize the storage of encryption keys, it is perfectly capable of
 storing other secrets as well. In such a situation, Custos could be
@@ -474,7 +480,7 @@ maintain the multi-party trust spread that more tradition Custos usage
 benefits from. It would also allow one service to optimize the storage
 of actual encrypted secretes (which may not necessarily require the
 same level of access control Custos provides) while Custos optimize
-the storage of encryption keys as in the prior use cases.
+the storage of encryption keys as in the prior applications.
 
 \begin{table}[!tb]
   \vspace{5ex}
@@ -532,8 +538,6 @@ as the encryption key access control element of a larger system, to
 greatly simply secret storage, reducing user effort while increasing
 user security.
 
-\subsection{Data Centers}
-
 \section{Threat Model}
 
 \subsection{Threats}
@@ -543,6 +547,8 @@ Malevolent Custos Provider, Malevolent Client, Etc
 \subsection{Mitigation}
 
 Distributing/Sharding Trust, Etc
+
+Separation of Data and Keys
 
 \subsection{Limitations}
 
