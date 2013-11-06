@@ -238,7 +238,7 @@ their devices.
   \begin{center}
     \begin{subfigure}{\textwidth}
       \begin{center}
-        \includegraphics[width=.5\linewidth]
+        \includegraphics[width=.5\textwidth]
                         {./figs/pdf/FS-Traditional-Layered.pdf}
         \caption{Traditional Layered File System Encryption}
         \label{fig:FS-traditional-layered}
@@ -246,7 +246,7 @@ their devices.
     \end{subfigure}
     \begin{subfigure}{\textwidth}
       \begin{center}
-        \includegraphics[width=.5\linewidth]
+        \includegraphics[width=.5\textwidth]
                         {./figs/pdf/FS-Traditional-Integrated.pdf}
         \caption{Traditional Integrated File System Encryption}
         \label{fig:FS-traditional-integrated}
@@ -299,7 +299,7 @@ access the necessary encryption keys.
   \begin{center}
     \begin{subfigure}{\textwidth}
       \begin{center}
-        \includegraphics[width=.5\linewidth]
+        \includegraphics[width=.5\textwidth]
                         {./figs/pdf/FS-Custos-Layered.pdf}
         \caption{Layered File System Encryption with Custos}
         \label{fig:FS-custos-layered}
@@ -307,7 +307,7 @@ access the necessary encryption keys.
     \end{subfigure}
     \begin{subfigure}{\textwidth}
       \begin{center}
-        \includegraphics[width=.5\linewidth]
+        \includegraphics[width=.5\textwidth]
                         {./figs/pdf/FS-Custos-Integrated.pdf}
         \caption{Integrated File System Encryption with Custos}
         \label{fig:FS-custos-integrated}
@@ -348,6 +348,58 @@ services without having to worry about ensuring future access to their
 corresponding encryption keys. These keys are all stored in Custos,
 and will be potentially available wherever the file needs to be
 accessed.
+
+\begin{table}[!tb]
+  \begin{center}
+    \begin{tabular}
+      { | >{\centering\arraybackslash} m{.19\textwidth}
+        | >{\centering\arraybackslash} m{.15\textwidth}
+        | >{\centering\arraybackslash} m{.15\textwidth}
+        | >{\centering\arraybackslash} m{.15\textwidth}
+        | >{\centering\arraybackslash} m{.15\textwidth}
+        | }
+      \hline
+      & \textbf{Unencrypted \newline File System}
+      & \textbf{Local \newline Encrypted \newline File System}
+      & \textbf{Distributed \newline Encrypted \newline File System}
+      & \textbf{Custos \newline Encrypted \newline File System}
+      \\ \hline
+      \textbf{Encrypt \newline Files}
+      & No & Yes & Yes & Yes
+      \\ \hline
+      \textbf{Local \newline Access Control}
+      & No & Yes & Maybe & No
+      \\ \hline
+      \textbf{Remote \newline Access Control}
+      & No & No & Maybe & Yes
+      \\ \hline
+      \textbf{Local \newline Access Auditing}
+      & No & Maybe & Maybe & No
+      \\ \hline
+      \textbf{Remote \newline Access Auditing}
+      & No & No & Maybe & Yes
+      \\ \hline
+      \textbf{Flexible \newline Authentication}
+      & N/A & No & No & Yes
+      \\ \hline
+      \textbf{Share Files \newline (In-Band)}
+      & N/A & No & Yes & Yes
+      \\ \hline
+      \textbf{Share Files \newline (Out-of-Band)}
+      & Yes & No & No & Yes
+      \\ \hline
+      \textbf{Multi-Device \newline Access}
+      & Yes & No & No & Yes
+      \\ \hline
+      \textbf{Trusted \newline 3rd Party}
+      & No & No & Maybe & Maybe
+      \\ \hline
+      \end{tabular}
+  \end{center}
+  \label{tab:comp-fs}
+  \caption{Feature Comparison of Encrypted File System Architectures}
+\end{table}
+
 
 \subsection{Secret Stores}
 
