@@ -415,7 +415,29 @@ discuss the manner in which Custos achieves these features in Chapter
 
 \subsection{Data Centers}
 
+Modern data centers are a lesson in ephemeral state. The
+commoditization of ``cloud'' computing means that pretty much anyone
+can create a virtual server, use it for a bit, and then destroy it
+again to avoid paying for more than they need. The Cloud's ``pay only
+for what you need'' business case manifests as a highly dynamic,
+impermanent ecosystem where resources are in constant churn. This has
+created a slew of management systems~\cite{chef, salt, puppet}
+designed to handle the need for persistent configuration and
+management across a range of ephemeral resources.
 
+What is currently missing, however, is a secure method for storing
+sensitive configuration data and distributing it to the appropriate
+resource. Often virtual machines and other cloud resources will
+require a variety of cryptographic keys (e.g. SSH, SSL, VPN, etc) to
+perform their desired roles. Today, these keys must either be
+regenerated on each VM, stored in a non-secure traditional
+configuration service, or manually copied to each machine from a
+secure location. What we need is a secure ``Key-Storage as a Service''
+platform through which ephemeral cloud resources can gain access to
+the sensitive keys they require. Others have also realized the
+importance of such a service and a working to build possible
+implementations~\cite{cloudkeep-presentation, cloudkeep,
+  gazzang}. Custos can also be used as the basis of such a service.
 
 \subsection{Secret Stores}
 
