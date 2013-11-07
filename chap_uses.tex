@@ -428,16 +428,88 @@ management across a range of ephemeral resources.
 What is currently missing, however, is a secure method for storing
 sensitive configuration data and distributing it to the appropriate
 resource. Often virtual machines and other cloud resources will
-require a variety of cryptographic keys (e.g. SSH, SSL, VPN, etc) to
-perform their desired roles. Today, these keys must either be
+require a variety of cryptographic keys (e.g. SSH, SSL, AES, VPN, etc)
+to perform their desired roles. Today, these keys must either be
 regenerated on each VM, stored in a non-secure traditional
 configuration service, or manually copied to each machine from a
 secure location. What we need is a secure ``Key-Storage as a Service''
-platform through which ephemeral cloud resources can gain access to
-the sensitive keys they require. Others have also realized the
-importance of such a service and a working to build possible
+platform through which ephemeral cloud resources can easily gain
+access to the sensitive keys they require. Others have also realized
+the importance of such a service and a working to build possible
 implementations~\cite{cloudkeep-presentation, cloudkeep,
   gazzang}. Custos can also be used as the basis of such a service.
+
+In the data center Custos can serve a wide range of use cases. For
+instance, Custos could be user as described in the file system section
+above to enable use of encrypted file systems between multiple VMs are
+across VM instances. Custos could also be used to store SSH keys,
+providing users immediate and simple access to new VM resources as
+soon as they are created. Custos could be used to enable access to
+secure VPN systems, proving users with access to various cloud
+resources by storing the necessary cryptographic keys these resources
+require. Custos could also be used to store and coordinate access to
+private SSL keys across a domain of web services. In all of these
+cases, Custos's flexible authentication capabilities, centralized
+nature, and auditing capabilities would contribute to easing the use
+of cryptographic services in the data center.
+
+\begin{table}[!tb]
+  \vspace{5ex}
+  \begin{center}
+    \tabulinesep = 5pt
+    \begin{tabu} to \textwidth
+      { | X[1.5,c,m]
+        | X[1,c,m]
+        | X[1,c,m]
+        | X[1,c,m]
+        | }
+      \hline
+      & \textbf{DC without Key Storage Service}
+      & \textbf{DC with Generic Key Storage Service}
+      & \textbf{DC with Custos Key Storage Service}
+      \\ \hline
+      \textbf{Provide SSH Access to New Resources}
+      & No & Maybe & Yes
+      \\ \hline
+      \textbf{Provide VPN Access to New Resources}
+      & No & Maybe & Yes
+      \\ \hline
+      \textbf{Provide SSL Access to New Resources}
+      & No & Maybe & Yes
+      \\ \hline
+      \textbf{Enable Use of Shared Encrypted Volumes}
+      & No & Maybe & Yes
+      \\ \hline
+      \textbf{Enable Use of Persistent Encrypted Volumes}
+      & No & Yes & Yes
+      \\ \hline
+      \textbf{Centralized Access Auditing}
+      & No & Yes & Yes
+      \\ \hline
+      \textbf{Flexible Authentication}
+      & N/A & Maybe & Yes
+      \\ \hline
+      \textbf{API-Based Key Access}
+      & N/A & Maybe & Yes
+      \\ \hline
+      \textbf{Trusted 3rd Party}
+      & N/A & Maybe & Maybe
+      \\ \hline
+      \end{tabu}
+  \end{center}
+  \caption{Feature Comparison of Data Center Key Management Architectures}
+  \label{tab:comp-dc}
+\end{table}
+
+Table \ref{tab:comp-dc} shows a comparison of data center capabilities
+across various key storage service systems. Custos has the potentials
+to greatly simply many cloud operations by allowing applications and
+systems to offload key management to a dedicated key management
+service. Custos's flexible authentication and access control make it
+compatible with a wide range of potential cloud applications. Custos's
+auditing capabilities can help cloud providers meet various compliance
+standards and ensure that users feel comfortable storing their data
+securely in the cloud.
 
 \subsection{Secret Stores}
 
