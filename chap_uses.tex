@@ -634,16 +634,148 @@ user security.
 
 \section{Threat Model}
 
-\subsection{Threats}
+Like any system, the Custos architecture operates with certain
+assumptions as the basis of its security profile. These assumptions
+form the Custos security model: what must be trusted, what kind of
+attacks Custos can defend against, etc. I'll discussed the Custos
+security model in this section.
 
-Malevolent Custos Provider, Malevolent Client, Etc
+\subsection{Model}
+
+At the core of the Custos security model is the assumption that a
+Custos provider are themselves trusted and secure. Custos does not
+inherently strive to protect users from malevolent Custos providers
+who might intentionally are accidentally leak data stored in Custos, fail
+to enforce the requested ACLs, or make other violations of the intended
+Custos design. Custos provides a means for separating trust from
+functionality and isolating trust to dedicated providers, but Custos
+does not eliminate the need for trust all together. It only aims to
+provide more control over where the trust in placed. This is the price
+we pay for the ease-of-use benefits Custos provides. A trusted Custos
+provider is assumed to:
+
+\begin{packed_item}
+\item Securely store Custos key:value pairs
+\item Faithfully enforce all Custos access control requirements
+\item Securely implement proper verification of authentication attributes
+\item Properly implement appropriate secure communication protocols where
+  required (SSL, etc)
+\item Accurately log all Custos access information and make this data
+  available to the user.
+\item Ensure that servers running Custos are kept physically and
+  digitally secure to resist attacks on both Custos and non-Custos
+  components
+\end{packed_item}
+
+Beyond the security of the Custos provider and the data stored there,
+the threat model for a given Custos-backed application is largely a
+function of the applications' implementation. For example, a
+Custos-integrated file system may opt to maintain a local cache of
+Custos keys to allow offline file access. Such behavior, however,
+would open an additional attack vector whereby an adversary must only
+compromise a local key cache to gain file access without ever having
+to compromise a Custos server itself. Custos, however, is designed to
+be flexible, which means leaving such trade-offs up to each individual
+application.
+
+Like most encrypted file systems, key-access in Custos is a one-time
+play: once a user or system has been granted access to a key, it must
+be assumed that the user or system will always have access to the data
+associated with that key since they can copy and store the such data
+indefinitely. In the case where Custos is storing encryption keys,
+this also means assuming that the user has access to the decrypted
+data a given key protects once key access has been granted at least
+once. There is no reliable way to revoke access to a key or the data
+it protects once access is granted.
+
+Custos also leaves authentication requirements and access control up
+to each user. Thus, the burden of ensuring that data is being
+adequately protected, either directly in Custos or via encryption with
+the necessary keys stored in Custos, lies with the user to set the
+necessary authentication and access control requirements. Custos aims
+to make it easy for the user to create and maintaining access control
+requirements for specific data, but Custos can not guarantee that the
+user is making intelligent decisions related to the protection of
+their data. Custos provides flexibility and ease of use, which should
+maximize protection while minimizing usage errors, but some level of
+user intelligence and responsibility is still required for secure
+Custos use.
 
 \subsection{Mitigation}
 
-Distributing/Sharding Trust, Etc
+The Custos threat model does have its limitations. That said, there
+are various ways to mitigate these restrictions and further increase
+the security of a Custos-backed system.
 
-Separation of Data and Keys
+While Custos does require Custos providers to generally be trusted, it
+is possible to manage this trust. If a user is unwilling to place full
+trust in a Custos provider to safeguard her data, she has a few
+options. First, when Custos is used to store encrypted data keys and
+not the data itself, a Custos provider only ever has access to part of
+the required information to actually access the users data. While the
+Custos provider may hold the encryption keys, unless they can also
+gain access to the underlying data itself, these keys are
+useless. Thus, by storing her data locally or with a separate provider
+than the Custos provider, a Custos user can help reduce the damage a
+misbehaving Custos provider could cause.
 
-\subsection{Limitations}
+Second, if a user is unwilling to trust a single Custos provider, she
+can instead opt to securely shard her Custos data (encryption keys,
+etc) across multiple, non-cooperating Custos providers. A variety of
+secure secret-sharing systems have been proposed~\cite{Shamir1979,
+  Resch2011, Krawczyk1993}, and these system could be leveraged by
+Custos-backed applications to split Custos data between multiple
+Custos providers. Such a system does not require the Custos's
+providers to even be away that they are only storing a part of a
+larger secret. Instead, Custos providers behave as they always would,
+but the user must query multiple Custos providers to reassemble the
+full secret. Such a strategy also mitigates a Custos provider being
+offline or unavailable, since many secret sharing system support
+reassembly using only K of a larger set of N keys. I believe many
+Custos application will leverage secret sharing to avoid placing trust
+in a single Custos provider or relying on a single Custos provider's
+availability.
 
-Trade-off between 3rd party trust and flexibility
+It's also possible for clients to locally encrypt Custos-stored data
+before shipping it off to a Custos Provider. This action, however
+would negate many of the benefits Custos provides and reintroduce the
+inflexible-use-case problems inherent in existing encryption systems
+due to the checking-and-the-egg problem that would come along with
+it. If you are to encrypt data stored on Custos, where do you store
+those encryption keys? Like the secret sharing option, the Custos
+servers do not need to be aware of whether or not the data they hold
+has already been encrypted on the client side. For some applications,
+client-side encryption of Custos data may be appropriate, but I don't
+feel it will be the most common case due to the additional flexibility
+and key storage problems it poses.
+
+The traditional revocation problems associated with using encryption
+(e.g. inability to revoke access to data a user has already decrypted)
+are not unique to Custos. As such, Custos can mitigate this issue in
+the same manner most system due, through versioning/rotation and lazy
+revocation~\cite{Kallahalla2003}. While Custos can not revoke access
+to a data that has already been decrypted and read, Custos can revoke
+access to all future versions or modifications of that data. This is
+accomplished by having a Custos application re-encrypt the data with a
+new key each time it is update. These new keys are then uploaded to
+Custos leveraging Custos's versioning support. When a user revoked
+access to a Custos object, Custos blocks all future access to any
+versions of that object uploaded after the revocation occurred. Custos
+can't force users to un-see data they have seen, but it can help
+prevent users from seeing changes to that data.
+
+In terms of Custos server security goes, Custos's backing data store
+could be built atop existing Hardware Security Module (HSM)
+platforms~\cite{fips140}. Such systems utilize hardware-based
+constraints to control access to the data they store. They can help
+mitigate the damage that a compromised Custos server would pose by
+limiting access to the underlying Custos data stored on such a
+server. Several cloud platforms are already beginning to offer access
+to cloud-based HSM resources that might be appropriate for Custos
+server implementations~\cite{amazon-hsm}. Whether or not a Custos
+server is backed by such technology could be one of the determining
+factors users use to evaluate whether to use a specific Custos
+provider and thus could drive the market price such a provider might
+be able to charge.
+
+%%  LocalWords:  dm Plutus LastPass iCloud's
