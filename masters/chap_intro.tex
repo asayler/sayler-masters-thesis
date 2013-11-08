@@ -340,7 +340,7 @@ over insecure channels, they can be used to exchange the symmetric
 encryption key actually used to encrypt the underlying data. Such
 systems are common in many modern protocols like
 SSL~\cite{Freier2011}, TLS~\cite{Dierks2008}, and
-OpenPGP~\cite{Callas2007}.
+OpenPGP~\cite{Callas2007, openpgp}.
 
 Custos uses and supports a verity of the above technologies. In
 general, we believe that Custos will be used to store and symmetric
@@ -409,9 +409,101 @@ unnecessary complexity.
 
 \subsection{Authentication Systems}
 
-PAM, Shibboleth, OAuth, OpenID, SAML, Etc
+Over the years, we have developed a range of authentication techniques
+and protocols. The goal of any authentication system is to confirm the
+validity of a fact. In many authentication systems, the fact they aim
+to confirm is the positive associate between a user's asserted
+identity and the user's actual identity. In short: is an actor who she
+claims to be? Authentication systems can also be used to provide
+association between an actor and an object (i.e. does a user process
+access to a specific token or device), between an actor and a
+capability (i.e. as in a CAPTCHA~\cite{captcha}) or a variety of more
+generalized facts and associations. Authentication and authorization
+are often complementary systems. Authentication is used to establish
+the identity of an actor. Authorization then leverages this
+identification as the basis of granting or deny specific rights to the
+actor.
 
-Context-sensitive approaches
+Early computer authentication schemes often revolved around the use of
+a single basic primitive: text-based passwords. To this day, passwords
+are probably the most common authentication primitive. Passwords are a
+form of shared secret. They operate on the premises that only a
+specific actor and the system with which she wishes to interact will
+be aware of the value of a unique text token. When the actor wishes to
+prove her identity, she provides her password to the system, which
+confirms that it matches the expected password. Often, instead of
+comparing passwords directly, passwords are first hashed before being
+stored. This increases the difficulty for attackers wishing to
+brute-force a leaked password list by dissociating the provided value
+from the stored value. Passwords are often used in an interactive
+manner, where an actor must provide her password at a live prompt. But
+passwords can also be used in non interactive (albeit generally less
+secure) forms where the necessary password is simply stored and
+automatically provided when required. Passwords, while common, have a
+range of known limitations and issues. From reuse, to guess-ability,
+passwords have a lot of problems~\cite{singer-passwords,
+  goodin-passwords, goodin-bible}. None the less, they remain
+ubiquitous authentication primitives to this day to to their ease of
+use and user familiarity..
+
+In addition to passwords, common authentication primitives also
+include asymmetric cryptography certificates, multi factor devices,
+biometrics, or contextual information. Systems like
+OpenSSH~\cite{openSSH} and OpenPGP~\cite{openpgp} support using
+standard asymmetric cryptography certificates as the basis for
+authentication. In such systems, an actor's public key is stored by
+the server. The user must prove they can access to the corresponding
+private key, often by decrypting a message encrypted with their public
+key, in order to authenticate. Certificate based authentication system
+have the benefit of often be non-interactive; the user must simply
+posses the necessary certificate to gain access, no interactive
+password prompt required. Multi factor authentication systems are
+rising in popularity as a mitigation tactic for the risks of password
+based authentication systems. Such systems force the user to prove
+they have access to an object (often a cell phone~\cite{google-auth}
+or dongle~\cite{yubikey}) in addition to prompting the user for their
+password. Where as a password is ``something you know'', a multi
+factor device is ``something you have'', the combination of which make
+up the multiple factors in multi-factor authentication. Biometric
+authentication systems have also become more common. Many modern
+laptops and cell phone include fingerprint reader, and more exhibit
+devices like retina or palm scanners are not uncommon in high security
+installations. Systems have even been proposed that rely on a user's
+unique keystroke patterns to identify her~\cite{Peacock2004}. There
+are also a variety of contextual authentication systems, that aim to
+authenticate the user on the basis of various environment data
+(i.e. IP address, time of day, etc)~\cite{Hulsebosch2005}.
+
+Moving beyond basic authentication primitives, there are also a range
+of existing authentication protocols and
+standards. Kerberos~\cite{Kohl1994, Neuman1994} was an early and
+widely deployed authentication system. It aimed to provide secure
+authentication over untrusted networks, as well as to allow
+token-based single-sign-on across multiple sites and
+services. Kerberos is still used widely today as part of the Microsoft
+suite of operating systems and in a number Linux and Unix
+environments. SAML (Security Assertion Markup Language)~\cite{saml},
+SASL~\cite{sasl} are standardized format for exchanging authentication
+and authorization data. SAML is the basis of authentication systems
+like Shibboleth~\cite{shibboleth} whose aim is to create a
+standardized federated authentication system for use across the
+Internet. Systems like OAuth~\cite{oauth}, OpenID~\cite{openid}, or
+Persona~\cite{persona} operate under a similar principle, allowing
+users to designate Cloud-based identity providers who can be used to
+authenticate the user to a range of disparate web services.
+
+PAM~\cite{linux-pam, openpam} is a framework for integrating a variety
+of authentication primitives and systems in an application. PAM is
+used by Linux and a variety of other POSIX operating systems as the
+basis for a flexible user login authentication system. PAM exposes a
+standardized API for integrating various authentication technologies
+into the framework.
+
+Custos aims to be flexible enough to incorporate a range of existing
+authentication primitives and systems based on the user's
+requirements. Custos also incorporates ideas from PAM related to the
+pluggability of authentication modules. The details of these points
+are discusses in subsequent chapters.
 
 \section{Related Work}
 
