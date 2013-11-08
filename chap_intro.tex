@@ -507,6 +507,14 @@ are discusses in subsequent chapters.
 
 \section{Related Work}
 
+Custos is not the only system trying to simplify encryption and
+provide a solution to the key storage problem. A number of other
+systems have been created with similar goals, albeit often different
+approaches. From existing secure storage systems, to secret managers,
+to consumer cryptographic suites many individuals have proposed
+possible ways to make encryption more usable and data more easily
+secured. I discuss some of the existing related work in this section.
+
 \subsection{Secure Storage}
 
 Early storage and file system technologies often neglected security,
@@ -561,9 +569,54 @@ standardized external system for storing and managing keys.
 
 \subsection{Password and Secret Mangers}
 
-Password mangers
+Password and secret managers represent a class of software designed
+for securely storing user secrets. In the age of
+every-website-needs-a-password and constant promoting for personal
+info like CC numbers, SSNs, etc these systems provide the user with a
+method for managing their secrets in a centralized, secure location.
 
-CloudKeep~\cite{cloudkeep-presentation, cloudkeep}
+Password mangers like 1Password~\cite{onepassword},
+LastPass~\cite{lastpass}, or Apple's iCloud Keychain~\cite{icloud}
+provide users with a single repository for storing website
+credentials. These services often integrate with web browsers to allow
+users to atomically populate password and user name fields and log
+into the websites they use. Some web browsers even include password
+management functionality built in. Password managers aim to increase
+user security by allowing users to use a range of unique, complex
+password across sites without the added burden of having to memorize a
+separate complex password for every site. While they do create a
+single-point-of-failure, most security researcher's believe using a
+password manager protected by a strong master password and multi
+factor authentication is more secure than using weak, repetitive
+passwords across website directly~\cite{schneier-passwords,
+  krebs-passwords, brodkin-passman}. Many password managers are also
+capable of storing common user data like SSNs, CC numbers, addresses,
+birth dates, etc and filling this information into website forms that
+require it. While password managers to tend to be a good mechanism for
+managing passwords and user data, they still require a lot of direct
+user intervention (create passwords, filling form fields, etc). They
+generally lack standardized interfaces for directly interacting with
+services requiring user credentials, instead simply using browser
+extensions to copy and paste data into the fields where a user would
+normally type it. They also tend to lack support for arbitrary
+authentication mechanisms. Nor do they provide a good system for data
+sharing or multi-user access. They are often also associated with
+propriety companies, making it difficult to move data from one or
+another and forcing the user to trust the company providing the
+service, violating the principal of separation of features and trust.
+
+Moving beyond password managers, others have proposed generic secret
+storage services (i.e. Key Storage as a Service) similar to Custos.
+CloudKeep~\cite{cloudkeep-presentation, cloudkeep} is a Rackspace
+project that aims to create a standard application key and secret
+storage system, avoiding need to re-implement such systems across each
+applications and providing centralized access control and
+auditing. Custos shares similar goals. CloudKeep, however, lacks the
+fully generic flexibility of Custos, prescribing a more specific usage
+model than Custos requires. A variety of private companies also
+provide similar services (i.e. Gazzang~\cite{gazzang}). These systems,
+however, are propriety, closed, and not easily extensible. They also
+lack the generic functional of Custos.
 
 \subsection{Cryptography Suites}
 
