@@ -620,4 +620,40 @@ lack the generic functional of Custos.
 
 \subsection{Cryptography Suites}
 
-openPGP
+Consumer-oriented cryptography suites exist to make encryption easier
+for the end-user. Unfortunately, as we discussed in previous sections,
+many of these systems have series usability constraints. None the
+less, they do exist as end-user targeted cryptography, and thus share
+Custos's goal of making encryption easily usable to end users.
+
+OpenPGP~\cite{openpgp} is likely the most well known user cryptography
+suite. It provides tools for leveraging asymmetric cryptography to
+encrypt, decrypt, sign, and verify data or messages. On the propriety
+software front, the most common OpenPGP implementation is Symantec's
+PGP~\cite{pgp}. It is the evolution of the original PGP software suite
+and provides users with a GUI, email client plugin, and CLI for
+utilizing OpenPGP. On the open source side, GnuPG~\cite{gnupg} is by
+far the most commonly user OpenPGP utility. Like PGP, it provides
+users with a CLI for preforming OpenPGP operations. There are a number
+of third-party front-end of GnuPG enabling GUI based options and mail
+client integration. All of these systems, however, lack a standardized
+solution for key storage, offloading the burden of protecting private
+keys to the user.
+
+OpenPGP's most common use is to send and receive secure email. Toward
+this end, a variety of mail clients exist to enable easy use of GnuPG
+or PGP when sending or receiving mail. Systems like the
+Enigmail~\cite{enigmail} Thunderbird add-on or the default PGP mail
+Clint plugin provide users with direct access to OpenPGP functions
+from within their mail clients. Some mail clients like
+Mailpile~\cite{mailpile} integrate OpenPGP support directly,
+emphasizing end-user usability of encrypted email. While these systems
+are commendable for striving to make encrypted message more accessible
+to end users, they suffer from the same ``ignore key management
+problem'' that the underling OpenPGP tools they use exhibit. They are
+also all very specific encryption solutions, pertaining direct to
+sending and receiving secure email. They do not broach the larger
+issue of making encryption available to users across and a range of
+arbitrary use cases.
+
+%%  LocalWords:  Mailpile
