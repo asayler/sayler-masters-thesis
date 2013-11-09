@@ -737,22 +737,32 @@ useless. Thus, by storing her data locally or with a separate provider
 than the Custos provider, a Custos user can help reduce the damage a
 misbehaving Custos provider could cause.
 
+\begin{figure}[!tb]
+  \vspace{5ex}
+  \begin{center}
+    \includegraphics[width=.75\textwidth]
+                    {./figs/pdf/Arch-Sharded.pdf}
+  \end{center}
+  \caption{Sharding Trust Across Multiple Providers}
+  \label{fig:arch-sharded}
+\end{figure}
+
 Second, if a user is unwilling to trust a single Custos provider, she
 can instead opt to securely shard her Custos data (encryption keys,
-etc) across multiple, non-cooperating Custos providers. A variety of
-secure secret-sharing systems have been proposed~\cite{Shamir1979,
-  Resch2011, Krawczyk1993}, and these system could be leveraged by
-Custos-backed applications to split Custos data between multiple
-Custos providers. Such a system does not require the Custos's
-providers to even be aware that they are only storing a part of a
-larger secret. Instead, Custos providers behave as they always would,
-but the user must query multiple Custos providers to reassemble the
-full secret. Such a strategy also mitigates a Custos provider being
-offline or unavailable, since many secret sharing system support
-reassembly using only K of a larger set of N keys. I believe many
-Custos application will leverage secret sharing to avoid placing trust
-in a single Custos provider or relying on a single Custos provider's
-availability.
+etc) across multiple, non-cooperating Custos providers as shown in
+Figure \ref{fig:arch-sharded}. A variety of secure secret-sharing
+systems have been proposed~\cite{Shamir1979, Resch2011, Krawczyk1993},
+and these system could be leveraged by Custos-backed applications to
+split Custos data between multiple Custos providers. Such a system
+does not require the Custos's providers to even be aware that they are
+only storing a part of a larger secret. Instead, Custos providers
+behave as they always would, but the user must query multiple Custos
+providers to reassemble the full secret. Such a strategy also
+mitigates a Custos provider being offline or unavailable, since many
+secret sharing system support reassembly using only K of a larger set
+of N keys. I believe many Custos application will leverage secret
+sharing to avoid placing trust in a single Custos provider or relying
+on a single Custos provider's availability.
 
 A Custos user could also opt to self-host her own Custos server. This
 might be an appropriate approach for situations requiring retaining
