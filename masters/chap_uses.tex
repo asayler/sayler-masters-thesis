@@ -123,15 +123,23 @@ administrative perspective.
   possession of a multi-factor device like a cell phone. Users should
   be able to select how their data is protected and what hurdles must
   be jumped to access it.
-\item[Simple Access Granting] \hfill \\ The semantics for granting a
+\item[Simple Access Control] \hfill \\ The semantics for granting a
   specific actor access to specific data for a specific capability
   should be simple and straightforward. It should be clear how to
   grant access, what level of security that access entails, and what
-  the grantee is able to do with such access.
-\item[Simple Access Revocation] \hfill \\ Occasionally, you will need
-  to revoke access that has been previously granted. Doing so should
-  be simple and have well defined semantics to ensure the user knows
-  what effect revoking access is guaranteed or not guaranteed to have.
+  the grantee is able to do with such access. Occasionally, you will
+  need to revoke access that has been previously granted. Doing so
+  should also be simple and have well defined semantics to ensure the
+  user knows what effect revoking access is guaranteed or not
+  guaranteed to have.
+\item[Logical Centralization] \hfill \\ A Custos server should appear
+  as a centralized, globally accessible resource. This will allow
+  applications to access a Custos server regardless of their relative
+  locations. There are some situations where administrators may wish
+  forgo truly global access in favor of to operating a Custos server
+  in a manner that limits access to specific networks or resources,
+  but even in these cases a Custos server should be treated as a
+  global resource within any given administrative domain.
 \end{packed_desc}
 
 The final component of Custos usability is its developer usability. If
@@ -435,7 +443,7 @@ management across a range of ephemeral resources.
       \begin{center}
         \includegraphics[width=.5\textwidth]
                         {./figs/pdf/App-DC-Custos.pdf}
-        \caption{Offloading Key Management to Custos Resolved Issues}
+        \caption{Offloading Key Management to Custos Resolves Issues}
         \label{fig:DC-custos}
       \end{center}
     \end{subfigure}
