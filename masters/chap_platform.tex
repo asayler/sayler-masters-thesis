@@ -111,26 +111,47 @@ storing secrets is fairly well understood. It is Custos's access
 control abstraction that is unique. This abstraction is at the core of
 Custos's flexible capabilities.
 
+\begin{figure}[!tb]
+  \vspace{5ex}
+  \begin{center}
+    \includegraphics[width=.75\textwidth]
+                    {./figs/pdf/Arch-OU.pdf}
+  \end{center}
+  \caption{Custos Organizational Units}
+  \label{fig:arch-ou}
+\end{figure}
+
 In order to discuss the access control abstraction, I must first
 explain the Custos \emph{organizational units} (OU). The Custos
-architecture specifies three organizational units: a server, a group,
-and a key:value object. The server unit is used to specify server-wide
-configuration. A server has one or more groups. A group is used to
-slice a server between a variety of administrative domains. It exists
-to allow a single server to grant group-level administrative
-privileges to multiple, non-cooperating entities (i.e. separate Custos
-provider customers). A group, in turn, has any number of actual
-key:value objects stored within it. Each OU is responsible for the
-creation of OU instances beneath it, e.g. servers create groups and
-groups create objects.
+architecture specifies three organizational units (Figure
+\ref{fig:arch-ou}): a server, a group, and a key:value object. The
+server unit is used to specify server-wide configuration. A server has
+one or more groups. A group is used to slice a server between a
+variety of administrative domains. It exists to allow a single server
+to grant group-level administrative privileges to multiple,
+non-cooperating entities (i.e. separate Custos provider customers). A
+group, in turn, has any number of actual key:value objects stored
+within it. Each OU is responsible for the creation of OU instances
+beneath it, e.g. servers create groups and groups create objects.
+
+\begin{figure}[!tb]
+  \vspace{5ex}
+  \begin{center}
+    \includegraphics[width=.75\textwidth]
+                    {./figs/pdf/Arch-ACS.pdf}
+  \end{center}
+  \caption{Custos Access Control Specification Components}
+  \label{fig:arch-acs}
+\end{figure}
 
 The Custos access control abstraction revolves around designating an
 \emph{Access Control Specification} (ACS) for each OU in the Custos
-architecture. An ACS consists of three components. First, each ACS
-contains a full list of the applicable Custos \emph{permissions} for
-the given OU. Associated with each permission is one or more
-\emph{access control chains} (ACCs). Each ACC in turn consist of an
-ordered list of \emph{authentication attributes}.
+architecture. An ACS consists of three components (Figure
+\ref{fig:arch-acs}). First, each ACS contains a full list of the
+applicable Custos \emph{permissions} for the given OU. Associated with
+each permission is one or more \emph{access control chains}
+(ACCs). Each ACC in turn consist of an ordered list of
+\emph{authentication attributes}.
 
 \subsection{Permissions}
 
@@ -264,9 +285,9 @@ satisfying at least one of the ACCs associated with that permission.
 For example, consider a key:value object whose \texttt{obj\_read}
 permission has the following ACC:
 
-\begin{verbatim}
+\begin{Verbatim}[samepage=true]
 [ (username = 'Andy'), (password = '12345'), (src\_ip = 192.168.1.0/24) ]
-\end{verbatim}
+\end{Verbatim}
 
 In order for my read request for the associated key:value object to
 succeed, I would have to make sure that my request contained all three
@@ -283,11 +304,11 @@ Looking at a slightly more complex example, consider the same
 \texttt{obj\_read} permission, but this time with two separate ACCs
 associated with it:
 
-\begin{verbatim}
+\begin{Verbatim}[samepage=true]
 [ (username = 'Andy'), (password = '12345'), (src\_ip = 192.168.1.0/24) ]
 [ (username = 'Andy'), (password = '12345'), (src\_ip = 75.148.118.216/29) ]
 [ (username = 'John'), (password = 'Swordfish') ]
-\end{verbatim}
+\end{Verbatim}
 
 Now I am able to make the Custos request from either the local network
 or from my home IP range. As long as I can satisfy at least one ACC in
@@ -413,11 +434,12 @@ for authentication data. AAs contain the following information:
 
 The current Custos specification supports a handful of authentication
 types. Thus far, the types support by Custos are primarily associated
-with stateless authentication mechanisms. This simplifies the design of
-the RESTful interface and authentication plugins. That said, Custos
-eventually intends to supports fully arbitrary authentication parameters,
-allowing authentication plugins to maintain their state across
-requests where required. The currently defined implicit types are:
+with stateless authentication mechanisms. This simplifies the design
+of the RESTful interface and authentication plugins. That said, Custos
+eventually intends to supports fully arbitrary authentication
+parameters, allowing authentication plugins to maintain their state
+across requests where required. The currently defined implicit types
+are:
 
 \begin{packed_desc}
 \item[\texttt{ip\_src}] \hfill \\ The source IP of a request as seen
@@ -467,6 +489,100 @@ this may effect inter-implementation compatibility. Implementations
 that do use their own types may wish to propose them as official types
 so that other implementations will support them as well.
 
+\subsection{Example}
+
+As an example showing the full access control process, consider a
+Custos-backed encrypted file system application. Figure
+\ref{fig:arch-request} shows two users of this application attempting
+to access an encrypted file. In order to decrypt the file and provide
+access, the encrypted file system must query Custos for the necessary
+encryption keys.
+
+\begin{figure}[!tb]
+  \vspace{5ex}
+  \begin{center}
+    \includegraphics[width=.75\textwidth]
+                    {./figs/pdf/Arch-KeyRequest-All.pdf}
+  \end{center}
+  \caption{An Example Custos Request Sequence}
+  \label{fig:arch-request}
+\end{figure}
+
+The first user (red) is a daemon process running on a headless server
+(IP = 1.2.3.4). The file the daemon wishes to read has an ACS
+associated with it that contains the \texttt{obj\_read} permission and
+grants access to this permission on the basis of the host IP and the
+time:
+
+\begin{Verbatim}[samepage=true]
+{
+  obj\_read:
+    [
+      [ (ip\_src = '1.2.3.4'), (time\_utc = '1300 +/- 5') ]
+      ...
+    ]
+  ...
+}
+\end{Verbatim}
+
+When the daemon reads the file, the encrypted file system requests the
+associated encryption key from the server (dashed red line). The
+request passes through the access control module, which looks up the
+Access Control Chains associated with obj\_read permission for the
+requested key:value pair. The requests is then passed to each of the
+necessary Authentication Attribute modules in the order they appear in
+the chain. Because the request is coming from an allows IP, it passes
+the source IP verification module. Next, as long as the request is
+being made within 5 minutes of 1300 hours UTC, the request will also
+pass the time verification module. After satisfying both attributes
+specified in the ACC, the request is granted the obj\_read permission
+and passed to the audit module for logging. Finally, the server looks
+up the requested key:value pair (in this case the encryption key for
+the corresponding file) in the key:value store, generates a response,
+and returns it to the encrypted file system. The file system decrypts
+the file and returns it to the daemon that originally made the read
+request. All of this is done without any interactive input on the part
+of the daemon, overcoming one of the traditional obstacles to using
+encryption with automated processed.
+
+The second user (blue) is a live user named Dirk also trying to read a
+file on the encrypted file system. The file the user wishes to read
+has an ACS associated with it that contains the \texttt{obj\_read}
+permission and grants access to this permission on the basis of the
+user ID and a password:
+
+\begin{verbatim}
+{
+  obj\_read:
+    [
+      [ (user\_id = 'Dirk'), (psk = 'WorldOfBeer') ]
+      ...
+    ]
+  ...
+}
+\end{verbatim}
+
+When user reads the file, the encrypted file system requests the
+associated encryption key from the server (dashed blue line),
+attaching the current users ID of 'Dirk' to the request (but excluding
+the password). The request passes through the access control module,
+which, as before, looks up the Access Control Chains associated with
+the obj\_read permission for the requested key:value pair. The request
+is then passed to the user ID verification authentication plugin,
+which confirms that the user ID of Dirk is present, next the request
+is passed to the PSK module for password verification. Unfortunately,
+the request lacks the necessary password, so the server responds to
+the request informing the encrypted file system that a password is
+required for user 'Dirk'. The encrypted file system prompts the user
+for their password, and reissues the request, including everything
+from the first request and in addition the newly provided password
+(dotted blue line). This time the request clears both AA verification
+modules, passes through the auditing system, and finally hits the
+actual key:value store. Here the server looks up the requested key,
+generates a response, and returns it to the file system. The file
+system decrypts the requested file and allows the user's read to
+proceed on the resulting clear text.
+
 \section{API}
 
 format, etc
@@ -483,7 +599,7 @@ For controlling keys
 
 For auditing  keys
 
-\section{Implementation}
+\section{Prototype Implementation}
 
 \subsection{API}
 
