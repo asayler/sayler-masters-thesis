@@ -41,12 +41,10 @@ The Custos architecture contains several core components:
   \label{fig:arch-overview}
 \end{figure}
 
-Figure \ref{fig:arch-overview} shows the core Custos components. The
-Custos architecture utilizes a client-server model. I'll discuss the
-details of the Custos architecture in more details with respect to
-both the client and server halves of the system below.
+Figure \ref{fig:arch-overview} shows the core Custos components. I'll
+discuss the details of the Custos architecture in more details below.
 
-\subsection{Server}
+\subsection{Overview}
 
 The bulk of core Custos functionality is handled on the server
 side. The server is designed to expose a single standardized API in
@@ -95,17 +93,123 @@ implements the following components:
   etc).
 \end{packed_desc}
 
-\subsection{Client}
+A Custos client applications interacts with a Custos server via the
+API. As such, a client can simply offload the bulk of it's key
+management directly to Custos through API-backed RPC libraries. Custos
+simply becomes a remote key:value store where applications secrets are
+stored. To satisfy Custos's authentication requirements, applications
+can generate the necessary authentication attributes directly or can
+instead pass these requirements on to the user, querying them for the
+necessary attributes to send to Custos. Applications can either
+implement their own auditing and management user controls directly,
+passing the necessary information back to Custos via the API, or
+applications can pass off auditing or management duties to separate
+applications that interact directly with the Custos server.
 
-Custos Client Application Blocks
+\subsection{Access Control Abstraction}
 
-\subsection{Authentication and Access Control}
+As I already mentioned, the key:value abstraction Custos presents for
+storing secrets is fairly well understood. It is Custos's access
+control abstraction that is unique. This abstraction is at the core of
+Custos's flexible capabilities.
 
-Permissions
+The Custos abstraction control abstraction revolves around designating
+an access control specification (ACS) for each object in the Custos
+data store or for the Custos server itself. An ACS consists of three
+components. First, each ACS contains a full list of the applicable
+Custos \emph{permissions}. Associated with each permission is one or
+more \emph{access control chains} (ACCs). Each ACC in turn consist of
+an ordered list of \emph{authentication attributes}.
 
-ACLs
+\subsubsection{Permissions}
 
-Users?
+The Custos access control model starts with the concepts of a
+permission: a right to perform a specific Custos action. Custos
+permissions are generally associated with the three core Custos
+subsystems: data access, auditing, and access control. Custos also has
+permission at two levels: per-server permissions, each associated with a
+specific Custos server, and per-object permissions, each associated with
+a specific key:value object.
+
+The Custos data access permissions follow the pattern used by many
+data access systems: permission to read data, permission to write
+data, permission to create data, and permission to delete data. These
+permissions are modified slightly to account for Custos's versioning
+system. Unlike many system, Custos has no notion of object
+ownership. Instead, it relies on priding access to each right an owner
+would traditionally hold via explicit permissions. The per-server
+Custos data access permissions are:
+
+\begin{packed_desc}
+\item[create] \hfill \\ The 'create' permission grants a user the
+  right to create a new key:value object on a Custos server. When
+  created, this object is associated with a programable default ACS
+  similar to the Linux umask~\cite{man-umask} mechanism.
+\end{packed_desc}
+
+The per-object Custos data access permissions are:
+
+\begin{packed_desc}
+\item[delete] \hfill \\ The 'delete' permission grants a user the
+  right to delete all versions of an existing key:value object.
+\item[read] \hfill \\ The 'read' permission grants a user the right to
+  read an exiting key:value object.
+\item[update] \hfill \\ The 'update' permission grants a user the
+  right to create a new version of a key:value object. It is the
+  Custos equivalent of a ``write'' permission, but accounts for the fact
+  the Custos key:value pairs are write-once objects, so ``writing'' to
+  them really means creating a new version.
+\end{packed_desc}
+
+Similar to the data permissions, Custos associates audit permissions
+with various entities. The per-server Custos audit permissions are:
+
+\begin{packed_desc}
+\item[audit-server] \hfill \\ The 'audit-server' permission grants a
+  user the right to read all audit information not associated with an
+  existing key:value object. This includes information related to
+  requests for non-existent objects, object creation, etc.
+\end{packed_desc}
+
+The per-object Custos audit permissions are:
+
+\begin{packed_desc}
+\item[audit] \hfill \\ The 'audit' permission grants a user the right
+  to read all audit information associated with an existing key:value
+  object. This includes information related to object access (both
+  granted and denied), object versioning, etc.
+\item[clean] \hfill \\ The 'clean' permission grants a user the right
+  to delete all audit information associated with an existing key:value
+  object.
+\end{packed_desc}
+
+Finally, the Custos management permission control a users ability to
+manage a Custos object or server. The per-server Custos management
+permissions are:
+
+\begin{packed_desc}
+\item[mask-get] \hfill \\ The 'mask-get' permission grants a user the
+  right to read the mask used to associate a default ACS with a newly
+  created key:value pair.
+\item[mask-set] \hfill \\ The 'mask-set' permission grants a user the
+  right to set the mask used to associate a default ACS with a newly
+  created key:value pair.
+\end{packed_desc}
+
+The per-object Custos management permissions are:
+
+\begin{packed_desc}
+\item[acs-get] \hfill \\ The 'acs-get' permission grants a user the
+  right to view the ACS associated with an existing key-value pair.
+\item[acs-set] \hfill \\ The 'acs-set' permission grants a user the
+  right to set the ACS associated with an existing key-value pair.
+\end{packed_desc}
+
+\subsubsection{Access Control Chains}
+
+
+\subsubsection{Authentication Attributes}
+
 
 \section{Interface}
 
@@ -134,3 +238,5 @@ Standardized module interface
 \subsection{Back-end Storage}
 
 Variable back-end key-value providers
+
+%%  LocalWords:  ACS ACCs ACC acs
