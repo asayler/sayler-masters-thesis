@@ -255,6 +255,140 @@ The per-object Custos permissions are:
 
 \subsubsection{Access Control Chains}
 
+Now that we've seen the available permissions contain in an ACS for a
+specific OU, I can explain the next portion of an ACS: the access
+control chains (ACCs). An access control chain is an ordered list or
+authentication attributes. Each permission in an ACS is associated
+with one or more ACCs. In order for a request to be granted a specific
+permission, it must be bale to provide authentication attributes
+satisfying at least one of the ACCs associated with that permission.
+
+For example, consider a key:value object whose \texttt{obj\_read}
+permission has the following ACC:
+
+\begin{verbatim}
+[ (username = 'Andy'), (password = '12345'), (src\_ip = 192.168.1.0/24) ]
+\end{verbatim}
+
+In order for my read request for the associated key:value object to
+succeed, I would have to make sure that my request contained all three
+of the above authentication attributes. That would mean attaching the
+'username' attribute to the request with a value of 'Andy', as well as
+attaching the 'password' attribute to the request with a value of
+'12345'. The src\_ip attribute is an implicit attribute (see next
+section) and will be atomically added to my request when received by
+the Custos server. In order to satisfy it, I would have to send the
+request from the local network attached to the Custos server I'm
+trying to query.
+
+Looking at a slightly more complex example, consider the same
+\texttt{obj\_read} permission, but this time with two separate ACCs
+associated with it:
+
+\begin{verbatim}
+[ (username = 'Andy'), (password = '12345'), (src\_ip = 192.168.1.0/24) ]
+[ (username = 'Andy'), (password = '12345'), (src\_ip = 75.148.118.216/29) ]
+[ (username = 'John'), (password = 'Swordfish') ]
+\end{verbatim}
+
+Now I am able to make the Custos request from either the local network
+or from my home IP range. As long as I can satisfy at least one ACC in
+a set of ACCs for a given permission, I am granted the right to
+perform actions associated with the permission. I have also granted
+access to an addition user, John, with his own password and no src\_ip
+restriction.
+
+This system is highly flexible. Take for example, the lack of explicit
+username support anywhere in the Custos specification. As was done
+above, usernames simply become another authentication attribute, often
+the first attribute in a ACC to allow for all following attributes to
+be made relative to the username attribute. But there's nothing
+special about usernames. I could just have easily started each ACC
+with a src\_ip, requiring a separate password based upon the location
+a user is making their request from. The combination of simple ordered
+attribute lists and a wide range of flexible attributes makes for a
+very powerful access control system.
+
+Another point worth noting is that sets of ACCs can be converted into
+sets of trees, often simplifying the understanding of their
+intent. ACC list sets are converted into ACC tree sets by combining
+each attribute in matching attribute sub-lists across multiple lists
+into single nodes in a ACC tree. For example, the previous set of ACC
+lists could also be represented as:
+
+\begin{center}
+\begin{tikzpicture}
+  \tikzset{level distance=30pt}
+  \tikzset{sibling distance=0pt}
+  \Tree [
+    .\texttt{(username = 'Andy')}
+    [ .\texttt{(password = '12345')}
+      \texttt{(src\_ip = 192.168.1.0/24)} \texttt{(src\_ip = 75.148.118.216/29)} ]
+  ]
+\end{tikzpicture}
+\begin{tikzpicture}
+  \tikzset{level distance=60pt}
+  \tikzset{sibling distance=0pt}
+  \Tree [
+    .\texttt{(username = 'John')}
+    [ .\texttt{(password = 'Swordfish')} ]
+  ]
+\end{tikzpicture}
+\end{center}
+
+Finally, where desired, the Custos API can continue to prompt the user
+for the next N missing attribute types in a chain. For now, N is a
+per-implementation constant, but eventually N will be available as a
+configuration parameter on a per-object basis. When N > 0, this
+feature is leaking some authentication information in the form of the
+required attribute types (although not their values), so it is left to
+the user to decide when such leaking is acceptable and when it is
+not. When in use, this feature allows a Custos server to engage in a
+back-and forth with a client to prompt the client through all required
+attribute types in an ACC. For example, in the case where N is equal
+to 1, and the previously mentioned ACCs are in effect, the following
+set of transactions would occur:
+
+\begin{packed_enum}
+\item The user sends a read object request with no attributes
+\item The server respond that a username attribute is required
+\item The user resubmits the request with an attached username
+  attribute equal to 'Andy'
+\item The server responds that a password is required
+\item The user resubmits the response with a password equal to '12345'
+\item As long as the user is submitting request from either the local
+  network or my home IP range, the server will respond granting the
+  request.
+\end{packed_enum}
+
+But what happens where there are multiple next steps in an ACC? For a
+more complex request-response example, consider the ACC expressed in
+the following tree:
+
+\begin{center}
+\begin{tikzpicture}
+  \tikzset{level distance=60pt}
+  \tikzset{sibling distance=0pt}
+  \Tree [
+    .\texttt{(username = 'Andy')}
+    \texttt{(password = '12345')} \texttt{(auth\_cert = '0x32C59C00')}
+  ]
+\end{tikzpicture}
+\end{center}
+
+In this ACC, I must either provide a password or prove access to my
+GPG authentication key. Rehashing the request-response sequence from
+the previous ACC example:
+
+\begin{packed_enum}
+\item The user sends a read object request with no attributes
+\item The server respond that a username attribute is required
+\item The user resubmits the request with an attached username
+  attribute equal to 'Andy'
+\item The server responds that a password or a auth\_cert is required
+\item The user resubmits the response with a password equal to '12345'
+\item The server responds granting the request.
+\end{packed_enum}
 
 \subsubsection{Authentication Attributes}
 
@@ -287,4 +421,4 @@ Standardized module interface
 
 Variable back-end key-value providers
 
-%%  LocalWords:  ACS ACCs ACC acs OU srv grp
+%%  LocalWords:  ACS ACCs ACC acs OU srv grp src ip usernames auth
