@@ -44,8 +44,6 @@ The Custos architecture contains several core components:
 Figure \ref{fig:arch-overview} shows the core Custos components. I'll
 discuss the details of the Custos architecture in more details below.
 
-\subsection{Overview}
-
 The bulk of core Custos functionality is handled on the server
 side. The server is designed to expose a single standardized API in
 order to allow for a variety of inter-compatible implementations (one
@@ -106,7 +104,7 @@ passing the necessary information back to Custos via the API, or
 applications can pass off auditing or management duties to separate
 applications that interact directly with the Custos server.
 
-\subsection{Access Control Abstraction}
+\section{Access Control Abstraction}
 
 As I already mentioned, the key:value abstraction Custos presents for
 storing secrets is fairly well understood. It is Custos's access
@@ -134,7 +132,7 @@ the given OU. Associated with each permission is one or more
 \emph{access control chains} (ACCs). Each ACC in turn consist of an
 ordered list of \emph{authentication attributes}.
 
-\subsubsection{Permissions}
+\subsection{Permissions}
 
 The Custos access control model starts with the concept of a
 permission: a right to perform a specific Custos action. Custos has
@@ -253,7 +251,7 @@ The per-object Custos permissions are:
   associated controlling the permissions in this list.
 \end{packed_desc}
 
-\subsubsection{Access Control Chains}
+\subsection{Access Control Chains}
 
 Now that we've seen the available permissions contain in an ACS for a
 specific OU, I can explain the next portion of an ACS: the access
@@ -390,10 +388,12 @@ the previous ACC example:
 \item The server responds granting the request.
 \end{packed_enum}
 
-\subsubsection{Authentication Attributes}
+\subsection{Authentication Attributes}
 
 
-\section{Interface}
+\section{API}
+
+format, etc
 
 \subsection{Data API Components}
 
@@ -421,4 +421,4 @@ Standardized module interface
 
 Variable back-end key-value providers
 
-%%  LocalWords:  ACS ACCs ACC acs OU srv grp src ip usernames auth
+%%  LocalWords:  ACS ACCs ACC OU srv grp src ip usernames auth
