@@ -390,6 +390,82 @@ the previous ACC example:
 
 \subsection{Authentication Attributes}
 
+Each Access Control Chain contains one or more Authentication
+Attributes (AAs). An authentication attribute is a generic container
+for authentication data. AAs contain the following information:
+
+\begin{packed_desc}
+\item[Class] \hfill \\ The class is the top level classification
+  property of an AA. It is used to designate the nature of a given
+  AA. Currently, Custos specific two possible values for class:
+  ``implicit'' and ``explicit''. Implicit attributes are those that
+  are automatically associated with a request (like an IP address or SSL
+  client certificate). Explicit attributes are those that the user
+  provides directly (like a password or token).
+\item[Type] \hfill \\ Within a given class, the AA type specific which
+  authentication plugin should handle a specific attribute. Details on
+  currently supported Custos types are provided below.
+\item[Value] \hfill \\ The value contains the arbitrary binary data
+  associated with a given attribute. This could be a password, token,
+  or portion of a handshake for more complicated authentication
+  mechanisms.
+\end{packed_desc}
+
+The current Custos specification supports a handful of authentication
+types. Thus far, the types support by Custos are primarily associated
+with stateless authentication mechanisms. This simplifies the design of
+the RESTful interface and authentication plugins. That said, Custos
+eventually intends to supports fully arbitrary authentication parameters,
+allowing authentication plugins to maintain their state across
+requests where required. The currently defined implicit types are:
+
+\begin{packed_desc}
+\item[\texttt{ip\_src}] \hfill \\ The source IP of a request as seen
+  by the Custos server (e.g. the gateway IP is the source IP is behind
+  a NAT device, etc). Compared against the required
+  \texttt{$\langle$base$\rangle$/$\langle$mask$\rangle$} specification where
+  included.
+\item[\texttt{user\_agent}] \hfill \\ The HTTP user agent
+  associated with a given request. Compared against the required text
+  value where included.
+\item[\texttt{auth\_type}] \hfill \\ The HTTP authentication type
+  associated with a given request (i.e. none, basic, digest,
+  tls). Compared against the required type where included.
+\item[\texttt{auth\_value}] \hfill \\ The HTTP authentication value
+  associated with a given request. Often a username or some other
+  identifying value output by the HTTP servers internal authentication
+  mechanisms. Compared against the required value where included.
+\item[\texttt{time\_utc}] \hfill \\ The time the request arrived in
+  UTC. Compared against the
+  \texttt{$\langle$base$\rangle$/$\langle$mask$\rangle$} UTC time
+  specification where included.
+\end{packed_desc}
+
+\noindent
+The currently defined explicit types are:
+
+\begin{packed_desc}
+\item[\texttt{user\_id}] \hfill \\ An arbitrary value. Directly
+  compared agings the required attribute value where included. Behaves
+  the same as the \texttt{psk} type, but gets its own type for
+  readability of semantic intent.
+\item[\texttt{psk}] \hfill \\ An arbitrary value. Directly
+  compared against the required attribute value where included.
+\item[\texttt{psk\_sha256}] \hfill \\ An arbitrary value. Hashed with
+  the sha256 algorithm with the result compared against the the
+  required attribute value where included. Specifications related to
+  iterations and salting are specified on a per-site basis.
+\item[\texttt{psk\_bcrypt}] \hfill \\ An arbitrary value. Hashed with
+  the bcrypt algorithm with the result compared against the the
+  required attribute value where included. Specifications related to
+  work factor and salting are specified on a per-site basis.
+\end{packed_desc}
+
+Other authentication types will be added as Custos matures. It's also
+possible for Custos implementations to support non-standard types, but
+this may effect inter-implementation compatibility. Implementations
+that do use their own types may wish to propose them as official types
+so that other implementations will support them as well.
 
 \section{API}
 
@@ -421,4 +497,5 @@ Standardized module interface
 
 Variable back-end key-value providers
 
-%%  LocalWords:  ACS ACCs ACC OU srv grp src ip usernames auth
+%%  LocalWords:  ACS ACCs ACC OU srv grp src ip usernames auth acs
+%%  LocalWords:  username AAs tls psk sha bcrypt utc
