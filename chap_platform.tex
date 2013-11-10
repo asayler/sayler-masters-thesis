@@ -113,96 +113,144 @@ storing secrets is fairly well understood. It is Custos's access
 control abstraction that is unique. This abstraction is at the core of
 Custos's flexible capabilities.
 
-The Custos abstraction control abstraction revolves around designating
-an access control specification (ACS) for each object in the Custos
-data store or for the Custos server itself. An ACS consists of three
-components. First, each ACS contains a full list of the applicable
-Custos \emph{permissions}. Associated with each permission is one or
-more \emph{access control chains} (ACCs). Each ACC in turn consist of
-an ordered list of \emph{authentication attributes}.
+In order to discuss the access control abstraction, I must first
+explain the Custos \emph{organizational units} (OU). The Custos
+architecture specifies three organizational units: a server, a group,
+and a key:value object. The server unit is used to specify server-wide
+configuration. A server has one or more groups. A group is used to
+slice a server between a variety of administrative domains. It exists
+to allow a single server to grant group-level administrative
+privileges to multiple, non-cooperating entities (i.e. separate Custos
+provider customers). A group, in turn, has any number of actual
+key:value objects stored within it. Each OU is responsible for the
+creation of OU instances beneath it, e.g. servers create groups and
+groups create objects.
+
+The Custos access control abstraction revolves around designating an
+\emph{Access Control Specification} (ACS) for each OU in the Custos
+architecture. An ACS consists of three components. First, each ACS
+contains a full list of the applicable Custos \emph{permissions} for
+the given OU. Associated with each permission is one or more
+\emph{access control chains} (ACCs). Each ACC in turn consist of an
+ordered list of \emph{authentication attributes}.
 
 \subsubsection{Permissions}
 
-The Custos access control model starts with the concepts of a
-permission: a right to perform a specific Custos action. Custos
-permissions are generally associated with the three core Custos
-subsystems: data access, auditing, and access control. Custos also has
-permission at two levels: per-server permissions, each associated with a
-specific Custos server, and per-object permissions, each associated with
-a specific key:value object.
+The Custos access control model starts with the concept of a
+permission: a right to perform a specific Custos action. Custos has
+specific permissions associated with each OU: per-server permissions,
+each associated with the top-level Custos server, per-group
+permission, each associated with a specific server group, and
+per-object permissions, each associated with a specific key:value
+object within a group.
 
-The Custos data access permissions follow the pattern used by many
-data access systems: permission to read data, permission to write
-data, permission to create data, and permission to delete data. These
+Custos permissions are generally associated with the three core Custos
+subsystems based upon the subsystem handling the associated actions
+the permission grants: data access, auditing, and management. The
+Custos data access permissions follow the pattern used by many data
+access systems: permission to read data, permission to write data,
+permission to create data, and permission to delete data. These
 permissions are modified slightly to account for Custos's versioning
 system. Unlike many system, Custos has no notion of object
-ownership. Instead, it relies on priding access to each right an owner
-would traditionally hold via explicit permissions. The per-server
-Custos data access permissions are:
+ownership. Instead, it relies on providing access to each right an
+owner would traditionally hold via explicit permissions. Likewise,
+Custos associates audit permissions with various entities. Audit
+permission grant read and delete access to various audit data.
+Finally, the Custos management permissions control a users ability to
+manage a specific Custos OU. This includes the ability to manipulate
+OU access control specifications.
+
+\noindent
+The per-server (server-wide) Custos permissions are:
 
 \begin{packed_desc}
-\item[create] \hfill \\ The 'create' permission grants a user the
-  right to create a new key:value object on a Custos server. When
-  created, this object is associated with a programable default ACS
-  similar to the Linux umask~\cite{man-umask} mechanism.
+\item[\texttt{srv\_create\_grp}] \hfill \\ The
+  \texttt{srv\_create\_grp} permission grants a user the right to
+  create a new group on a Custos server. When created, this group is
+  associated with an initial default ACS, programmable via the next
+  two permission.
+\item[\texttt{srv\_new\_grp\_acs\_get}] \hfill \\ The
+  \texttt{srv\_new\_grp\_acs\_get} permission grants a user the right
+    to read the default ACS applied to newly created groups.
+\item[\texttt{srv\_new\_grp\_acs\_set}] \hfill \\ The
+  \texttt{srv\_new\_grp\_acs\_set} permission grants a user the right
+  to set the default ACS applied to newly created groups.
+\item[\texttt{srv\_audit}] \hfill \\ The \texttt{srv\_audit}
+  permission grants a user the right to read all audit information not
+  associated with an existing server group. This includes information
+  related to requests for non-existent groups, group creation, etc.
+\item[\texttt{srv\_clean}] \hfill \\ The \texttt{srv\_clean}
+  permission grants a user the right to delete all audit information
+  not associated with an existing server group.
+\item[\texttt{srv-acs-get}] \hfill \\ The \texttt{srv-acs-get}
+  permission grants a user the right to view the per-server ACS
+  controlling the permissions in this list.
+\item[\texttt{srv-acs-set}] \hfill \\ The \texttt{srv-acs-set}
+  permission grants a user the right to set the per-server ACS
+  controlling the permissions in this list.
 \end{packed_desc}
 
-The per-object Custos data access permissions are:
+\noindent
+The per-group (group-wide) Custos permissions are:
 
 \begin{packed_desc}
-\item[delete] \hfill \\ The 'delete' permission grants a user the
-  right to delete all versions of an existing key:value object.
-\item[read] \hfill \\ The 'read' permission grants a user the right to
-  read an exiting key:value object.
-\item[update] \hfill \\ The 'update' permission grants a user the
-  right to create a new version of a key:value object. It is the
-  Custos equivalent of a ``write'' permission, but accounts for the fact
-  the Custos key:value pairs are write-once objects, so ``writing'' to
-  them really means creating a new version.
+\item[\texttt{grp\_create\_obj}] \hfill \\ The
+  \texttt{grp\_create\_obj} permission grants a user the right to
+  create a new key:value object within a given group. When created,
+  this object is associated with an initial default ACS, programmable
+  via the next two permission.
+\item[\texttt{grp\_new\_obj\_acs\_get}] \hfill \\ The
+  \texttt{grp\_new\_obj\_acs\_get} permission grants a user the right
+  to read the default ACS applied to newly created objects.
+\item[\texttt{grp\_new\_obj\_acs\_set}] \hfill \\ The
+  \texttt{grp\_new\_obj\_acs\_set} permission grants a user the right
+  to set the default ACS applied to newly created objects.
+\item[\texttt{grp\_audit}] \hfill \\ The \texttt{grp\_audit}
+  permission grants a user the right to read all audit information not
+  associated with an existing key:value object. This includes
+  information related to requests for non-existent objects, object
+  creation, etc.
+\item[\texttt{grp\_clean}] \hfill \\ The \texttt{grp\_clean}
+  permission grants a user the right to delete all audit information
+  not associated with an existing key:value object.
+\item[\texttt{grp\_acs\_get}] \hfill \\ The \texttt{grp\_acs\_get}
+  permission grants a user the right to view the per-group ACS
+  controlling the permissions in this list.
+\item[\texttt{grp\_acs\_set}] \hfill \\ The \texttt{grp\_acs\_set}
+  permission grants a user the right to set the per-group ACS
+  controlling the permissions in this list.
 \end{packed_desc}
 
-Similar to the data permissions, Custos associates audit permissions
-with various entities. The per-server Custos audit permissions are:
+\noindent
+The per-object Custos permissions are:
 
 \begin{packed_desc}
-\item[audit-server] \hfill \\ The 'audit-server' permission grants a
-  user the right to read all audit information not associated with an
-  existing key:value object. This includes information related to
-  requests for non-existent objects, object creation, etc.
-\end{packed_desc}
-
-The per-object Custos audit permissions are:
-
-\begin{packed_desc}
-\item[audit] \hfill \\ The 'audit' permission grants a user the right
-  to read all audit information associated with an existing key:value
-  object. This includes information related to object access (both
-  granted and denied), object versioning, etc.
-\item[clean] \hfill \\ The 'clean' permission grants a user the right
-  to delete all audit information associated with an existing key:value
+\item[\texttt{obj\_delete}] \hfill \\ The \texttt{obj\_delete}
+  permission grants a user the right to delete all versions of an
+  existing key:value object.
+\item[\texttt{obj\_read}] \hfill \\ The \texttt{obj\_read} permission
+  grants a user the right to read all versions of an exiting key:value
   object.
-\end{packed_desc}
-
-Finally, the Custos management permission control a users ability to
-manage a Custos object or server. The per-server Custos management
-permissions are:
-
-\begin{packed_desc}
-\item[mask-get] \hfill \\ The 'mask-get' permission grants a user the
-  right to read the mask used to associate a default ACS with a newly
-  created key:value pair.
-\item[mask-set] \hfill \\ The 'mask-set' permission grants a user the
-  right to set the mask used to associate a default ACS with a newly
-  created key:value pair.
-\end{packed_desc}
-
-The per-object Custos management permissions are:
-
-\begin{packed_desc}
-\item[acs-get] \hfill \\ The 'acs-get' permission grants a user the
-  right to view the ACS associated with an existing key-value pair.
-\item[acs-set] \hfill \\ The 'acs-set' permission grants a user the
-  right to set the ACS associated with an existing key-value pair.
+\item[\texttt{obj\_update}] \hfill \\ The \texttt{obj\_update}
+  permission grants a user the right to create a new version of a
+  key:value object. It is the Custos equivalent of a ``write''
+  permission, but accounts for the fact the Custos key:value pairs are
+  write-once objects, so ``writing'' to them really means creating a
+  new version.
+\item[\texttt{obj\_audit}] \hfill \\ The \texttt{obj\_audit}
+  permission grants a user the right to read all audit information
+  associated with an existing key:value object. This includes
+  information related to object access (both granted and denied),
+  object versioning, etc.
+\item[\texttt{obj\_clean}] \hfill \\ The \texttt{obj\_clean}
+  permission grants a user the right to delete all audit information
+  associated with an existing key:value object.
+\item[\texttt{obj\_acs\_get}] \hfill \\ The \texttt{obj\_acs\_get}
+  permission grants a user the right to view the per-object ACS
+  associated controlling the permissions in this list.
+\item[\texttt{obj\_acs\_set}] \hfill \\ The \texttt{obj\_acs\_set}
+  permission grants a user the right to set the per-object ACS
+  associated controlling the permissions in this list.
 \end{packed_desc}
 
 \subsubsection{Access Control Chains}
@@ -239,4 +287,4 @@ Standardized module interface
 
 Variable back-end key-value providers
 
-%%  LocalWords:  ACS ACCs ACC acs
+%%  LocalWords:  ACS ACCs ACC acs OU srv grp
