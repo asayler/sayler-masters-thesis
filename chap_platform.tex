@@ -183,11 +183,10 @@ OU access control specifications.
 The per-server (server-wide) Custos permissions are:
 
 \begin{packed_desc}
-\item[\texttt{srv\_create\_grp}] \hfill \\ The
-  \texttt{srv\_create\_grp} permission grants a user the right to
-  create a new group on a Custos server. When created, this group is
-  associated with an initial default ACS, programmable via the next
-  two permission.
+\item[\texttt{srv\_grp}] \hfill \\ The \texttt{srv\_grp} permission
+  grants a user the right to create, delete, or list groups on a
+  Custos server. When created, this group is associated with an
+  initial default ACS, programmable via the next two permission.
 \item[\texttt{srv\_new\_grp\_acs\_get}] \hfill \\ The
   \texttt{srv\_new\_grp\_acs\_get} permission grants a user the right
     to read the default ACS applied to newly created groups.
@@ -213,11 +212,11 @@ The per-server (server-wide) Custos permissions are:
 The per-group (group-wide) Custos permissions are:
 
 \begin{packed_desc}
-\item[\texttt{grp\_create\_obj}] \hfill \\ The
-  \texttt{grp\_create\_obj} permission grants a user the right to
-  create a new key:value object within a given group. When created,
-  this object is associated with an initial default ACS, programmable
-  via the next two permission.
+\item[\texttt{grp\_obj}] \hfill \\ The \texttt{grp\_obj}
+  permission grants a user the right to create, delete, or list
+  key:value objects within a given group. When created, this object is
+  associated with an initial default ACS, programmable via the next
+  two permission.
 \item[\texttt{grp\_new\_obj\_acs\_get}] \hfill \\ The
   \texttt{grp\_new\_obj\_acs\_get} permission grants a user the right
   to read the default ACS applied to newly created objects.
@@ -585,19 +584,134 @@ proceed on the resulting clear text.
 
 \section{API}
 
-format, etc
+The Custos API is the primary interface for interacting with a Custos
+server. The API handles, data, management, and auditing requests
+through a common interface. All API requests can contain
+authentication attributes as a means of attaining the necessary
+permission level for a requested operation. The API is RESTful and
+primarily stateless (individual authentication modules are allowed to
+maintain state if required).
 
-\subsection{Data API Components}
+API requests are made to specific server HTTP endpoints. The standard
+HTTP verbs (\texttt{GET}, \texttt{POST}, \texttt{DELETE}, etc) are
+used to multiplex related operations atop a specific endpoint. Each
+combination of endpoint and verb defines a specific API method. Each
+method required specific permission to complete. The API request and
+response message formats are composed in JSON. Binary data is encoded
+as Base64 ASCII text. When made as a \texttt{GET} request using a
+query string, JSON messages are URL encoded.
 
-For getting, setting keys
+\subsection{Message Format}
 
-\subsection{Management API Components}
+API requests and response use standard JSON objects as the basis for
+their message formats. Each request or response message shares a
+standard format. The effect of the message is determined by it's
+contents, as well as the endpoint and verb user to send it to the
+server. Examples API messages can be found in Appendix
+\ref{appx:messages}.
 
-For controlling keys
+The following are the required components in any Custos message. Each
+is represented as a key:value pair in the top level JSON message
+object.
 
-\subsection{Auditing API Components}
+\begin{packed_desc}
+\item[\texttt{Version}] \hfill \\ The Custos protocol version. Used to
+  determine server compatibility with a given Custos message format
+  and method semantics.
+\item[\texttt{Group}] \hfill \\ A UUID uniquely identifying the group
+  associated with the message. If left blank, the message is assumed
+  to apply at a server-wide level.
+\item[\texttt{ReqID}] \hfill \\ A UUID uniquely identifying the
+  request message (or the request message that triggered the response
+  message).
+\item[\texttt{ResID} (Response Only)] \hfill \\ A UUID uniquely
+  identifying the response message.
+\item[\texttt{Status} (Response Only)] \hfill \\ The status of the
+  response. Used to indicate errors processing the corresponding
+  request (malformed request, etc).
+\item[\texttt{Attrs}] \hfill \\ A list of Custos \texttt{Attrs}. Used
+  to identify or provide the AAs associated with the message.
+\end{packed_desc}
 
-For auditing  keys
+Furthermore, each message may cont in one or more of the following
+optional components:
+
+\begin{packed_desc}
+\item[\texttt{Keys}] \hfill \\ A list of Custos \texttt{Key}
+  objects. Used to identify or provide the key:value objects a
+  associated with the message.
+\item[\texttt{ACSs}] \hfill \\ A list of Custos \texttt{ACS}
+  objects. Used to provide the ACS associated with the message.
+\end{packed_desc}
+
+\noindent
+Custos \texttt{Attr} objects have the following components:
+
+\begin{packed_desc}
+\item[\texttt{Class}] \hfill \\ The AA class
+\item[\texttt{Type}] \hfill \\ The AA type
+\item[\texttt{Value}] \hfill \\ The AA value, encoded as Base64 ASCII.
+\item[\texttt{Echo}] \hfill \\ A Boolean indicting whether or not the
+  server should (when possible) echo the value of the \texttt{Attr}
+  contained in a request back to the user in the response.
+\item[\texttt{Status} (Response Only)] \hfill \\ The status indicating
+  whether a given AA was accepted, denied, ignored, or required.
+\item[\texttt{ResValue} (Response Only)] \hfill \\ An arbitrary
+  response from a given AA module providing details on the nature of
+  the status or instructions on how to continue. Encoded as Base64
+  ASCII.
+\end{packed_desc}
+
+\noindent
+Custos \texttt{Key} objects have the following components:
+
+\begin{packed_desc}
+\item[\texttt{UUID}] \hfill \\ The UUID identifying the key
+\item[\texttt{Revision}] \hfill \\ Used to request a specific key
+  revision. If blank, the latest revision is assumed.
+\item[\texttt{Value}] \hfill \\ The corresponding value, encoded as
+  Base64 ASCII. May be left blank (e.g. as in read requests where its
+  value is unknown).
+\item[\texttt{Echo}] \hfill \\ A Boolean indicating whether or not the
+  server should (when possible) echo the value of the \texttt{Key}
+  contained in a request back to the user in the response.
+\item[\texttt{Status} (Response Only)] \hfill \\ The status indicating
+  whether the requested operation on the Key was allowed or denied.
+\end{packed_desc}
+
+\noindent
+Custos \texttt{ACS} objects have the following components:
+
+\begin{packed_desc}
+\item[\texttt{Permissions}] \hfill \\ A dictionary of Permission:(ACC
+  list) pairs. Each ACC list is, in turn a list of Attr objects
+\item[\texttt{Echo}] \hfill \\ A Boolean indicating whether or not the
+  server should (when possible) echo the value of the \texttt{ACS}
+  contained in a request back to the user in the response.
+\item[\texttt{Status} (Response Only)] \hfill \\ The status indicating
+  whether the requested operation on the ACS was allowed or denied.
+\end{packed_desc}
+
+\subsection{Endpoints}
+
+Data:
+
+objs - create, read, update, del
+grps - create, list, del
+
+Management:
+
+obj\_acs - get, set
+new\_obj\_acs - get, set
+grp\_acs - get, set
+new\_grp\_acs - get, set
+srv\_acs - get, set
+
+Auditing:
+
+obj\_audit - get, clean
+grp\_audit - get, clean
+srv\_audit - get, clean
 
 \section{Prototype Implementation}
 
@@ -614,4 +728,5 @@ Standardized module interface
 Variable back-end key-value providers
 
 %%  LocalWords:  ACS ACCs ACC OU srv grp src ip usernames auth acs
-%%  LocalWords:  username AAs tls psk sha bcrypt utc
+%%  LocalWords:  username AAs tls psk sha bcrypt utc del ReqID ResID
+%%  LocalWords:  Attrs ACSs Attr ResValue
