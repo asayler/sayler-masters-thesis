@@ -855,7 +855,7 @@ the required permissions are shown in Table \ref{tab:methods-mgmt}.
   \label{tab:methods-mgmt}
 \end{table}
 
-\section{Reference Implementations}
+\section{Example Implementations}
 
 I have complete an reference/example Custos implementations for both a
 Custos server and a Custos client library. These implementations adhere
@@ -895,11 +895,55 @@ this time. They are manually configured where unsupported. Beyond
 that, the reference implementation function as described, and is
 capable of supporting basic key:value storage workloads.
 
+The server implementation is actually surprisingly short: about a thousand
+lines of python code in its basic form. The bulk of the code is spent
+performing the necessary Access Control regulations. This seems
+reasonable given that the bulk of the Custos server exists for the
+purpose of performing access control. The use of a web-app friendly
+language clearly reduces the amount of code required by allowing most of
+the complexity associated with networking and message exchange to be
+handed off to separate libraries.
+
 \subsection{Client}
 
+On the client front, I've create a reference client library appropriate
+for use with C-based applications: \texttt{libcustos}. I'll discuss the
+details of actual examples applications in Chapter \ref{chap:clients},
+but the client C library is discussed her. A C library is necessary
+due to the lack of native support for many of the components of the
+Custos architecture in the C programming language (e.g. JSON, HTTP
+communication, dictionaries, etc). Higher level language like
+(i.e. Python) have a much easier time interfacing with the Custos
+architecture and thus may not require full blown interface libraries.
 
+\texttt{libcustos} leverage the Curl~\cite{curl} library for
+performing HTTP requests. It uses the \texttt{json-c}~\cite{json-c}
+library for building and decoding JSON data structures. It also
+leverage various third party libraries for Base64 encoding, UUID
+generation, and checksum generation.
+
+\texttt{libcustos} deals with translating Custos JSON messages into C
+data structures. It exposes a series of functions for dealing with
+these data types, handling memory management, and using the data types
+to make Custos requests and decode the resulting response. The library
+aims to be thread-safe and defensively coded. It makes it easy to
+interface C applications with the Custos architecture. It would also
+be used by language that accept C-bindings like C++.
+
+Compared to the server, the \texttt{libcustos} implementation is quite
+a bit longer: about 5000 lines of C code. This is largely due to the
+extra effort required to properly and safely convert between Custos
+message formats and C data structures. The code would be even longer
+if not for the use of separate libraries for handle the core
+communication primitives. This length, however, does show the
+importance of having a C-based client library: many file systems and
+encryption systems are written in C, and it would be impractical for
+these applications to fully implement the Custos protocol directly due
+to the complexity involved. Applications based on higher level
+languages would likely have better luck directly interfacing with
+Custos.
 
 %%  LocalWords:  ACS ACCs ACC OU srv grp src ip usernames auth acs
 %%  LocalWords:  username AAs tls psk sha bcrypt utc del ReqID ResID
 %%  LocalWords:  Attrs ACSs Attr ResValue req contentType json dev
-%%  LocalWords:  MongoDB
+%%  LocalWords:  MongoDB libcustos
