@@ -488,7 +488,7 @@ this may effect inter-implementation compatibility. Implementations
 that do use their own types may wish to propose them as official types
 so that other implementations will support them as well.
 
-\subsection{Example}
+\subsection{Access Example}
 
 As an example showing the full access control process, consider a
 Custos-backed encrypted file system application. Figure
@@ -855,20 +855,51 @@ the required permissions are shown in Table \ref{tab:methods-mgmt}.
   \label{tab:methods-mgmt}
 \end{table}
 
-\section{Prototype Implementation}
+\section{Reference Implementations}
 
-\subsection{API}
+I have complete an reference/example Custos implementations for both a
+Custos server and a Custos client library. These implementations adhere
+to the architectures and interfaces discussed thus far and represent the
+``0.2-dev'' Custos API revision. These implementations are merely for
+proof-of-concept and reference usage. They have not been optimized for
+performance, scalability, etc. Building high-volume, fully production
+ready implementations is left to future work (see Chapter
+\ref{chap:conclusion}).
 
-JSON RESTful API
+\subsection{Server}
 
-\subsection{Authentication and Access Control}
+The reference server implementation is written in Python 2.7
+leveraging the Flask microframework~\cite{python-flask}. This
+framework simplifies the exposure of endpoints and handling of HTTP
+requests. It interfaces with the local web server
+(Apache~\cite{apache} in this case) via the WSGI~\cite{pep-wsgi}
+interface. A Custos server could easily be implemented in any web-app
+friendly language (i.e. Python, Go, Ruby, Java, etc). Python was
+selected for its ease of use and rapid prototyping capabilities.
 
-Standardized module interface
+The reference servery implementation does not use a discreet backing
+key:vale store. Instead, it stores all data in local files via the
+Python shelve~\cite{python-shelve} interface. Again, this was done for
+rapid prototyping and easy troubleshooting. This interface could be
+easily replaced with a production NoSQL-like key value store
+(i.e. MongoDB~\cite{mongodb}, Cassandra~\cite{cassandra}, etc).
 
-\subsection{Back-end Storage}
+When handling requests, the server primarily adheres to the
+description provided in this chapter. There are, however, and few
+limitations to the implementation. Currently, the implementation
+ignores the group attributes, treating all requests as coming form the
+same group. Since groups are only necessary in a multi-tenant
+scenario, this compromise seems acceptable fro a prototype
+implementation. Also, not all server-wide API calls are supported at
+this time. They are manually configured where unsupported. Beyond
+that, the reference implementation function as described, and is
+capable of supporting basic key:value storage workloads.
 
-Variable back-end key-value providers
+\subsection{Client}
+
+
 
 %%  LocalWords:  ACS ACCs ACC OU srv grp src ip usernames auth acs
 %%  LocalWords:  username AAs tls psk sha bcrypt utc del ReqID ResID
-%%  LocalWords:  Attrs ACSs Attr ResValue req
+%%  LocalWords:  Attrs ACSs Attr ResValue req contentType json dev
+%%  LocalWords:  MongoDB
