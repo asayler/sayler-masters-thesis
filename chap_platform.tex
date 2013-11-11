@@ -212,11 +212,11 @@ The per-server (server-wide) Custos permissions are:
 The per-group (group-wide) Custos permissions are:
 
 \begin{packed_desc}
-\item[\texttt{grp\_obj}] \hfill \\ The \texttt{grp\_obj}
-  permission grants a user the right to create, delete, or list
-  key:value objects within a given group. When created, this object is
-  associated with an initial default ACS, programmable via the next
-  two permission.
+\item[\texttt{grp\_create\_obj}] \hfill \\ The
+  \texttt{grp\_create\_obj} permission grants a user the right to
+  create key:value objects within a given group. When created, this
+  object is associated with an initial default ACS, programmable via
+  the next two permission.
 \item[\texttt{grp\_new\_obj\_acs\_get}] \hfill \\ The
   \texttt{grp\_new\_obj\_acs\_get} permission grants a user the right
   to read the default ACS applied to newly created objects.
@@ -694,24 +694,166 @@ Custos \texttt{ACS} objects have the following components:
 
 \subsection{Endpoints}
 
-Data:
+Custos messages are sent to the Custos server via a series of
+endpoints. Each endpoint relates to a a specific data objects or class
+of data objects on the Custos server. These objects can be manipulated
+in various ways using the standard HTTP verbs. I'll present each
+endpoint categorized by the subsystem it is primarily associated with
+(data, auditing, or management).
 
-objs - create, read, update, del
-grps - create, list, del
+Messages to sent via \texttt{GET} or \texttt{DELETE} requests are
+passed via query string as a URL-encoded value following a
+\texttt{req=} field. Messages sent via \texttt{POST} requests are
+passed in the request body in pure JSON with the \texttt{contentType}
+set to \texttt{application/json}.
 
-Management:
+The data endpoints are used to create, access, update, and delete
+Custos key:value objects or groups. The data endpoints, their
+associated verbs and the required permissions are shown in Table
+\ref{tab:methods-data}.
 
-obj\_acs - get, set
-new\_obj\_acs - get, set
-grp\_acs - get, set
-new\_grp\_acs - get, set
-srv\_acs - get, set
+\begin{table}[!tb]
+  \vspace{1ex}
+  \begin{center}
+    \tabulinesep = 5pt
+    \begin{tabu} to \textwidth
+      { | X[1,l,m]
+        | X[.5,l,m]
+        | X[1,l,m]
+        | X[2,l,m]
+        | }
+      \hline
+      \textbf{Endpoint}
+      & \textbf{Verb}
+      & \textbf{Required Permission}
+      & \textbf{Purpose}
+      \\ \hline
+      \texttt{/objs} & \texttt{GET} & \texttt{obj\_read}
+      & read and return one or more key:value objects
+      \\ \hline
+      \texttt{/objs} & \texttt{POST} & \texttt{grp\_create\_obj}
+      & create one or more new key:value object
+      \\ \hline
+      \texttt{/objs} & \texttt{POST} & \texttt{obj\_update}
+      & update one or more existing key:value object.
+      \\ \hline
+      \texttt{/objs} & \texttt{DELETE} & \texttt{obj\_delete}
+      & delete one or more key:value objects
+      \\ \hline
+      \texttt{/grps} & \texttt{GET} & \texttt{srv\_grp}
+      & list all groups
+      \\ \hline
+      \texttt{/grps} & \texttt{POST} & \texttt{srv\_grp}
+      & create a new group
+      \\ \hline
+      \texttt{/grps} & \texttt{DELETE} & \texttt{srv\_grp}
+      & remove a group
+      \\ \hline
+    \end{tabu}
+  \end{center}
+  \caption{Data API Methods}
+  \label{tab:methods-data}
+\end{table}
 
-Auditing:
+The audit endpoints are used to audit data related to a specific
+Custos OU. The audit endpoints, their associated verbs, and the
+required permissions are shown in Table \ref{tab:methods-audit}.
 
-obj\_audit - get, clean
-grp\_audit - get, clean
-srv\_audit - get, clean
+\begin{table}[!tb]
+  \vspace{1ex}
+  \begin{center}
+    \tabulinesep = 5pt
+    \begin{tabu} to \textwidth
+      { | X[1,l,m]
+        | X[.5,l,m]
+        | X[1,l,m]
+        | X[2,l,m]
+        | }
+      \hline
+      \textbf{Endpoint}
+      & \textbf{Verb}
+      & \textbf{Required Permission}
+      & \textbf{Purpose}
+      \\ \hline
+      \texttt{/audit/obj} & \texttt{GET} & \texttt{obj\_audit}
+      & read and return the audit data associated with one or more key:value objects
+      \\ \hline
+      \texttt{/audit/obj} & \texttt{DELETE} & \texttt{obj\_clean}
+      & purge the audit data associated with one or more key:value objects
+      \\ \hline
+      \texttt{/audit/grp} & \texttt{GET} & \texttt{grp\_audit}
+      & read and return the group-wide audit data
+      \\ \hline
+      \texttt{/audit/grp} & \texttt{DELETE} & \texttt{grp\_clean}
+      & purge the group-wide audit data
+      \\ \hline
+      \texttt{/audit/srv} & \texttt{GET} & \texttt{srv\_audit}
+      & read and return the server-wide audit data
+      \\ \hline
+      \texttt{/audit/srv} & \texttt{DELETE} & \texttt{srv\_clean}
+      & purge the server-wide audit data
+      \\ \hline
+    \end{tabu}
+  \end{center}
+  \caption{Audit API Methods}
+  \label{tab:methods-audit}
+\end{table}
+
+The management endpoints are used to manage access rights related to a
+specific Custos OU. The audit endpoints, their associated verbs, and
+the required permissions are shown in Table \ref{tab:methods-mgmt}.
+
+\begin{table}[!tb]
+  \vspace{1ex}
+  \begin{center}
+    \tabulinesep = 5pt
+    \begin{tabu} to \textwidth
+      { | X[.7,l,m]
+        | X[.3,l,m]
+        | X[1,l,m]
+        | X[2,l,m]
+        | }
+      \hline
+      \textbf{Endpoint}
+      & \textbf{Verb}
+      & \textbf{Required Permission}
+      & \textbf{Purpose}
+      \\ \hline
+      \texttt{/acs/obj} & \texttt{GET} & \texttt{obj\_acs\_get}
+      & read and return the ACS associated with a key:value object
+      \\ \hline
+      \texttt{/acs/obj} & \texttt{POST} & \texttt{obj\_acs\_set}
+      & Set a new ACS associated with a key:value object
+      \\ \hline
+      \texttt{/acs/new\_obj} & \texttt{GET} & \texttt{grp\_new\_obj\_acs\_get}
+      & read and return the default ACS associated with new key:value objects
+      \\ \hline
+      \texttt{/acs/new\_obj} & \texttt{POST} & \texttt{grp\_new\_obj\_acs\_set}
+      & Set a new default ACS associated with new key:value objects
+      \\ \hline
+      \texttt{/acs/grp} & \texttt{GET} & \texttt{grp\_acs\_get}
+      & read and return the ACS associated with a group
+      \\ \hline
+      \texttt{/acs/grp} & \texttt{POST} & \texttt{grp\_acs\_set}
+      & Set a new ACS associated with a group
+      \\ \hline
+      \texttt{/acs/new\_grp} & \texttt{GET} & \texttt{srv\_new\_grp\_acs\_get}
+      & read and return the default ACS associated with new group objects
+      \\ \hline
+      \texttt{/acs/new\_grp} & \texttt{POST} & \texttt{srv\_new\_grp\_acs\_set}
+      & Set a new default ACS associated with new group objects
+      \\ \hline
+      \texttt{/acs/srv} & \texttt{GET} & \texttt{srv\_acs\_get}
+      & read and return the ACS associated with a server
+      \\ \hline
+      \texttt{/acs/srv} & \texttt{POST} & \texttt{srv\_acs\_set}
+      & Set a new ACS associated with a server
+      \\ \hline
+    \end{tabu}
+  \end{center}
+  \caption{Audit API Methods}
+  \label{tab:methods-mgmt}
+\end{table}
 
 \section{Prototype Implementation}
 
@@ -729,4 +871,4 @@ Variable back-end key-value providers
 
 %%  LocalWords:  ACS ACCs ACC OU srv grp src ip usernames auth acs
 %%  LocalWords:  username AAs tls psk sha bcrypt utc del ReqID ResID
-%%  LocalWords:  Attrs ACSs Attr ResValue
+%%  LocalWords:  Attrs ACSs Attr ResValue req
