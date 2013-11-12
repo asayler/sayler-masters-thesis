@@ -141,13 +141,93 @@ occurs when a file is created or written, with \texttt{EncFS} rotating
 the encryption key and uploading a new version to Custos for each
 write operation.
 
-\section{ACS Management UI}
+\section{``Banking'' Website}
+
+As a final example application, I've designed the shell of a fake
+``banking'' website (meant to represent any website that collects
+personal data) that demonstrates how a user and website could use
+Custos as a dedicate user data store (instead of the more typical
+encryption key store discussed in the previous example). This example
+shows the user a basic ``Enter your info'' page familiar to anyone who
+has ever signed up for a web site user account. Unlike a normal
+``Enter your info'' page, however, instead entering their info
+directly, the user instead inputs a UUID pointing to the corresponding
+info on a Custos server. If the website wishes to read this info, the
+user must grant them read access to the associated object on the
+Custos server. This allows the user to control and audit website
+access to data, as well as avoids having to reenter or update the same
+data on multiple websites.
+
+\subsection{Architecture}
+
+\begin{figure}[!tb]
+  \vspace{5ex}
+  \begin{center}
+    \includegraphics[width=.75\textwidth]
+                    {./figs/pdf/App-SS.pdf}
+  \end{center}
+  \caption{The Demo ``Banking'' Website Architecture}
+  \label{fig:app-bank}
+\end{figure}
+
+Figure \ref{fig:app-bank} shows the basic structure of the
+``banking'' website demo app. The user is presented with an ``create
+new account'' page that prompts her for a variety of personal
+information (Name, SSN, address, etc). The user provides a UUID is
+response to each of these prompts instead of producing the data
+directly. The user is assumed to have already created the
+corresponding data objects on a Custos server (via the management
+interface discussed next).
+
+When the user is done producing UUIDs, the website attempts to access
+this data on the Custos server and display it to the user. If the user
+has granted the website read access to the data (e.g. via a unique
+access key displayed to the user when entering the UUIDs, IP address,
+or various other attributes or combinations of attributes), the server
+will return the data which the website can then store. As discussed in
+Chapter \ref{chap:purpose}, this both saves the user the hassle of
+manually entering data, and also save the website the trouble of
+locally storing data and keeping it safe and up to date. The user also
+gains the benefit of the ability to revoke this data access latter and
+to audit when and how the website is accessing the data.
+
+\subsection{Implementation}
+
+The website is implemented in Python 2.7 using the
+Flask~\cite{python-flask} microframework (similar to the process
+format used to implement the Custos server in Chapter
+\ref{chap:platform}, but with actual UI elements instead of just a
+JSON API). The application communicates with the Custos server via the
+Python requests~\cite{python-requests} module. Python's numerous
+modules handling JSON processing, designing, etc making interfacing a
+Python application directly whit the Custos server far easier than
+implementing a C application. Thus, no specialized library
+(i.e. \texttt{libcustos}) is necessary.
+
+When the user loads the website, it displays a basis form to the user,
+composed of the requested data fields and a unique website ID key,
+randomly generated for each user and kept as a secret between the user
+and the website. The user can (optionally) use this key as an
+authentication attribute when limiting access to their data on the
+Custos server to uniquely identify a specific website. When the user
+submits the form, the web app attempts to query the Custos server for
+the provided UUIDs, sending along the secret key it displayed to the
+user as an authentication attribute. If the user has granted the site
+read access to her data, either using this key, the server IP address,
+or some other attribute, the Custos server returns the data which is
+then displayed to the user for verification.
+
+
+
+\section{Custos Management UI}
 
 In order to make Custos data easy to manage while developing various
 Custos apps that lack built-in management capabilities, I've designed
 a basic managed user interface that simplifies the process of
-interacting with the Custos server and managing the Access Control
-Specification associated with a given Custos key:value object.
+interacting with the Custos server. It provides a means to directly
+managing the Access Control Specification associated with a given
+Custos key:value object, as well as to directly read and write
+objects.
 
 \subsection{Architecture}
 
@@ -162,80 +242,58 @@ Specification associated with a given Custos key:value object.
 \end{figure}
 
 The management interface utilizes a web-based UI for managing Custos
-access control specifications (Figure \ref{fig:app-mgmt}). The user
-access the UI by ``logging in'' through the prevision of one or more
-authentication attributes. The UI stores these attributes in the user
-restyling session state, and leverages them to grant the user access
-to verify Custos key:value ACSs. The user must have the appropriate
-management permissions in order to make effective use of the
-management UI.
+access control specifications and key:value data (Figure
+\ref{fig:app-mgmt}). The user accesses the UI by ``logging in''
+through the prevision of one or more authentication attributes. The UI
+stores these attributes in the user's resulting session state, and
+leverages them to gain the user access to various Custos
+permission. The user must have the appropriate permissions in order to
+make effective use of the management UI.
 
 Once ``logged in'', the user can input a UUID identifying a Custos
-key:value object. They may then view the current ACS associated with
-the object in JSON, and make any changes required before re-uploading
-the object to Custos. It is possible to list multiple objects in order
-to perform batch changes. The user is also capable of setting the
-default ACS applied to newly created objects.
-
-The management interface could also be coded as a command line utility
-with fairly minimal changes. The interface would be similar, just via
-command line interaction instead of a web UI. Neither system is ideal
-for large scale, production Custos management, but both are adequate
-for basic Custos management while testing or using the system with a
-small number of users.
+key:value object, or request to create a new object. They may then
+choose to view the object and/or the current ACS associated with the
+object. AT this point, they make any changes they desire to either the
+object or the ACS before re-uploading the object or ACS to Custos
+(assuming they ``logged on'' with the appropriate permissions,
+otherwise their request will be denied). It is possible to list
+multiple objects in order to perform batch changes. The user is also
+capable of setting the default ACS applied to newly created objects.
 
 Custos's flexible authentication system also allows the administrator
 to setup Custos to allow management access to any request from a
 specific IP, making it simple to designate a management machine hat
 can fully control Custos access without requiring more complex
-attributes. This method has been sued effectively to provide
+attributes. This method has been used effectively to provide
 \texttt{local-host} to a Custos server to expedite management of
-server data while developing against it.
+server data while developing against it. It provides a means to manage
+the ACSs associated with encrypted files from the \texttt{EncFS}
+application, as well as the means to store user data and manipulate
+allowed viewers in the ``Banking'' Website application.
 
 \subsection{Implementation}
 
-The web UI is implemented in Python 2.7 using the
-Flask~\cite{python-flask} microframework (similar to the process
-format used to implement the Custos server in Chapter
-\ref{chap:platform}, but with actual UI elements instead of just a
-JSON API). The application communicates with the Custos server via the
-Python requests~\cite{python-requests} module. Python's numerous
-modules handling JSON processing, deigning, etc making interfacing a
-Python application directly whit the Custos server far easier than
-implementing a C application. Thus, no specialized library
-(i.e. \texttt{libcustos}) is necessary.
+Like the Custos server and the ``Banking'' website, the management UI
+is implemented in Python using Flask. It initially prompts the user to
+``login'' by proving one or more authentication attributes in
+JSON. These are then associated with the user's session state within
+the Flask framework.
 
-When a user request to view the ACS for a one or more objects, the
+When a user request to create or view an ACS or key:value object, the
 back-end builds the necessary Custos message and issues the request,
-appending the user supplied authentication attribute. If the user has
-the necessary permissions to view and edit an ACS, the ACS is
-returned. The user can manipulate the existing ACS directly, and if
-she desires, send it back to Custos, replacing the original ACS. This
-system, while not the most polished, provides the user with the
-ability to fully manipulate the ACS for any Custos stored object.
+appending the user supplied authentication attributes. If the user has
+the necessary permissions to view the request item, the item is
+returned. The user can manipulate the existing item directly, and if
+she desires, send it back to Custos, replacing the original item,
+again, assuming the necessary permission. This system, while not the
+most polished, provides the user with the ability to fully manipulate
+any item in the Custos stored object.
 
-\section{``Banking'' Website}
-
-\subsection{Architecture}
-
-\begin{figure}[!tb]
-  \vspace{5ex}
-  \begin{center}
-    \includegraphics[width=.75\textwidth]
-                    {./figs/pdf/App-SS.pdf}
-  \end{center}
-  \caption{The Demo ``Banking'' Website Architecture}
-  \label{fig:app-bank}
-\end{figure}
-
-Public, Encrypted Personal Data Store
-
-(Name, SSN, Etc)
-
-\subsection{Implementation}
-
-Static Encrypted Web Content
-
-Assessor used Custos Client
+The management interface could also be coded as a command line utility
+with fairly minimal changes. The interface would be similar, just via
+command line interaction instead of a web UI. Neither system is ideal
+for large scale, production Custos management, but both are adequate
+for basic Custos management while testing or using the system with
+only a few users.
 
 %%  LocalWords:  EncFS libcustos OpenSSL ACSs ACS
