@@ -141,9 +141,92 @@ occurs when a file is created or written, with \texttt{EncFS} rotating
 the encryption key and uploading a new version to Custos for each
 write operation.
 
-\section{Secure Data Repository}
+\section{ACS Management UI}
+
+In order to make Custos data easy to manage while developing various
+Custos apps that lack built-in management capabilities, I've designed
+a basic managed user interface that simplifies the process of
+interacting with the Custos server and managing the Access Control
+Specification associated with a given Custos key:value object.
 
 \subsection{Architecture}
+
+\begin{figure}[!tb]
+  \vspace{5ex}
+  \begin{center}
+    \includegraphics[width=.75\textwidth]
+                    {./figs/pdf/App-Mgmt.pdf}
+  \end{center}
+  \caption{The ACS Management Architecture}
+  \label{fig:app-mgmt}
+\end{figure}
+
+The management interface utilizes a web-based UI for managing Custos
+access control specifications (Figure \ref{fig:app-mgmt}). The user
+access the UI by ``logging in'' through the prevision of one or more
+authentication attributes. The UI stores these attributes in the user
+restyling session state, and leverages them to grant the user access
+to verify Custos key:value ACSs. The user must have the appropriate
+management permissions in order to make effective use of the
+management UI.
+
+Once ``logged in'', the user can input a UUID identifying a Custos
+key:value object. They may then view the current ACS associated with
+the object in JSON, and make any changes required before re-uploading
+the object to Custos. It is possible to list multiple objects in order
+to perform batch changes. The user is also capable of setting the
+default ACS applied to newly created objects.
+
+The management interface could also be coded as a command line utility
+with fairly minimal changes. The interface would be similar, just via
+command line interaction instead of a web UI. Neither system is ideal
+for large scale, production Custos management, but both are adequate
+for basic Custos management while testing or using the system with a
+small number of users.
+
+Custos's flexible authentication system also allows the administrator
+to setup Custos to allow management access to any request from a
+specific IP, making it simple to designate a management machine hat
+can fully control Custos access without requiring more complex
+attributes. This method has been sued effectively to provide
+\texttt{local-host} to a Custos server to expedite management of
+server data while developing against it.
+
+\subsection{Implementation}
+
+The web UI is implemented in Python 2.7 using the
+Flask~\cite{python-flask} microframework (similar to the process
+format used to implement the Custos server in Chapter
+\ref{chap:platform}, but with actual UI elements instead of just a
+JSON API). The application communicates with the Custos server via the
+Python requests~\cite{python-requests} module. Python's numerous
+modules handling JSON processing, deigning, etc making interfacing a
+Python application directly whit the Custos server far easier than
+implementing a C application. Thus, no specialized library
+(i.e. \texttt{libcustos}) is necessary.
+
+When a user request to view the ACS for a one or more objects, the
+back-end builds the necessary Custos message and issues the request,
+appending the user supplied authentication attribute. If the user has
+the necessary permissions to view and edit an ACS, the ACS is
+returned. The user can manipulate the existing ACS directly, and if
+she desires, send it back to Custos, replacing the original ACS. This
+system, while not the most polished, provides the user with the
+ability to fully manipulate the ACS for any Custos stored object.
+
+\section{``Banking'' Website}
+
+\subsection{Architecture}
+
+\begin{figure}[!tb]
+  \vspace{5ex}
+  \begin{center}
+    \includegraphics[width=.75\textwidth]
+                    {./figs/pdf/App-SS.pdf}
+  \end{center}
+  \caption{The Demo ``Banking'' Website Architecture}
+  \label{fig:app-bank}
+\end{figure}
 
 Public, Encrypted Personal Data Store
 
@@ -155,10 +238,4 @@ Static Encrypted Web Content
 
 Assessor used Custos Client
 
-\section{Management Interface}
-
-\subsection{Architecture}
-
-\subsection{Implementation}
-
-%%  LocalWords:  EncFS libcustos OpenSSL
+%%  LocalWords:  EncFS libcustos OpenSSL ACSs ACS
