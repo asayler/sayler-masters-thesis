@@ -1,7 +1,7 @@
 \chapter{Platform}
 \label{chap:platform}
 
-In chapter \ref{chap:intro}, I explained the motivations behind the
+In chapter \ref{chap:intro}, I explained the motivations behind
 Custos. Chapter \ref{chap:purpose} outlines the design goals and
 potential applications that these motivations suggest. In this
 chapter, I'll discuss the architecture, interface, and implementation
@@ -13,18 +13,18 @@ The Custos architecture contains several core components:
 
 \begin{packed_item}
 \item A standardized API and message exchange format promoting the
-  creation and proliferation of multiple implementations across a
-  selection of providers.
+  creation and proliferation of multiple implementations from a range
+  of providers.
 \item A flexible server-side authentication interface, supporting an
   extensible variety of authentication attributes.
 \item A programable server-side access control system for associating
-  authenticated attributes with key:value access rights on a per-key
-  basis.
+  authenticated attributes with key:value access permissions on a
+  per-object basis.
 \item A server-side back-end key:value store for holding persistent
   user and implementation data
 \item A server-side data system for storing and retrieving user data
 \item A server-side auditing system for monitoring and recording
-  key:value access and authentication attempt data.
+  key:value access and authentication data.
 \item A server-side management system for configuring and controlling
   the other components.
 \item One or more client applications that offload encryption keys or
@@ -64,12 +64,12 @@ implements the following components:
   if a Custos request should be allowed or denied.
 \item[Authentication Subsystem] \hfill \\ The authentication
   subsystem's job is to verify the validity of any authentication
-  attributes associated with a given Custos request. This subsystem is
-  designed to allow for a pluggable authentication module interface
-  capable of supporting a variety of authentication attributes.
+  attributes associated with a given Custos request. This subsystem
+  provides a pluggable authentication module interface capable of
+  supporting a variety of authentication attributes.
 \item[Data Subsystem] \hfill \\ The data subsystem is responsible for
   handling verified and accepted Custos data API requests (get, set,
-  create, and delete key:value pairs). It interfaces with Key-Value
+  create, and delete key:value pairs). It interfaces with Key:Value
   store on one side and the access control system on the other.
 \item[Auditing Subsystem] \hfill \\ The auditing subsystem is
   responsible for handling verified and accepted Custos audit API
@@ -84,7 +84,7 @@ implements the following components:
   responsible for handling all management related API requests after
   they have passed the authentication and access control layers. This
   primarily entails manipulating access control parameters.
-\item[Key-Value Store] \hfill \\ The Key-Value store is the persistent
+\item[Key:Value Store] \hfill \\ The Key-Value store is the persistent
   data container associated with a given Custos server. It is used to
   store both end-user key:value pairs (encryption keys, etc) as well
   as a variety of internal Custos state (access control requirements,
@@ -92,17 +92,17 @@ implements the following components:
 \end{packed_desc}
 
 A Custos client applications interacts with a Custos server via the
-API. As such, a client can simply offload the bulk of it's key
+API. As such, a client can simply offload the bulk of its key
 management directly to Custos through API-backed RPC libraries. Custos
-simply becomes a remote key:value store where applications secrets are
-stored. To satisfy Custos's authentication requirements, applications
-can generate the necessary authentication attributes directly or can
-instead pass these requirements on to the user, querying them for the
-necessary attributes to send to Custos. Applications can either
-implement their own auditing and management user controls directly,
-passing the necessary information back to Custos via the API, or
-applications can pass off auditing or management duties to separate
-applications that interact directly with the Custos server.
+simply becomes a remote key:value database where application secrets
+are stored. To satisfy Custos's authentication requirements,
+applications can generate the necessary authentication attributes
+directly or can instead pass these requirements on to the user,
+querying them for the necessary attributes to send to
+Custos. Applications can either implement auditing and management
+support directly, passing the necessary information back to Custos via
+the API, or applications can pass off auditing or management duties to
+separate applications that interact directly with the Custos server.
 
 \section{Access Control}
 
@@ -117,7 +117,7 @@ Custos's flexible capabilities.
     \includegraphics[width=.75\textwidth]
                     {./figs/pdf/Arch-OU.pdf}
   \end{center}
-  \caption{Custos Organizational Units}
+  \caption{Custos's Organizational Units}
   \label{fig:arch-ou}
 \end{figure}
 
@@ -129,10 +129,10 @@ server unit is used to specify server-wide configuration. A server has
 one or more groups. A group is used to slice a server between a
 variety of administrative domains. It exists to allow a single server
 to grant group-level administrative privileges to multiple,
-non-cooperating entities (i.e. separate Custos provider customers). A
-group, in turn, has any number of actual key:value objects stored
-within it. Each OU is responsible for the creation of OU instances
-beneath it, e.g. servers create groups and groups create objects.
+non-cooperating entities (i.e. separate Custos customers). A group, in
+turn, has any number of actual key:value objects stored within
+it. Each OU is responsible for the creation of OU instances beneath
+it, e.g. servers create groups and groups create objects.
 
 \begin{figure}[!tb]
   \vspace{5ex}
@@ -170,14 +170,14 @@ Custos data access permissions follow the pattern used by many data
 access systems: permission to read data, permission to write data,
 permission to create data, and permission to delete data. These
 permissions are modified slightly to account for Custos's versioning
-system. Unlike many system, Custos has no notion of object
-ownership. Instead, it relies on providing access to each right an
-owner would traditionally hold via explicit permissions. Likewise,
-Custos associates audit permissions with various entities. Audit
-permission grant read and delete access to various audit data.
-Finally, the Custos management permissions control a users ability to
-manage a specific Custos OU. This includes the ability to manipulate
-OU access control specifications.
+system. Likewise, Custos associates audit permissions with various
+entities. Audit permissions grant read and delete access to various
+audit data.  Finally, the Custos management permissions control a
+user's ability to manage a specific Custos OU. This includes the
+ability to manipulate OU access control specifications. Unlike many
+system, Custos has no notion of object ownership. Instead, it relies
+on providing access to each right an owner would traditionally hold
+via explicit permissioning.
 
 \noindent
 The per-server (server-wide) Custos permissions are:
@@ -185,8 +185,8 @@ The per-server (server-wide) Custos permissions are:
 \begin{packed_desc}
 \item[\texttt{srv\_grp}] \hfill \\ The \texttt{srv\_grp} permission
   grants a user the right to create, delete, or list groups on a
-  Custos server. When created, this group is associated with an
-  initial default ACS, programmable via the next two permission.
+  Custos server. When created, a group is associated with an initial
+  default ACS, programmable via the next two permission.
 \item[\texttt{srv\_new\_grp\_acs\_get}] \hfill \\ The
   \texttt{srv\_new\_grp\_acs\_get} permission grants a user the right
     to read the default ACS applied to newly created groups.
@@ -214,7 +214,7 @@ The per-group (group-wide) Custos permissions are:
 \begin{packed_desc}
 \item[\texttt{grp\_create\_obj}] \hfill \\ The
   \texttt{grp\_create\_obj} permission grants a user the right to
-  create key:value objects within a given group. When created, this
+  create key:value objects within a given group. When created, an
   object is associated with an initial default ACS, programmable via
   the next two permission.
 \item[\texttt{grp\_new\_obj\_acs\_get}] \hfill \\ The
@@ -247,8 +247,8 @@ The per-object Custos permissions are:
   permission grants a user the right to delete all versions of an
   existing key:value object.
 \item[\texttt{obj\_read}] \hfill \\ The \texttt{obj\_read} permission
-  grants a user the right to read all versions of an exiting key:value
-  object.
+  grants a user the right to read all versions of an existing
+  key:value object.
 \item[\texttt{obj\_update}] \hfill \\ The \texttt{obj\_update}
   permission grants a user the right to create a new version of a
   key:value object. It is the Custos equivalent of a ``write''
@@ -265,20 +265,20 @@ The per-object Custos permissions are:
   associated with an existing key:value object.
 \item[\texttt{obj\_acs\_get}] \hfill \\ The \texttt{obj\_acs\_get}
   permission grants a user the right to view the per-object ACS
-  associated controlling the permissions in this list.
+  controlling the permissions in this list.
 \item[\texttt{obj\_acs\_set}] \hfill \\ The \texttt{obj\_acs\_set}
   permission grants a user the right to set the per-object ACS
-  associated controlling the permissions in this list.
+  controlling the permissions in this list.
 \end{packed_desc}
 
 \subsection{Access Control Chains}
 
-Now that we've seen the available permissions contain in an ACS for a
-specific OU, I can explain the next portion of an ACS: the access
-control chains (ACCs). An access control chain is an ordered list or
+Now that we've seen the available permissions contained in an ACS for
+a specific OU, I can explain the next portion of an ACS: the access
+control chains (ACCs). An access control chain is an ordered list of
 authentication attributes. Each permission in an ACS is associated
 with one or more ACCs. In order for a request to be granted a specific
-permission, it must be bale to provide authentication attributes
+permission, it must be able to provide authentication attributes
 satisfying at least one of the ACCs associated with that permission.
 
 For example, consider a key:value object whose \texttt{obj\_read}
@@ -294,7 +294,7 @@ of the above authentication attributes. That would mean attaching the
 'username' attribute to the request with a value of 'Andy', as well as
 attaching the 'password' attribute to the request with a value of
 '12345'. The src\_ip attribute is an implicit attribute (see next
-section) and will be atomically added to my request when received by
+section) and will be automatically added to my request when received by
 the Custos server. In order to satisfy it, I would have to send the
 request from the local network attached to the Custos server I'm
 trying to query.
@@ -313,26 +313,26 @@ Now I am able to make the Custos request from either the local network
 or from my home IP range. As long as I can satisfy at least one ACC in
 a set of ACCs for a given permission, I am granted the right to
 perform actions associated with the permission. I have also granted
-access to an addition user, John, with his own password and no src\_ip
-restriction.
+access to an additional user, John, with his own password and no
+src\_ip restriction.
 
 This system is highly flexible. Take for example, the lack of explicit
 username support anywhere in the Custos specification. As was done
-above, usernames simply become another authentication attribute, often
-the first attribute in a ACC to allow for all following attributes to
-be made relative to the username attribute. But there's nothing
-special about usernames. I could just have easily started each ACC
-with a src\_ip, requiring a separate password based upon the location
-a user is making their request from. The combination of simple ordered
-attribute lists and a wide range of flexible attributes makes for a
-very powerful access control system.
+above, usernames simply become another authentication attribute. Often
+a username will be the first attribute in a ACC to allow for all
+following attributes to be set relative to a given username. But
+there's nothing special about usernames. I could just have easily
+started each ACC with a src\_ip, requiring a separate password based
+upon the location a user is making their request from. The combination
+of simple ordered attribute lists and a wide range of flexible
+attributes makes for a very powerful access control system.
 
 Another point worth noting is that sets of ACCs can be converted into
-sets of trees, often simplifying the understanding of their
-intent. ACC list sets are converted into ACC tree sets by combining
-each attribute in matching attribute sub-lists across multiple lists
-into single nodes in a ACC tree. For example, the previous set of ACC
-lists could also be represented as:
+sets of trees, often simplifying the understanding of their intent or
+their processing on a server. ACC list sets are converted into ACC
+tree sets by combining each attribute in matching attribute sub-lists
+across multiple lists into single nodes in a ACC tree. For example,
+the previous set of ACC lists could also be represented as:
 
 \begin{center}
 \begin{tikzpicture}
@@ -379,7 +379,7 @@ set of transactions would occur:
   request.
 \end{packed_enum}
 
-But what happens where there are multiple next steps in an ACC? For a
+But what happens when there are multiple next steps in an ACC? For a
 more complex request-response example, consider the ACC expressed in
 the following tree:
 
@@ -394,9 +394,9 @@ the following tree:
 \end{tikzpicture}
 \end{center}
 
-In this ACC, I must either provide a password or prove access to my
-GPG authentication key. Rehashing the request-response sequence from
-the previous ACC example:
+In this ACC, I must either provide a password or prove access to an
+authentication certificate. Rehashing the request-response sequence
+from the previous ACC example:
 
 \begin{packed_enum}
 \item The user sends a read object request with no attributes
@@ -422,7 +422,7 @@ for authentication data. AAs contain the following information:
   are automatically associated with a request (like an IP address or SSL
   client certificate). Explicit attributes are those that the user
   provides directly (like a password or token).
-\item[Type] \hfill \\ Within a given class, the AA type specific which
+\item[Type] \hfill \\ Within a given class, the AA type specifies which
   authentication plugin should handle a specific attribute. Details on
   currently supported Custos types are provided below.
 \item[Value] \hfill \\ The value contains the arbitrary binary data
@@ -436,9 +436,9 @@ types. Thus far, the types support by Custos are primarily associated
 with stateless authentication mechanisms. This simplifies the design
 of the RESTful interface and authentication plugins. That said, Custos
 eventually intends to supports fully arbitrary authentication
-parameters, allowing authentication plugins to maintain their state
-across requests where required. The currently defined implicit types
-are:
+parameters, allowing authentication plugins to maintain their own
+state across requests where required. The currently defined implicit
+types are:
 
 \begin{packed_desc}
 \item[\texttt{ip\_src}] \hfill \\ The source IP of a request as seen
@@ -454,8 +454,9 @@ are:
   tls). Compared against the required type where included.
 \item[\texttt{auth\_value}] \hfill \\ The HTTP authentication value
   associated with a given request. Often a username or some other
-  identifying value output by the HTTP servers internal authentication
-  mechanisms. Compared against the required value where included.
+  identifying value output by the HTTP server's internal
+  authentication mechanisms. Compared against the required value where
+  included.
 \item[\texttt{time\_utc}] \hfill \\ The time the request arrived in
   UTC. Compared against the
   \texttt{$\langle$base$\rangle$/$\langle$mask$\rangle$} UTC time
@@ -467,9 +468,9 @@ The currently defined explicit types are:
 
 \begin{packed_desc}
 \item[\texttt{user\_id}] \hfill \\ An arbitrary value. Directly
-  compared agings the required attribute value where included. Behaves
-  the same as the \texttt{psk} type, but gets its own type for
-  readability of semantic intent.
+  compared against the required attribute value where
+  included. Behaves the same as the \texttt{psk} type, but gets its
+  own type name for readability of semantic intent.
 \item[\texttt{psk}] \hfill \\ An arbitrary value. Directly
   compared against the required attribute value where included.
 \item[\texttt{psk\_sha256}] \hfill \\ An arbitrary value. Hashed with
@@ -530,7 +531,7 @@ request passes through the access control module, which looks up the
 Access Control Chains associated with obj\_read permission for the
 requested key:value pair. The requests is then passed to each of the
 necessary Authentication Attribute modules in the order they appear in
-the chain. Because the request is coming from an allows IP, it passes
+the chain. Because the request is coming from an allowed IP, it passes
 the source IP verification module. Next, as long as the request is
 being made within 5 minutes of 1300 hours UTC, the request will also
 pass the time verification module. After satisfying both attributes
@@ -542,7 +543,7 @@ and returns it to the encrypted file system. The file system decrypts
 the file and returns it to the daemon that originally made the read
 request. All of this is done without any interactive input on the part
 of the daemon, overcoming one of the traditional obstacles to using
-encryption with automated processed.
+encryption with automated processes.
 
 The second user (blue) is a live user named Dirk also trying to read a
 file on the encrypted file system. The file the user wishes to read
@@ -561,26 +562,26 @@ user ID and a password:
 }
 \end{verbatim}
 
-When user reads the file, the encrypted file system requests the
+When the user reads the file, the encrypted file system requests the
 associated encryption key from the server (dashed blue line),
-attaching the current users ID of 'Dirk' to the request (but excluding
-the password). The request passes through the access control module,
-which, as before, looks up the Access Control Chains associated with
-the obj\_read permission for the requested key:value pair. The request
-is then passed to the user ID verification authentication plugin,
-which confirms that the user ID of Dirk is present, next the request
-is passed to the PSK module for password verification. Unfortunately,
-the request lacks the necessary password, so the server responds to
-the request informing the encrypted file system that a password is
-required for user 'Dirk'. The encrypted file system prompts the user
-for their password, and reissues the request, including everything
-from the first request and in addition the newly provided password
-(dotted blue line). This time the request clears both AA verification
-modules, passes through the auditing system, and finally hits the
-actual key:value store. Here the server looks up the requested key,
-generates a response, and returns it to the file system. The file
-system decrypts the requested file and allows the user's read to
-proceed on the resulting clear text.
+attaching the current user's ID of 'Dirk' to the request (but
+excluding the password). The request passes through the access control
+module, which, as before, looks up the Access Control Chains
+associated with the obj\_read permission for the requested key:value
+pair. The request is then passed to the user ID verification
+authentication plugin, which confirms that the user ID of Dirk is
+present, next the request is passed to the PSK module for password
+verification. Unfortunately, the request lacks the necessary password,
+so the server responds to the request informing the encrypted file
+system that a password is required for user 'Dirk'. The encrypted file
+system prompts the user for their password, and reissues the request,
+including everything from the first request and in addition the newly
+provided password (dotted blue line). This time the request clears
+both AA verification modules, passes through the auditing system, and
+finally hits the actual key:value store. Here the server looks up the
+requested key, generates a response, and returns it to the file
+system. The file system decrypts the requested file and allows the
+user's read operation to proceed on the resulting clear text.
 
 \section{API}
 
@@ -596,7 +597,7 @@ API requests are made to specific server HTTP endpoints. The standard
 HTTP verbs (\texttt{GET}, \texttt{POST}, \texttt{DELETE}, etc) are
 used to multiplex related operations atop a specific endpoint. Each
 combination of endpoint and verb defines a specific API method. Each
-method required specific permission to complete. The API request and
+method requires specific permission to complete. The API request and
 response message formats are composed in JSON. Binary data is encoded
 as Base64 ASCII text. When made as a \texttt{GET} request using a
 query string, JSON messages are URL encoded.
@@ -605,8 +606,8 @@ query string, JSON messages are URL encoded.
 
 API requests and response use standard JSON objects as the basis for
 their message formats. Each request or response message shares a
-standard format. The effect of the message is determined by it's
-contents, as well as the endpoint and verb user to send it to the
+standard format. The effect of the message is determined by its
+contents, as well as the endpoint and verb used to send it to the
 server. Examples API messages can be found in Appendix
 \ref{appx:messages}.
 
@@ -695,7 +696,7 @@ Custos \texttt{ACS} objects have the following components:
 \subsection{Endpoints}
 
 Custos messages are sent to the Custos server via a series of
-endpoints. Each endpoint relates to a a specific data objects or class
+endpoints. Each endpoint relates to a specific data object or class
 of data objects on the Custos server. These objects can be manipulated
 in various ways using the standard HTTP verbs. I'll present each
 endpoint categorized by the subsystem it is primarily associated with
@@ -881,40 +882,44 @@ The reference servery implementation does not use a discreet backing
 key:vale store. Instead, it stores all data in local files via the
 Python shelve~\cite{python-shelve} interface. Again, this was done for
 rapid prototyping and easy troubleshooting. This interface could be
-easily replaced with a production NoSQL-like key value store
+easily replaced with a production NoSQL-like key:value store
 (i.e. MongoDB~\cite{mongodb}, Cassandra~\cite{cassandra}, etc).
 
 When handling requests, the server primarily adheres to the
-description provided in this chapter. There are, however, and few
+description provided in this chapter. There are, however, a few
 limitations to the implementation. Currently, the implementation
-ignores the group attributes, treating all requests as coming form the
-same group. Since groups are only necessary in a multi-tenant
-scenario, this compromise seems acceptable fro a prototype
+ignores the group attributes, treating all requests as coming from a
+single global group. Since groups are only necessary in a multi-tenant
+scenario, this compromise seems acceptable for a prototype
 implementation. Also, not all server-wide API calls are supported at
-this time. They are manually configured where unsupported. Beyond
-that, the reference implementation function as described, and is
-capable of supporting basic key:value storage workloads.
+this time. The corresponding parameters are manually configured where
+not yet supported via the API. Beyond that, the reference
+implementation function as described, and is capable of supporting
+basic key:value storage workloads.
 
-The server implementation is actually surprisingly short: about a thousand
-lines of python code in its basic form. The bulk of the code is spent
-performing the necessary Access Control regulations. This seems
-reasonable given that the bulk of the Custos server exists for the
-purpose of performing access control. The use of a web-app friendly
-language clearly reduces the amount of code required by allowing most of
-the complexity associated with networking and message exchange to be
-handed off to separate libraries.
+The server implementation is actually surprisingly short: about a
+thousand lines of python code in its basic form. The bulk of the code
+is spent performing the necessary Access Control regulations. This
+seems reasonable given that the bulk of the Custos server exists for
+the purpose of performing access control. The use of a web-app
+friendly language clearly reduces the amount of code required by
+allowing most of the complexity associated with networking and message
+exchange to be handed off to separate libraries. Using a preexisting
+backing store also simplifies the Custos code base by avoiding the
+need to build an entirely new key:value storage database from scratch.
 
 \subsection{Client}
 
-On the client front, I've create a reference client library appropriate
-for use with C-based applications: \texttt{libcustos}. I'll discuss the
-details of actual examples applications in Chapter \ref{chap:clients},
-but the client C library is discussed her. A C library is necessary
-due to the lack of native support for many of the components of the
-Custos architecture in the C programming language (e.g. JSON, HTTP
-communication, dictionaries, etc). Higher level language like
-(i.e. Python) have a much easier time interfacing with the Custos
-architecture and thus may not require full blown interface libraries.
+On the client front, I've create a reference client library
+appropriate for use with C-based applications:
+\texttt{libcustos}. I'll discuss the details of actual examples
+applications in Chapter \ref{chap:clients}, but the client C library
+is discussed here. A C library is necessary due to the lack of native
+support for many of the components of the Custos architecture in the C
+programming language (e.g. JSON, HTTP communication, dictionaries,
+etc). Higher level language like (i.e. Python) have a much easier time
+interfacing with the Custos architecture and thus may not require full
+blown interface libraries.
 
 \texttt{libcustos} leverage the Curl~\cite{curl} library for
 performing HTTP requests. It uses the \texttt{json-c}~\cite{json-c}
@@ -927,14 +932,14 @@ data structures. It exposes a series of functions for dealing with
 these data types, handling memory management, and using the data types
 to make Custos requests and decode the resulting response. The library
 aims to be thread-safe and defensively coded. It makes it easy to
-interface C applications with the Custos architecture. It would also
-be used by language that accept C-bindings like C++.
+interface C applications with the Custos architecture. It could also
+be used by languages that accept C-bindings like C++ or Python.
 
 Compared to the server, the \texttt{libcustos} implementation is quite
 a bit longer: about 5000 lines of C code. This is largely due to the
 extra effort required to properly and safely convert between Custos
 message formats and C data structures. The code would be even longer
-if not for the use of separate libraries for handle the core
+if not for the use of separate libraries for handling the core
 communication primitives. This length, however, does show the
 importance of having a C-based client library: many file systems and
 encryption systems are written in C, and it would be impractical for
@@ -946,4 +951,4 @@ Custos.
 %%  LocalWords:  ACS ACCs ACC OU srv grp src ip usernames auth acs
 %%  LocalWords:  username AAs tls psk sha bcrypt utc del ReqID ResID
 %%  LocalWords:  Attrs ACSs Attr ResValue req contentType json dev
-%%  LocalWords:  MongoDB libcustos
+%%  LocalWords:  MongoDB libcustos objs grps
