@@ -157,11 +157,15 @@ each permission is one or more \emph{access control chains}
 
 The Custos access control model starts with the concept of a
 permission: a right to perform a specific Custos action. Custos has
-specific permissions associated with each OU: per-server permissions,
-each associated with the top-level Custos server, per-group
-permission, each associated with a specific server group, and
-per-object permissions, each associated with a specific key:value
-object within a group.
+specific permissions associated with each OU ACS type: per-server
+permissions (Table \ref{tab:permissions-server}), each associated with
+the top-level Custos server, per-group permissions (Table
+\ref{tab:permissions-group}), each associated with a specific server
+group, and per-object permissions (Table \ref{tab:permissions-object}),
+each associated with a specific key:value object within a group. The
+first three letters of a permission name indicate the type of ACS with
+which it is associated: \texttt{srv}:server, \texttt{grp}:group, or
+\texttt{obj}:object.
 
 Custos permissions are generally associated with the three core Custos
 subsystems based upon the subsystem handling the associated actions
@@ -179,97 +183,159 @@ system, Custos has no notion of object ownership. Instead, it relies
 on providing access to each right an owner would traditionally hold
 via explicit permissioning.
 
-\noindent
-The per-server (server-wide) Custos permissions are:
+Custos group and server ACSs also include an ``override''
+permission. This permission can be used to override the permissions of
+a lower-lever OU's ACS. For example, anyone gaining the
+\texttt{srv\_grp\_override} permission can use it to gain any of the
+rights normally granted via a group-level persuasion. Likewise, anyone
+gaining the \texttt{grp\_obj\_override} permission can use it to gain
+any of the rights normally granted via an object-level
+permission. These overrides exist for administrative tasks: allowing
+server admins to manipulate group (and thus, also object) data, and
+allowing group admins to manipulate object data. They must be used
+with caution (or disabled), but they provide a powerful mechanism for
+Custos administration.
 
-\begin{packed_desc}
-\item[\texttt{srv\_grp}] \hfill \\ The \texttt{srv\_grp} permission
-  grants a user the right to create, delete, or list groups on a
-  Custos server. When created, a group is associated with an initial
-  default ACS, programmable via the next two permission.
-\item[\texttt{srv\_new\_grp\_acs\_get}] \hfill \\ The
-  \texttt{srv\_new\_grp\_acs\_get} permission grants a user the right
-    to read the default ACS applied to newly created groups.
-\item[\texttt{srv\_new\_grp\_acs\_set}] \hfill \\ The
-  \texttt{srv\_new\_grp\_acs\_set} permission grants a user the right
-  to set the default ACS applied to newly created groups.
-\item[\texttt{srv\_audit}] \hfill \\ The \texttt{srv\_audit}
-  permission grants a user the right to read all audit information not
-  associated with an existing server group. This includes information
-  related to requests for non-existent groups, group creation, etc.
-\item[\texttt{srv\_clean}] \hfill \\ The \texttt{srv\_clean}
-  permission grants a user the right to delete all audit information
-  not associated with an existing server group.
-\item[\texttt{srv-acs-get}] \hfill \\ The \texttt{srv-acs-get}
-  permission grants a user the right to view the per-server ACS
-  controlling the permissions in this list.
-\item[\texttt{srv-acs-set}] \hfill \\ The \texttt{srv-acs-set}
-  permission grants a user the right to set the per-server ACS
-  controlling the permissions in this list.
-\end{packed_desc}
+Custos permission are initially set when the associated OU is
+created. Part of the creation process involves passing Custos the
+initial ACS definition for a new OU instance. After creation, The ACS
+can be updated by anyone granted the necessary \texttt{acs\_set}
+permission for the specific OU instance. This provides a flexible
+mechanism for setting and changing permissions.
 
-\noindent
-The per-group (group-wide) Custos permissions are:
+\begin{table}[!tbh]
+  \vspace{1ex}
+  \begin{center}
+    \tabulinesep = 5pt
+    \begin{tabu} to \textwidth
+      { | X[1,l,m]
+        | X[4,l,m]
+        | }
+      \hline
+      \textbf{Permission}
+      & \textbf{Rights}
+      \\ \hline
+      \texttt{srv\_grp\_create}
+      & create groups on a Custos server
+      \\ \hline
+      \texttt{srv\_grp\_list}
+      & list groups on a Custos server
+      \\ \hline
+      \texttt{srv\_grp\_override}
+      & escalate to any group-level permission, overriding the per-group ACS
+      \\ \hline
+      \texttt{srv\_audit}
+      & read all server-level audit information
+      \newline
+      (i.e. group creation logging, group override logging, etc)
+      \\ \hline
+      \texttt{srv\_clean}
+      & delete all server-level audit information
+      \newline
+      (i.e. group creation logging, group override logging, etc)
+      \\ \hline
+      \texttt{srv\_acs\_get}
+      & view the server-level ACS controlling the permissions in this list
+      \\ \hline
+      \texttt{srv\_acs\_set}
+      & update the server-level ACS controlling the permissions in this list
+      \\ \hline
+    \end{tabu}
+  \end{center}
+  \caption{Per-Server ACS Permissions}
+  \label{tab:permissions-server}
+\end{table}
 
-\begin{packed_desc}
-\item[\texttt{grp\_create\_obj}] \hfill \\ The
-  \texttt{grp\_create\_obj} permission grants a user the right to
-  create key:value objects within a given group. When created, an
-  object is associated with an initial default ACS, programmable via
-  the next two permission.
-\item[\texttt{grp\_new\_obj\_acs\_get}] \hfill \\ The
-  \texttt{grp\_new\_obj\_acs\_get} permission grants a user the right
-  to read the default ACS applied to newly created objects.
-\item[\texttt{grp\_new\_obj\_acs\_set}] \hfill \\ The
-  \texttt{grp\_new\_obj\_acs\_set} permission grants a user the right
-  to set the default ACS applied to newly created objects.
-\item[\texttt{grp\_audit}] \hfill \\ The \texttt{grp\_audit}
-  permission grants a user the right to read all audit information not
-  associated with an existing key:value object. This includes
-  information related to requests for non-existent objects, object
-  creation, etc.
-\item[\texttt{grp\_clean}] \hfill \\ The \texttt{grp\_clean}
-  permission grants a user the right to delete all audit information
-  not associated with an existing key:value object.
-\item[\texttt{grp\_acs\_get}] \hfill \\ The \texttt{grp\_acs\_get}
-  permission grants a user the right to view the per-group ACS
-  controlling the permissions in this list.
-\item[\texttt{grp\_acs\_set}] \hfill \\ The \texttt{grp\_acs\_set}
-  permission grants a user the right to set the per-group ACS
-  controlling the permissions in this list.
-\end{packed_desc}
+\begin{table}[!tbh]
+  \vspace{1ex}
+  \begin{center}
+    \tabulinesep = 5pt
+    \begin{tabu} to \textwidth
+      { | X[1,l,m]
+        | X[4,l,m]
+        | }
+      \hline
+      \textbf{Permission}
+      & \textbf{Rights}
+      \\ \hline
+      \texttt{grp\_obj\_create}
+      & create a key:value objects within the given group
+      \\ \hline
+      \texttt{grp\_obj\_list}
+      & list key:value objects within the given group
+      \\ \hline
+      \texttt{grp\_obj\_override}
+      & escalate to any object-level permission, overriding the per-object ACS
+      \\ \hline
+      \texttt{grp\_delete}
+      & delete the given group on a Custos server
+      \\ \hline
+      \texttt{grp\_audit}
+      & read all group-level audit information
+      \newline
+      (i.e. object creation logging, object override logging, etc)
+      \\ \hline
+      \texttt{grp\_clean}
+      & delete all group-level audit information
+      \newline
+      (i.e. object creation logging, object override logging, etc)
+      \\ \hline
+      \texttt{grp\_acs\_get}
+      & view the group-level ACS controlling the permissions in this list
+      \\ \hline
+      \texttt{grp\_acs\_set}
+      & update the group-level ACS controlling the permissions in this list
+      \\ \hline
+    \end{tabu}
+  \end{center}
+  \caption{Per-Group ACS Permissions}
+  \label{tab:permissions-group}
+\end{table}
 
-\noindent
-The per-object Custos permissions are:
-
-\begin{packed_desc}
-\item[\texttt{obj\_delete}] \hfill \\ The \texttt{obj\_delete}
-  permission grants a user the right to delete all versions of an
-  existing key:value object.
-\item[\texttt{obj\_read}] \hfill \\ The \texttt{obj\_read} permission
-  grants a user the right to read all versions of an existing
-  key:value object.
-\item[\texttt{obj\_update}] \hfill \\ The \texttt{obj\_update}
-  permission grants a user the right to create a new version of a
-  key:value object. It is the Custos equivalent of a ``write''
-  permission, but accounts for the fact the Custos key:value pairs are
-  write-once objects, so ``writing'' to them really means creating a
-  new version.
-\item[\texttt{obj\_audit}] \hfill \\ The \texttt{obj\_audit}
-  permission grants a user the right to read all audit information
-  associated with an existing key:value object. This includes
-  information related to object access (both granted and denied),
-  object versioning, etc.
-\item[\texttt{obj\_clean}] \hfill \\ The \texttt{obj\_clean}
-  permission grants a user the right to delete all audit information
-  associated with an existing key:value object.
-\item[\texttt{obj\_acs\_get}] \hfill \\ The \texttt{obj\_acs\_get}
-  permission grants a user the right to view the per-object ACS
-  controlling the permissions in this list.
-\item[\texttt{obj\_acs\_set}] \hfill \\ The \texttt{obj\_acs\_set}
-  permission grants a user the right to set the per-object ACS
-  controlling the permissions in this list.
-\end{packed_desc}
+\begin{table}[!tbh]
+  \vspace{1ex}
+  \begin{center}
+    \tabulinesep = 5pt
+    \begin{tabu} to \textwidth
+      { | X[1,l,m]
+        | X[4,l,m]
+        | }
+      \hline
+      \textbf{Permission}
+      & \textbf{Rights}
+      \\ \hline
+      \texttt{obj\_delete}
+      & delete the given key:value object within the given group
+      \\ \hline
+      \texttt{obj\_read}
+      & read the given key:value object within the given group
+      \\ \hline
+      \texttt{obj\_update}
+      & create a new version of the given key:value object within the given group
+      \newline
+      (the equivalent of a ``write'' permission for the Custos write-once system)
+      \\ \hline
+      \texttt{obj\_audit}
+      & read all object-level audit information
+      \newline
+      (i.e. object read logging, object update logging, etc)
+      \\ \hline
+      \texttt{obj\_clean}
+      & delete all object-level audit information
+      \newline
+      (i.e. object read logging, object update logging, etc)
+      \\ \hline
+      \texttt{obj\_acs\_get}
+      & view the object-level ACS controlling the permissions in this list
+      \\ \hline
+      \texttt{obj\_acs\_set}
+      & update the object-level ACS controlling the permissions in this list
+      \\ \hline
+    \end{tabu}
+  \end{center}
+  \caption{Per-Object ACS Permissions}
+  \label{tab:permissions-object}
+\end{table}
 
 \subsection{Access Control Chains}
 
@@ -587,66 +653,35 @@ user's read operation to proceed on the resulting clear text.
 
 The Custos API is the primary interface for interacting with a Custos
 server. The API handles, data, management, and auditing requests
-through a common interface. All API requests can contain
-authentication attributes as a means of attaining the necessary
-permission level for a requested operation. The API is RESTful and
-primarily stateless (individual authentication modules are allowed to
-maintain state if required).
+through a common interface. All API requests pass authentication
+attributes as a means of attaining the necessary permission level for
+a requested operation. The order in which these authentication
+attributes are passed in each requires is not relevant. Custos treats
+them as a heap of attributes and attempts to extract them from the
+heap in order to satisfy the requirements of a specific ACS. The API
+is RESTful and primarily stateless (individual authentication modules
+are allowed to maintain state if required).
 
 API requests are made to specific server HTTP endpoints. The standard
-HTTP verbs (\texttt{GET}, \texttt{POST}, \texttt{DELETE}, etc) are
-used to multiplex related operations atop a specific endpoint. Each
-combination of endpoint and verb defines a specific API method. Each
-method requires specific permission to complete. The API request and
-response message formats are composed in JSON. Binary data is encoded
-as Base64 ASCII text. When made as a \texttt{GET} request using a
-query string, JSON messages are URL encoded.
+HTTP verbs (\texttt{GET}, \texttt{PUT}, \texttt{POST}, and
+\texttt{DELETE}) are used to multiplex related operations atop a
+specific endpoint. Each combination of endpoint and verb defines a
+specific API method. Each method requires a specific permission to
+complete. The API request and response message formats are composed in
+JSON. Binary data is encoded as Base64 ASCII text. Authentication
+attributes and passed via query string as URL encoded JSON.
 
 \subsection{Message Format}
 
 API requests and response use standard JSON objects as the basis for
-their message formats. Each request or response message shares a
-standard format. The effect of the message is determined by its
-contents, as well as the endpoint and verb used to send it to the
+their message formats. The effect of the message is determined by its
+content, as well as the endpoint and verb used to send it to the
 server. Examples API messages can be found in Appendix
-\ref{appx:messages}.
-
-The following are the required components in any Custos message. Each
-is represented as a key:value pair in the top level JSON message
-object.
-
-\begin{packed_desc}
-\item[\texttt{Version}] \hfill \\ The Custos protocol version. Used to
-  determine server compatibility with a given Custos message format
-  and method semantics.
-\item[\texttt{Group}] \hfill \\ A UUID uniquely identifying the group
-  associated with the message. If left blank, the message is assumed
-  to apply at a server-wide level.
-\item[\texttt{ReqID}] \hfill \\ A UUID uniquely identifying the
-  request message (or the request message that triggered the response
-  message).
-\item[\texttt{ResID} (Response Only)] \hfill \\ A UUID uniquely
-  identifying the response message.
-\item[\texttt{Status} (Response Only)] \hfill \\ The status of the
-  response. Used to indicate errors processing the corresponding
-  request (malformed request, etc).
-\item[\texttt{Attrs}] \hfill \\ A list of Custos \texttt{Attrs}. Used
-  to identify or provide the AAs associated with the message.
-\end{packed_desc}
+\ref{appx:messages}. That basic JSON objects used to compose Custos
+requests or response include:
 
 \noindent
-Each message may contain any of the following optional components:
-
-\begin{packed_desc}
-\item[\texttt{Keys}] \hfill \\ A list of Custos \texttt{Key}
-  objects. Used to identify or provide the key:value objects a
-  associated with the message.
-\item[\texttt{ACSs}] \hfill \\ A list of Custos \texttt{ACS}
-  objects. Used to provide the ACS associated with the message.
-\end{packed_desc}
-
-\noindent
-Custos \texttt{Attr} objects have the following components:
+\texttt{Attr} objects: JSON Dictionaries with the following keys:
 
 \begin{packed_desc}
 \item[\texttt{Class}] \hfill \\ The AA class
@@ -664,33 +699,78 @@ Custos \texttt{Attr} objects have the following components:
 \end{packed_desc}
 
 \noindent
-Custos \texttt{Key} objects have the following components:
+\texttt{Key} objects: JSON dictionaries with the following keys:
 
 \begin{packed_desc}
-\item[\texttt{UUID}] \hfill \\ The UUID identifying the key
-\item[\texttt{Revision}] \hfill \\ Used to request a specific key
-  revision. If blank, the latest revision is assumed.
 \item[\texttt{Value}] \hfill \\ The corresponding value, encoded as
   Base64 ASCII. May be left blank (e.g. as in read requests where its
   value is unknown).
-\item[\texttt{Echo}] \hfill \\ A Boolean indicating whether or not the
-  server should (when possible) echo the value of the \texttt{Key}
-  contained in a request back to the user in the response.
+\item[\texttt{UUID} (Response Only)] \hfill \\ The UUID identifying
+  the key
+\item[\texttt{Revision} (Response Only)] \hfill \\ Used to request a
+  specific key revision. If blank, the latest revision is assumed.
 \item[\texttt{Status} (Response Only)] \hfill \\ The status indicating
   whether the requested operation on the Key was allowed or denied.
 \end{packed_desc}
 
 \noindent
-Custos \texttt{ACS} objects have the following components:
+\texttt{ACS} objects: JSON dictionaries with the following keys:
 
 \begin{packed_desc}
 \item[\texttt{Permissions}] \hfill \\ A dictionary of Permission:(ACC
-  list) pairs. Each ACC list is, in turn a list of Attr objects
+  list) pairs. Each ACC list is, in turn a list of \texttt{Attr} JSON
+  objects
 \item[\texttt{Echo}] \hfill \\ A Boolean indicating whether or not the
   server should (when possible) echo the value of the \texttt{ACS}
   contained in a request back to the user in the response.
 \item[\texttt{Status} (Response Only)] \hfill \\ The status indicating
   whether the requested operation on the ACS was allowed or denied.
+\end{packed_desc}
+
+All API messages contain an order-agnostic list of \texttt{Attrs} JSON
+objects passed in a \texttt{aa=} query string parameter attached to
+each request URL. Requests that refer to specific groups pass the
+group UUID as part of the URL. Likewise, requests referencing specific
+object pass the object UUID as part of the URL. All query string
+parameters are URL encoded prior to being attached.
+
+In addition to the above data, Custos requests that create or update
+objects or ACSs pass the object/ACS value in the \texttt{POST} or
+\texttt{PUT} message body as a JSON dictionary. On creation, this JSON
+dictionary contains a \texttt{Key} JSON object stored under the
+\texttt{``Key''} key, as well as an \texttt{ACS} JSON object (see
+below) stored under the \texttt{``ACS''} key. An object update works
+the same way, but only the \texttt{``Key''} key and associated JSON
+object are passed. Likewise, an ACS update passes only the
+\texttt{``ACS''} key and the associated JSON object. All Custos
+\texttt{POST} and \texttt{PUT} requests may contain an options
+\texttt{chk=} query string parameter containing a list of checksums
+for the corresponding request body data.
+
+Custos responses are returned as JSON dictionary objects containing
+one or more key:value pairs. All Custos responses contain the
+following required dictionary keys:
+
+\begin{packed_desc}
+\item[\texttt{Status}] \hfill \\ The integer status code of the
+  response. Used to indicate errors processing the corresponding
+  request (malformed request, etc).
+\item[\texttt{Attrs}] \hfill \\ A list of \texttt{Attr} JSON
+  objects. Used to identify or prompt for the AAs associated with the
+  corresponding request.
+\end{packed_desc}
+
+\noindent
+Each response may also optionally contain any of the following
+dictionary keys:
+
+\begin{packed_desc}
+\item[\texttt{Keys}] \hfill \\ A list of \texttt{Key} JSON
+  objects. Used to provide the key:value objects associated with the
+  corresponding request.
+\item[\texttt{ACSs}] \hfill \\ A list of \texttt{ACS} JSON
+  objects. Used to provide the ACSs associated with the corresponding
+  request.
 \end{packed_desc}
 
 \subsection{Endpoints}
@@ -702,26 +782,20 @@ in various ways using the standard HTTP verbs. I'll present each
 endpoint categorized by the subsystem it is primarily associated with
 (data, auditing, or management).
 
-Messages to sent via \texttt{GET} or \texttt{DELETE} requests are
-passed via query string as a URL-encoded value following a
-\texttt{req=} field. Messages sent via \texttt{POST} requests are
-passed in the request body in pure JSON with the \texttt{contentType}
-set to \texttt{application/json}.
-
 The data endpoints are used to create, access, update, and delete
 Custos key:value objects or groups. The data endpoints, their
 associated verbs and the required permissions are shown in Table
 \ref{tab:methods-data}.
 
-\begin{table}[!tb]
+\begin{table}[!tbh]
   \vspace{1ex}
   \begin{center}
     \tabulinesep = 5pt
     \begin{tabu} to \textwidth
-      { | X[1,l,m]
+      { | X[2.5,l,m]
         | X[.5,l,m]
         | X[1,l,m]
-        | X[2,l,m]
+        | X[1,l,m]
         | }
       \hline
       \textbf{Endpoint}
@@ -729,26 +803,39 @@ associated verbs and the required permissions are shown in Table
       & \textbf{Required Permission}
       & \textbf{Purpose}
       \\ \hline
-      \texttt{/objs} & \texttt{GET} & \texttt{obj\_read}
-      & read and return one or more key:value objects
+      \texttt{/grp}
+      & \texttt{POST} & \texttt{srv\_grp\_create}
+      & create a new group, returning the group's UUID
       \\ \hline
-      \texttt{/objs} & \texttt{POST} & \texttt{grp\_create\_obj}
-      & create one or more new key:value object
+      \texttt{/grp}
+      & \texttt{GET} & \texttt{srv\_grp\_list}
+      & return the list of all groups
       \\ \hline
-      \texttt{/objs} & \texttt{POST} & \texttt{obj\_update}
-      & update one or more existing key:value object.
-      \\ \hline
-      \texttt{/objs} & \texttt{DELETE} & \texttt{obj\_delete}
-      & delete one or more key:value objects
-      \\ \hline
-      \texttt{/grps} & \texttt{GET} & \texttt{srv\_grp}
-      & list all groups
-      \\ \hline
-      \texttt{/grps} & \texttt{POST} & \texttt{srv\_grp}
-      & create a new group
-      \\ \hline
-      \texttt{/grps} & \texttt{DELETE} & \texttt{srv\_grp}
+      \texttt{/grp/$\langle$grp\_uuid$\rangle$}
+      & \texttt{DELETE} & \texttt{grp\_delete}
       & remove a group
+      \\ \hline
+      \texttt{/grp/$\langle$grp\_uuid$\rangle$/obj}
+      & \texttt{POST} & \texttt{grp\_obj\_create}
+      & create a new key:value object, returning the object's UUID
+      \\ \hline
+      \texttt{/grp/$\langle$grp\_uuid$\rangle$/obj}
+      & \texttt{GET} & \texttt{grp\_obj\_list}
+      & return a list of all key:value objects
+      \\ \hline
+      \texttt{/grp/$\langle$grp\_uuid$\rangle$/obj/$\langle$obj\_uuid$\rangle$}
+      & \texttt{PUT} & \texttt{obj\_update}
+      & update an existing key:value object
+      \\ \hline
+      \texttt{/grp/$\langle$grp\_uuid$\rangle$/obj/$\langle$obj\_uuid$\rangle$}
+      & \texttt{GET} & \texttt{obj\_read}
+      & return a key:value object (the \texttt{rev=} query string
+        parameter may be used to specify a specific object version,
+        otherwise the latest version is returned)
+      \\ \hline
+      \texttt{/grp/$\langle$grp\_uuid$\rangle$/obj/$\langle$obj\_uuid$\rangle$}
+      & \texttt{DELETE} & \texttt{obj\_delete}
+      & delete a key:value object
       \\ \hline
     \end{tabu}
   \end{center}
@@ -760,15 +847,15 @@ The audit endpoints are used to audit data related to a specific
 Custos OU. The audit endpoints, their associated verbs, and the
 required permissions are shown in Table \ref{tab:methods-audit}.
 
-\begin{table}[!tb]
+\begin{table}[!tbh]
   \vspace{1ex}
   \begin{center}
     \tabulinesep = 5pt
     \begin{tabu} to \textwidth
-      { | X[1,l,m]
+      { | X[2.5,l,m]
         | X[.5,l,m]
         | X[1,l,m]
-        | X[2,l,m]
+        | X[1,l,m]
         | }
       \hline
       \textbf{Endpoint}
@@ -776,23 +863,29 @@ required permissions are shown in Table \ref{tab:methods-audit}.
       & \textbf{Required Permission}
       & \textbf{Purpose}
       \\ \hline
-      \texttt{/audit/obj} & \texttt{GET} & \texttt{obj\_audit}
-      & read and return the audit data associated with one or more key:value objects
+      \texttt{/audit}
+      & \texttt{GET} & \texttt{srv\_audit}
+      & return the server-wide audit data
       \\ \hline
-      \texttt{/audit/obj} & \texttt{DELETE} & \texttt{obj\_clean}
-      & purge the audit data associated with one or more key:value objects
+      \texttt{/audit}
+      & \texttt{DELETE} & \texttt{srv\_clean}
+      & purge the server-wide audit data
       \\ \hline
-      \texttt{/audit/grp} & \texttt{GET} & \texttt{grp\_audit}
-      & read and return the group-wide audit data
+      \texttt{/grp/$\langle$grp\_uuid$\rangle$/audit}
+      & \texttt{GET} & \texttt{grp\_audit}
+      & return the group-wide audit data
       \\ \hline
-      \texttt{/audit/grp} & \texttt{DELETE} & \texttt{grp\_clean}
+      \texttt{/grp/$\langle$grp\_uuid$\rangle$/audit}
+      & \texttt{DELETE} & \texttt{grp\_clean}
       & purge the group-wide audit data
       \\ \hline
-      \texttt{/audit/srv} & \texttt{GET} & \texttt{srv\_audit}
-      & read and return the server-wide audit data
+      \texttt{/grp/$\langle$grp\_uuid$\rangle$/obj/$\langle$obj\_uuid$\rangle$/audit}
+      & \texttt{GET} & \texttt{obj\_audit}
+      & return the audit data associated with a key:value object
       \\ \hline
-      \texttt{/audit/srv} & \texttt{DELETE} & \texttt{srv\_clean}
-      & purge the server-wide audit data
+      \texttt{/grp/$\langle$grp\_uuid$\rangle$/obj/$\langle$obj\_uuid$\rangle$/audit}
+      & \texttt{DELETE} & \texttt{obj\_clean}
+      & purge the audit data associated with a key:value objects
       \\ \hline
     \end{tabu}
   \end{center}
@@ -804,15 +897,15 @@ The management endpoints are used to manage access rights related to a
 specific Custos OU. The audit endpoints, their associated verbs, and
 the required permissions are shown in Table \ref{tab:methods-mgmt}.
 
-\begin{table}[!tb]
+\begin{table}[!tbh]
   \vspace{1ex}
   \begin{center}
     \tabulinesep = 5pt
     \begin{tabu} to \textwidth
-      { | X[.7,l,m]
-        | X[.3,l,m]
+      { | X[2.5,l,m]
+        | X[.5,l,m]
         | X[1,l,m]
-        | X[2,l,m]
+        | X[1,l,m]
         | }
       \hline
       \textbf{Endpoint}
@@ -820,35 +913,29 @@ the required permissions are shown in Table \ref{tab:methods-mgmt}.
       & \textbf{Required Permission}
       & \textbf{Purpose}
       \\ \hline
-      \texttt{/acs/obj} & \texttt{GET} & \texttt{obj\_acs\_get}
-      & read and return the ACS associated with a key:value object
+      \texttt{/acs}
+      & \texttt{GET} & \texttt{srv\_acs\_get}
+      & return the ACS associated with a server
       \\ \hline
-      \texttt{/acs/obj} & \texttt{POST} & \texttt{obj\_acs\_set}
-      & set a new ACS associated with a key:value object
-      \\ \hline
-      \texttt{/acs/new\_obj} & \texttt{GET} & \texttt{grp\_new\_obj\_acs\_get}
-      & read and return the default ACS associated with new key:value objects
-      \\ \hline
-      \texttt{/acs/new\_obj} & \texttt{POST} & \texttt{grp\_new\_obj\_acs\_set}
-      & set a new default ACS associated with new key:value objects
-      \\ \hline
-      \texttt{/acs/grp} & \texttt{GET} & \texttt{grp\_acs\_get}
-      & read and return the ACS associated with a group
-      \\ \hline
-      \texttt{/acs/grp} & \texttt{POST} & \texttt{grp\_acs\_set}
-      & set a new ACS associated with a group
-      \\ \hline
-      \texttt{/acs/new\_grp} & \texttt{GET} & \texttt{srv\_new\_grp\_acs\_get}
-      & read and return the default ACS associated with new group objects
-      \\ \hline
-      \texttt{/acs/new\_grp} & \texttt{POST} & \texttt{srv\_new\_grp\_acs\_set}
-      & set a new default ACS associated with new group objects
-      \\ \hline
-      \texttt{/acs/srv} & \texttt{GET} & \texttt{srv\_acs\_get}
-      & read and return the ACS associated with a server
-      \\ \hline
-      \texttt{/acs/srv} & \texttt{POST} & \texttt{srv\_acs\_set}
+      \texttt{/acs}
+      & \texttt{POST} & \texttt{srv\_acs\_set}
       & set a new ACS associated with a server
+      \\ \hline
+      \texttt{/grp/$\langle$grp\_uuid$\rangle$/acs}
+      & \texttt{GET} & \texttt{grp\_acs\_get}
+      & return the ACS associated with a group
+      \\ \hline
+      \texttt{/grp/$\langle$grp\_uuid$\rangle$/acs}
+      & \texttt{PUT} & \texttt{grp\_acs\_set}
+      & set the ACS associated with a group
+      \\ \hline
+      \texttt{/grp/$\langle$grp\_uuid$\rangle$/obj/$\langle$obj\_uuid$\rangle$/acs}
+      & \texttt{GET} & \texttt{obj\_acs\_get}
+      & return the ACS associated with a key:value object
+      \\ \hline
+      \texttt{/grp/$\langle$grp\_uuid$\rangle$/obj/$\langle$obj\_uuid$\rangle$/acs}
+      & \texttt{PUT} & \texttt{obj\_acs\_set}
+      & set the ACS associated with a key:value object
       \\ \hline
     \end{tabu}
   \end{center}
@@ -948,7 +1035,7 @@ to the complexity involved. Applications based on higher level
 languages would likely have better luck directly interfacing with
 Custos.
 
-%%  LocalWords:  ACS ACCs ACC OU srv grp src ip usernames auth acs
+%%  LocalWords:  ACS ACCs ACC OU srv grp src ip usernames auth acs aa
 %%  LocalWords:  username AAs tls psk sha bcrypt utc del ReqID ResID
 %%  LocalWords:  Attrs ACSs Attr ResValue req contentType json dev
-%%  LocalWords:  MongoDB libcustos objs grps
+%%  LocalWords:  MongoDB libcustos objs grps OU's uuid
