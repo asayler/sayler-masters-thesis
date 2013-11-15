@@ -2,13 +2,13 @@
     {
 	"Class": "explicit",
 	"Type": "user_id",
-	"Value": "asayler",
+	"Value": "YXNheWxlcgA=",
 	"Echo": true
     },
     {
 	"Class": "explicit",
 	"Type": "psk",
-	"Value": "CorrectHorseBatteryStaple",
+	"Value": "TXlPYmplY3RBY2Nlc3NQYXNzd29yZAA=",
 	"Echo": false
     }
 ]

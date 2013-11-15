@@ -2,13 +2,14 @@
     {
 	"Class": "explicit",
 	"Type": "user_id",
-	"Value": "asayler",
+	"Value": "YXNheWxlcgA=",
 	"Echo": true
     },
     {
 	"Class": "explicit",
 	"Type": "psk",
-	"Value": "MyObjectCreationPassword",
+	"Value": "TXlPYmplY3RDcmVhdGlvblBhc3N3b3JkA
+                  A==",
 	"Echo": false
     }
 ]

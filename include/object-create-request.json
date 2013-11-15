@@ -1,9 +1,9 @@
 {
     "Keys": [
 	{
-	    "Value": "VHdhcyBicmlsbGlnLCBhbmQgdGhlIHNsaX
-                      RoeSB0b3ZlczsgRGlkIGd5cmUgYW5kIGdp
-                      bWJsZSBpbiB0aGUgd2FiZQA=",
+	    "Value": "VHdhcyBicmlsbGlnLCBhbmQgdGhlIHNsa
+                      XRoeSB0b3ZlczsgRGlkIGd5cmUgYW5kIG
+                      dpbWJsZSBpbiB0aGUgd2FiZQA=",
 	    "Echo": true
 	}
     ]
@@ -17,13 +17,13 @@
 			{
 			    "Class": "explicit",
 			    "Type": "user_id",
-			    "Value": "asayler",
+			    "Value": "YXNheWxlcgA=",
 			    "Echo": true
 			},
 			{
 			    "Class": "explicit",
 			    "Type": "psk",
-			    "Value": "MyObjectCreationPassword",
+			    "Value": "TXlPYmplY3RBY2Nlc3NQYXNzd29yZAA=",
 			    "Echo": false
 			}
 		    ]
@@ -34,7 +34,7 @@
 		"obj_acs_get": null,
 		"obj_acs_set": null
 	    }
-	},
-	"Echo": true
+	    "Echo": true
+	}
     ]
 }
