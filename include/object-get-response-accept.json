@@ -1,0 +1,30 @@
+{
+    "Status": "okay",
+    "Keys": [
+	{
+	    "Value": "VHdhcyBicmlsbGlnLCBhbmQgdGhlIHNsaX
+                      RoeSB0b3ZlczsgRGlkIGd5cmUgYW5kIGdp
+                      bWJsZSBpbiB0aGUgd2FiZQA=",
+	    "Echo": null,
+	    "Revision": 0,
+	    "UUID": "7af8c95d-479a-46fe-b5de-8574c6ca1369",
+	    "Status": "accepted"
+	}
+    ],
+    "Attrs": [
+	{
+	    "Class": "explicit",
+	    "Type": "user_id",
+	    "Value": "asayler",
+	    "Echo": true,
+	    "Status": "accepted"
+	},
+	{
+	    "Class": "explicit",
+	    "Type": "psk",
+	    "Value": null,
+	    "Echo": false,
+	    "Status": "accepted"
+	}
+    ]
+}

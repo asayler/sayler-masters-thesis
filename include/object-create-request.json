@@ -1,0 +1,40 @@
+{
+    "Keys": [
+	{
+	    "Value": "VHdhcyBicmlsbGlnLCBhbmQgdGhlIHNsaX
+                      RoeSB0b3ZlczsgRGlkIGd5cmUgYW5kIGdp
+                      bWJsZSBpbiB0aGUgd2FiZQA=",
+	    "Echo": true
+	}
+    ]
+    "ACSs": [
+	{
+	    "Permissions":
+	    {
+		"obj_delete": null,
+		"obj_read": [
+		    [
+			{
+			    "Class": "explicit",
+			    "Type": "user_id",
+			    "Value": "asayler",
+			    "Echo": true
+			},
+			{
+			    "Class": "explicit",
+			    "Type": "psk",
+			    "Value": "MyObjectCreationPassword",
+			    "Echo": false
+			}
+		    ]
+		]
+		"obj_update": null,
+		"obj_audit": null,
+		"obj_clean": null,
+		"obj_acs_get": null,
+		"obj_acs_set": null
+	    }
+	},
+	"Echo": true
+    ]
+}

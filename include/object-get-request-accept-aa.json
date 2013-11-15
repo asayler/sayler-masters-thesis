@@ -1,0 +1,14 @@
+[
+    {
+	"Class": "explicit",
+	"Type": "user_id",
+	"Value": "asayler",
+	"Echo": true
+    },
+    {
+	"Class": "explicit",
+	"Type": "psk",
+	"Value": "CorrectHorseBatteryStaple",
+	"Echo": false
+    }
+]
