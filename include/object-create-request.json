@@ -1,40 +1,40 @@
 {
     "Keys": [
-	{
-	    "Value": "VHdhcyBicmlsbGlnLCBhbmQgdGhlIHNsa
+        {
+	        "Value": "VHdhcyBicmlsbGlnLCBhbmQgdGhlIHNsa
                       XRoeSB0b3ZlczsgRGlkIGd5cmUgYW5kIG
                       dpbWJsZSBpbiB0aGUgd2FiZQA=",
-	    "Echo": true
-	}
+	        "Echo": true
+	    }
     ]
     "ACSs": [
-	{
-	    "Permissions":
 	    {
-		"obj_delete": null,
-		"obj_read": [
-		    [
-			{
-			    "Class": "explicit",
-			    "Type": "user_id",
-			    "Value": "YXNheWxlcgA=",
-			    "Echo": true
-			},
-			{
-			    "Class": "explicit",
-			    "Type": "psk",
-			    "Value": "TXlPYmplY3RBY2Nlc3NQYXNzd29yZAA=",
-			    "Echo": false
-			}
-		    ]
-		]
-		"obj_update": null,
-		"obj_audit": null,
-		"obj_clean": null,
-		"obj_acs_get": null,
-		"obj_acs_set": null
+	        "Permissions":
+	        {
+		        "obj_delete": null,
+		        "obj_read": [
+		            [
+			            {
+			                "Class": "explicit",
+			                "Type": "user_id",
+			                "Value": "YXNheWxlcgA=",
+			                "Echo": true
+			            },
+			            {
+			                "Class": "explicit",
+			                "Type": "psk",
+			                "Value": "TXlPYmplY3RBY2Nlc3NQYXNzd29yZAA=",
+			                "Echo": false
+			            }
+		            ]
+		        ]
+		        "obj_update": null,
+		        "obj_audit": null,
+		        "obj_clean": null,
+		        "obj_acs_get": null,
+		        "obj_acs_set": null
+	        }
+	        "Echo": true
 	    }
-	    "Echo": true
-	}
     ]
 }

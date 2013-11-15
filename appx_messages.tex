@@ -1,18 +1,84 @@
 \chapter{Sample Custos Messages}
 \label{appx:messages}
 
-\section{Read Key:Value Object}
-
-\subsection{Denied Request}
-
-\subsection{Denied Response}
-
-\subsection{Accepted Request}
-
-\subsection{Accepted Response}
-
-\section{Set Key:Value Object ACS}
+\newpage
+\section{Create New Key:Value Object}
 
 \subsection{Request}
 
+\lstinputlisting[
+  language=JavaScript,
+  label=lst:obj_create_req_attr,
+  caption={Create Request \texttt{Attr} Object}
+]{./include/object-create-request-aa.json}
+
+\lstinputlisting[
+  language=HTML,
+  label=lst:obj_create_req,
+  caption={Create HTTP Request}
+]{./include/object-create-request.url}
+
+\lstinputlisting[
+  language=JavaScript,
+  label=lst:obj_create_req_body,
+  caption={Create HTTP Request Body}
+]{./include/object-create-request.json}
+
+\newpage
 \subsection{Response}
+
+\lstinputlisting[
+  language=JavaScript,
+  label=lst:obj_create_res,
+  caption={Create HTTP Response}
+]{./include/object-create-response.json}
+
+\newpage
+\section{Get Existing Key:Value Object}
+
+\subsection{Request - Denied}
+
+\lstinputlisting[
+  language=JavaScript,
+  label=lst:obj_get_req_deny_attr,
+  caption={Get Request \texttt{Attr} Object - Incomplete}
+]{./include/object-get-request-deny-aa.json}
+
+\lstinputlisting[
+  language=HTML,
+  label=lst:obj_get_req_deny,
+  caption={Get HTTP Request - Incomplete}
+]{./include/object-get-request-deny.url}
+
+\newpage
+\subsection{Response - Denied}
+
+\lstinputlisting[
+  language=JavaScript,
+  label=lst:obj_get_res_deny,
+  caption={Get HTTP Response - Access Denied}
+]{./include/object-get-response-deny.json}
+
+\newpage
+\subsection{Accepted Request}
+
+\lstinputlisting[
+  language=JavaScript,
+  label=lst:obj_get_req_accept_attr,
+  caption={Get Request \texttt{Attr} Object - Complete}
+]{./include/object-get-request-accept-aa.json}
+
+\lstinputlisting[
+  language=HTML,
+  label=lst:obj_get_req_accept,
+  caption={Get HTTP Request - Complete}
+]{./include/object-get-request-accept.url}
+
+\newpage
+\subsection{Accepted Response}
+
+\lstinputlisting[
+  language=JavaScript,
+  label=lst:obj_get_res_accept,
+  caption={Get HTTP Response - Access Granted}
+]{./include/object-get-response-accept.json}
