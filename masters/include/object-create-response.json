@@ -1,0 +1,61 @@
+{
+    "Status": "okay",
+    "Keys": [
+	{
+	    "Value": "VHdhcyBicmlsbGlnLCBhbmQgdGhlIHNsaX
+                      RoeSB0b3ZlczsgRGlkIGd5cmUgYW5kIGdp
+                      bWJsZSBpbiB0aGUgd2FiZQA=",
+	    "Echo": true,
+	    "Revision": 0,
+	    "UUID": "7af8c95d-479a-46fe-b5de-8574c6ca1369",
+	    "Status": "accepted"
+	}
+    ],
+    "ACSs": [
+	{
+	    "Permissions":
+	    {
+		"obj_delete": null,
+		"obj_read": [
+		    [
+			{
+			    "Class": "explicit",
+			    "Type": "user_id",
+			    "Value": "asayler",
+			    "Echo": true
+			},
+			{
+			    "Class": "explicit",
+			    "Type": "psk",
+			    "Value": null,
+			    "Echo": false
+			}
+		    ]
+		]
+		"obj_update": null,
+		"obj_audit": null,
+		"obj_clean": null,
+		"obj_acs_get": null,
+		"obj_acs_set": null
+	    },
+	    "Echo": true,
+	    "Status": "accepted"
+	}
+    ],
+    "Attrs": [
+	{
+	    "Class": "explicit",
+	    "Type": "user_id",
+	    "Value": "asayler",
+	    "Echo": true,
+	    "Status": "accepted"
+	},
+	{
+	    "Class": "explicit",
+	    "Type": "psk",
+	    "Value": null,
+	    "Echo": false,
+	    "Status": "accepted"
+	}
+    ]
+}

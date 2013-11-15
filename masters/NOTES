@@ -1,8 +1,12 @@
+TODO:
+
+Update custos.h for update/delete
+
+DONE:
+
 Add note about runnign Custos on self-hosted server
 (you are the trust provider)
 
-
-DONE:
 conflating mechanism and policy
 
 Trust as a Service
