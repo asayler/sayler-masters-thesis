@@ -3,13 +3,13 @@
 
 Today, more so than ever, having secure, usable ways of protecting our
 data is of the utmost importance. Unfortunately, existing technologies
-are failing us. Most data storage system provide little security be
-default. The systems that due exist to secure data like strong
-cryptography are challenging to use, especially in a manner that fits
+are failing us. Most data storage systems provide little security by
+default. The technologies that do exist to secure data, like strong
+cryptography, are challenging to use, especially in a manner that fits
 our modern usage habits. Furthermore, we have been lead to conflate
-features with trust, or at least to be willing to forgo trust in favor
-of features. How can we protect and control our data in a manner that
-is easy to use, well suited to modern user cases, and allows us to
+features with trust, or at least to forgo trust in favor of
+features. How can we protect and control our data in a manner that is
+easy to use, well suited to modern user cases, and allows us to
 control whom we chose to trust with our data while still leveraging
 the rich set of features available on modern data-driven services?
 Custos aims to provide the basis of one possible answer to these
@@ -23,7 +23,7 @@ Custos's primary contributions include:
 \item[``Key Storage as a Service Platform:] For providing a dedicated
   encryption key storage and access control service
 \item[A generic, flexible access control scheme:] Including the use of
-  access control chins for generalized access control specifications
+  access control chains for generalized access control specifications
   using a range of authentication primitives
 \item[Custos protocol]: For standardizing the exchange of secrets and
   the authentication information required to access them
@@ -44,12 +44,12 @@ scheme, where Custos provides a logically centralized ``Key Storage as
 a Service'' platform capable of making the associated encryption
 systems more flexible, and thus more usable. The flexibility of the
 Custos architecture allow it to solve a variety of modern security
-problems, and forms the basis for a Trust as a Service security model
-appropriate for a range of contemporary applications.
+problems, and forms the basis for a ``Trust as a Service'' security
+model appropriate for a range of contemporary applications.
 
 \subsection{Successes}
 
-My experience with thus far has underlined the flexibility of
+My experience with Custos thus far has underlined the flexibility of
 system. Custos's flexibility is primly derived from two attributes of
 the system: Custos's logically centralized nature, and Custos's
 authentication and access control scheme. The centralization of Custos
@@ -62,9 +62,9 @@ authentication parameters to the arbitrary access control chains,
 allows for a wide range of access control intentions to be expressed
 in a common, easy to use, language.
 
-Custos flexibility, in turn, enable usability improvements across a
+Custos's flexibility, in turn, enables usability improvements across a
 range of application domains. Whether it's allowing for encryption
-system that can function across our myriad of modern devices and allow
+system that function across our myriad of modern devices and allow
 us to securely share data with other users, or providing us with a
 centralized personal data repository to which we can provide
 controlled access for the web services of our choosing, Custos's
@@ -73,43 +73,42 @@ formally verified this usability, anecdotal experience using Custos to
 protect my own data has shown it to enable secure systems that would
 not otherwise be possible.
 
-Finally, Custos provided a trust-separation system with a well defined
+Finally, Custos provides a trust-separation system with a well defined
 interface. This could form the basis of market-derived approach to
 security. Once we can separate trust from unrelated functionality, it
 becomes far easier to select and reward dedicated ``trust providers''
 on the basis of their trustworthiness, while still retaining the
 ability to select untrusted services on the basis of the features they
 provide. If we truly wish to protect our data, we must create an
-incentivizes system for proving trustworthiness as a service to users,
-just as we currently have systems that incentivizes providing features
-to users. Custos provides a standardized, inter-provider compatible
-architecture on which such an ecosystem could be built.
+incentive-based system for providing trustworthiness as a service to
+users, just as we currently have systems that incentive providing
+features to users. Custos provides a standardized, inter-provider
+compatible architecture on which such an ecosystem could be built.
 
 \subsection{Challenges}
 
-While Custos has had some successes, it is certainly not without its
+While Custos has its successes, it is certainly not without its
 challenges. First and foremost, Custos does not eliminate the need for
 trust, it simply isolates and it and makes it more flexible. In order
 to gain many of the usability benefits of a Custos-backed encryption
 system, you must still trust a third party. While it is possible to
 operate your own Custos server, and some may very well do that, doing
 so is not within realistic reach of many end-users, and may very well
-negate many o the usability benefits Custos provides. Trust is still
-necessary, Custos only helps regulate it.
+negate many of the usability benefits Custos provides. Trust is still
+necessary, Custos only helps commoditize and regulate it.
 
 Furthermore, Custos, like any new system, faces adoption
 challenges. At this point in time, there are no mainstream systems
 that utilize Custos. While I believe many systems could be refactored
 to use Custos with minimal effort, the task of doing so, or convincing
-other to do so, in still non trivial. In order for Custos to succeed,
-it must see a least moderately widespread standardization and
-adoption. There must be readily available security systems that
+others to do so, in still non trivial. In order for Custos to succeed,
+it must see at least moderately widespread standardization and
+adoption. There must be readily available secure applications that
 utilize Custos. And Custos providers must be easily found, affordable,
 and numerous (in order to ensure some modicum of trustworthiness
-through competition for your perception of their
-trustworthiness). Until Custos, or a similar standard secret storage
-system and provider bases exists, using Custos in live production
-settings will remain challenging.
+through competition). Until Custos, or a similar standardized secret
+storage system, becomes widely available, using Custos in live
+production settings will remain challenging.
 
 The performance overhead of using Custos is also not well
 understood. For many end-user applications, raw performance is not the
@@ -117,26 +116,26 @@ primary concern, and there may exist a willingness to sacrifice some
 performance in the name of increased security. That said, the overhead
 of Custos across a range of applications has not been evaluated. Nor
 have Custos performance bottlenecks and possible improvements been
-identified or proposed. This will have to come with time and
-additional use of Custos and Custos-backed applications.
+identified. Such analysis will come with time and additional use of
+Custos and Custos-backed applications.
 
 Custos's authentication system, especially the access control chain,
 component is highly flexible. But it remains to be seen whether or not
-this flexibility will lead only to increase ease of use (a good
-thing), or whether it risks giving the user too much freedom making it
-prone to misconfiguration and errors. Furthermore, the Custos protocol
-is believed to be capable of supporting a wide range of authentication
-primitives, but at this time, only a handful of authentication
-primitives have actually been tested. Whether or not the current
-format is capable of supporting more complex authentication schemes,
-and how easily they might be implemented within the Custos plugin
-framework, remains to be seen.
+this flexibility will lead only to increased ease of use (a good
+thing), or whether it risks giving the user too much freedom, making
+it prone to misconfiguration and errors. Furthermore, the Custos
+protocol is believed to be capable of supporting a wide range of
+authentication primitives, but at this time, only a handful of
+authentication primitives have actually been tested. Whether or not
+the current format is capable of supporting more complex
+authentication schemes, and how easily they might be implemented
+within the Custos plugin framework, remains to be seen.
 
 \section{Future Work}
 
 The Custos's work presented in this document represents the
 culmination of the initial Custos design and implementation effort. It
-has resulted in a usable secret storage services and the basis of a
+has resulted in a usable secret storage service and the basis of a
 variety of applications that leverage this service. That said, there
 is plenty of work to be done to make Custos a fully production-ready
 and proven system.
@@ -145,8 +144,8 @@ One of the key tenets of Custos design was usability, both the base
 usability of Custos itself, and the increased usability of
 applications leveraging Custos. I would like to conduct one or more
 user studies evaluating the usability of Custos and Custos backed
-applications. This might include measuring the success user have
-building access control chins that meet their intentions (vs those
+applications. This might include measuring the success users have
+building access control chains that meet their intentions (vs those
 that subvert intentions through misconfiguration). It would also
 likely include measuring the usability difference between a
 traditional encryption system and a Custos-backed encryption
@@ -154,17 +153,17 @@ system. Backing up the Custos design principles with some solid
 usability data, and adapting these principles where necessary, is a
 high priority for future Custos research.
 
-I would also like to expand the Custos server implementation prompt,
-making it more robust, scalable, and widely deployable. This will
-include switching to a high performance key:value back-end, improving
-the Custos authentication plugin interface, producing plugins for
-additional authentication primitives, and improving the efficiency of
-the Custos access control chain verification process. I would also
-like to explore availability and redundancy features of the Custos
-server.
+I would also like to expand the reference Custos server
+implementation, making it more robust, scalable, and widely
+deployable. This will include switching to a high performance
+key:value back-end, improving the Custos authentication plugin
+interface, producing plugins for additional authentication primitives,
+and improving the efficiency of the Custos access control chain
+verification process. I would also like to explore availability and
+redundancy features of the Custos server.
 
 I plan to build out several Custos-backed applications. This may
-include wither new native applications (like a Dropbox\cite{dropbox}
+include either new native applications (like a Dropbox\cite{dropbox}
 encryption plugin) or the modification of existing applications (like
 eCryptfs~\cite{eCryptfs}). These applications would allow further
 testing of the Custos architecture and server in a production
@@ -180,7 +179,7 @@ possible. Subjecting Custos to automatic auditing tools or
 bounty-based exploit contests might also yield interesting results
 with respect to the security of the underlying systems. Issues and
 exploits discovered in such an audit would be addresses in the design
-and implementation of Custos.
+and implementation of the next Custos revision.
 
 \section{Discussion}
 
@@ -210,6 +209,19 @@ et. al.~\cite{GreenwaldPrism}: to a world where governments and
 criminals (and governments turned criminals) will prey on the average
 computer user who lacks the tools to adequately protect herself.
 
+Furthermore, the rise of data-driven online serves has drastically
+increased the exposure of our data to corporate interests. Users of
+sites like Facebook or Twitter like to think they are the customers of
+these services. They are not. They are the product. The customers are
+the companies that buy user information or access to user eyeballs
+from these services. This has created a colossal conflict of interest:
+the companies we increasingly rely to store and safeguard our data
+have a vested interest in profiting off of it. We must avoid this
+conflict be creating a separate class of third parties, dedicated to
+the protection of our data (likely in return for payment) to act as a
+counter balance against the companies that desire to profit from our
+data.
+
 Custos is not about the mathematics. It is about making the
 mathematics, and the resulting encryption techniques, available to
 everyone. It is about increasing security through the commoditization
@@ -221,7 +233,7 @@ of tools that will allow us to do that.
 Security researchers can no longer afford to ignore the big
 picture. Encryption alone is useless. Security requires a holistic
 treatment. We must approach security from a technological, legal,
-social, and anthropological standpoint. Only then we consider all of
+social, and anthropological standpoint. Only when we consider all of
 these factors can we hope to make systems truly secure. Custos is one
 attempt to accommodate a wider outlook in order to increase end user
 security. I hope that other such project will follow and that Custos
