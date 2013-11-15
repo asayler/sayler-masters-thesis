@@ -13,16 +13,26 @@
 	{
 	    "Class": "explicit",
 	    "Type": "user_id",
-	    "Value": "asayler",
+	    "Value": "YXNheWxlcgA=",
 	    "Echo": true,
-	    "Status": "accepted"
+	    "Status": "accepted",
+	    "ResValue": null
 	},
 	{
 	    "Class": "explicit",
 	    "Type": "psk",
 	    "Value": null,
 	    "Echo": false,
-	    "Status": "required"
+	    "Status": "required",
+	    "ResValue": null
+	},
+	{
+	    "Class": "implicit",
+	    "Type": "ip_src",
+	    "Value": "NzUuMTQ4LjExOC4yMTcA",
+	    "Echo": true,
+	    "Status": "ignored",
+	    "ResValue": null
 	}
     ]
 }
