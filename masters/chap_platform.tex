@@ -708,15 +708,18 @@ the following keys:
 
 \noindent
 \texttt{Key} objects: JSON dictionaries represent key:value
-objects. Used only in responses. Includes the following keys:
+objects. Includes the following keys:
 
 \begin{packed_desc}
 \item[\texttt{Value}] \hfill \\ The object value, encoded as
   Base64 ASCII.
-\item[\texttt{UUID}] \hfill \\ The UUID identifying
+\item[\texttt{Echo}] \hfill \\ A Boolean indicting whether or not the
+  server should (when possible) echo the value of the \texttt{Key}
+  contained in a request back to the user in the response.
+\item[\texttt{UUID} (Response Only)] \hfill \\ The UUID identifying
   the key.
-\item[\texttt{Revision}] \hfill \\ The key revision.
-\item[\texttt{Status}] \hfill \\ The status indicating
+\item[\texttt{Revision} (Response Only)] \hfill \\ The key revision.
+\item[\texttt{Status} (Response Only)] \hfill \\ The status indicating
   whether the requested operation on the Key was allowed or denied.
 \end{packed_desc}
 
