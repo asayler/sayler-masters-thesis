@@ -35,6 +35,14 @@
 #define CUSTOS_QUERY_CHK "chk"
 #define CUSTOS_QUERY_REV "rev"
 
+typedef enum custosOp {
+    CUS_OP_OBJ_CREATE = 0,
+    CUS_OP_OBJ_DELETE,
+    CUS_OP_OBJ_READ,
+    CUS_OP_OBJ_UPDATE,
+    CUS_OP_OBJ_MAX
+} custosOp_t;
+
 typedef enum custosResStatus {
     CUS_RESSTAT_OKAY = 0,
     CUS_RESSTAT_UGROUP,
@@ -309,16 +317,10 @@ extern int custos_updateReqAddObjACSReq(custosReq_t* req,
                                         custosObjACSReq_t* acsreq);
 
 /* custosRes Functions */
-extern custosRes_t* custos_getRes(const custosReq_t* req);
-extern custosRes_t* custos_createRes(const custosResStatus_t status,
-                                     const char* source);
+extern custosRes_t* custos_getRes(const custosReq_t* req,
+                                  const custosOp_t op,
+                                  const uuid_t group);
 extern int custos_destroyRes(custosRes_t** resp);
-extern int custos_updateResAddAttrRes(custosRes_t* res,
-                                      custosAttrRes_t* attrres);
-extern int custos_updateResAddKeyRes(custosRes_t* res,
-                                     custosKeyRes_t* keyres);
-extern int custos_updateResAddObjACSRes(custosRes_t* res,
-                                        custosObjACSRes_t* acsres);
 
 extern const char* custos_ResStatusToStr(const custosResStatus_t status);
 extern custosResStatus_t custos_StrToResStatus(const char* str);
