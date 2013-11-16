@@ -1,51 +1,41 @@
 \chapter{Purpose}
 \label{chap:purpose}
 
-As was mentioned in Chapter \ref{chap:intro}, Custos aims to solve the
-cryptographic key storage problem, making encryption easier to use and
-an available option for securing user data across a range of modern
-applications. To accomplish this goal, Custos must be both usable and
-secure.  Furthermore, it must be flexible enough to overcome existing
-hurdles to utilizing encryption in modern situations.
-
-In this chapter, I'll discusses the goals Custos hopes to achieve, a
-number of possible application where Custos can help secure data, and
-the threat model that Custos assumes.
+As was mentioned in Chapter \ref{chap:intro}, Custos aims to provide
+dedicated secret storage and access control system. In doing so, it
+hopes to solve the cryptographic key storage problem, making
+encryption easier to use and more widely available to the average
+user. To accomplish this goal, Custos must be both usable and secure.
+Furthermore, it must be flexible enough to support a range of modern
+use cases. In this chapter, I'll discusses the goals Custos hopes to
+achieve, a number of possible application where Custos can help secure
+data, and the threat model that Custos assumes.
 
 \section{Goals}
 
-Custos's primary goal is as stated above: ``To solve existing key
-storage challenges and make encryption more easily utilized to secure
-modern data storage paradigms''. To achieve this goal, Custos aims
-to provide the basis of a Key Storage as a Service architecture. This,
-in turn, entails a handful of sub-goals. If we decompose the core
-Custos goal stated previously into its primary components, we get:
+Custos's primary goal is as stated above: ``To provide secure, easily
+usable, secret storage and access control''. This entails
+accomplishing a number of sub-goals: providing secret storage, making
+it easy to use, and ensuring security.
 
-\begin{packed_desc}
-\item[Provide Key Storage:] ``To solve existing \emph{key storage}
-  challenges...''
-\item[Easily Usable:] ``...and make encryption more \emph{easily
-  utilized}...''
-\item[Secure:] ``...to \emph{secure} modern data storage paradigms.''
-\end{packed_desc}
+\subsection{Secret Storage}
 
-\subsection{Key Storage}
-
-Custos is a type of key:value store. As such, it had better be cable
-of storing key:value pairs. I expect most Custos implementations
-(including the ones described in this document) to defer the actual
-key:value storage aspect of Custos to existing key:value storage
-systems. Why reinvent the wheel? Instead, we must identify what
-key:value storage capabilities are desirable in a Custos back end. The
-primary drivers of this analysis are the type of data Custos will
-store, and the methods in which this data will be accessed. We already
-know that Custos will primarily be used to store key:value pairs
-mapping data identifiers (the keys) to corresponding encryption keys
-(the values). As far as accessing this data goes, we would expect
-access patterns similar to that of the encrypted data that Custos is
-being used to protect. Most modern data, including the personal data
-that we'd expect users to use encryption and Custos to protect,
-follows an append-only, read-heavy workload~\cite{Ghemawat2003}.
+Custos is a secret store. As such, it had better be cable of storing
+secrets. Custos does this using standard object-storage key:value pair
+semantics. I expect most Custos implementations (including the ones
+described in this document) to defer the actual key:value storage
+aspect of Custos to existing key:value storage systems. Why reinvent
+the wheel? Instead, we must identify what key:value storage
+capabilities are desirable in a Custos back end. The primary drivers
+of this analysis are the type of data Custos will store, and the
+methods in which this data will be accessed. We already know that
+Custos will often be used to store key:value pairs mapping data
+identifiers (the keys) to corresponding encryption keys (the
+values). As far as accessing this data goes, I would expect access
+patterns similar to that of the encrypted data that Custos is being
+used to protect. Most modern data, including the personal data that
+I'd expect users to use encryption and Custos to protect, follows an
+append-only, read-heavy workload~\cite{Ghemawat2003}.
 
 With these thoughts in mind, I propose the following as desirable
 traits for a the key:value storage components of Custos.
@@ -61,10 +51,10 @@ traits for a the key:value storage components of Custos.
   that the user may wish to re-encrypt it with a new key (more on this
   in later sections). As such, Custos should support storing multiple
   versions of the value associated with a given key.
-\item[Arbitrary Data] \hfill \\ Encryption keys come in a variety of
-  shapes, sizes, and formats. To support the maximum range of
-  encryption systems, Custos should allow the storage of arbitrary
-  binary data associated with a given UUID key.
+\item[Arbitrary Data] \hfill \\ Encryption keys and other secrets come
+  in a variety of shapes, sizes, and formats. To support the maximum
+  range of encryption systems, Custos should allow the storage of
+  arbitrary binary data associated with a given UUID key.
 \end{packed_desc}
 
 \subsection{Usability}
@@ -103,7 +93,7 @@ support the following attributes of successful modern storage systems.
   large group of Friends. Still other data should never be accessed by
   anyone other than its creator. Custos must support a range of
   security levels, allowing the user to select the appropriate point
-  on the security burden vs accessibility risk continuum.
+  on the security vs accessibility continuum.
 \end{packed_desc}
 
 In addition to end-user usability, Custos also aims for administrative
@@ -112,7 +102,7 @@ to achieve this goal by providing users with the ability to grant
 access on the basis of a variety of authentication parameters,
 creating a flexible and straightforward system for controlling access
 to encryption keys, and by proxy, the data they protect. The following
-characteristics will help ensure Custos remains usable form an
+characteristics will help ensure Custos remains usable from an
 administrative perspective.
 
 \begin{packed_desc}
@@ -136,10 +126,10 @@ administrative perspective.
   as a centralized, globally accessible resource. This will allow
   applications to access a Custos server regardless of their relative
   locations. There are some situations where administrators may wish
-  forgo truly global access in favor of to operating a Custos server
-  in a manner that limits access to specific networks or resources,
-  but even in these cases a Custos server should be treated as a
-  global resource within any given administrative domain.
+  forgo truly global access in favor of operating a Custos server in a
+  manner that limits access to specific networks or resources, but
+  even in these cases a Custos server should be treated as a global
+  resource within any given administrative domain.
 \end{packed_desc}
 
 The final component of Custos usability is its developer usability. If
@@ -150,11 +140,11 @@ the following features.
 
 \begin{packed_desc}
 \item[Well Defined API] \hfill \\ Custos will expose a standard API
-  for data access and a standard API for administrative
-  management. These APIs will provide a well defined interface for
-  interacting with a Custos server.
+  for data access and administrative management. This API will provide
+  a well defined interface for interacting with a Custos server,
+  regardless of server provider or implementation.
 \item[Standard Design Patterns] \hfill \\ The Custos API will attempt
-  to follow standard web-based design patterns by following a
+  to adhere to standard web-based design patterns by implementing a
   REST-based architecture~\cite{ibm-restful}. This bring all of the
   standard usability benefits of RESTful systems (statelessness, etc)
   while also being a well understood architecture to develop against.
@@ -163,49 +153,50 @@ the following features.
   data standards like JSON~\cite{json} and Base64 encoding. There are
   a variety of libraries available to deal with these formats, making
   it easy to convert between Custos API messages and native internal
-  data types for a client application.
+  data types for client applications in a variety of languages.
 \end{packed_desc}
 
 \subsection{Security}
 
-Being a secure key-values store means that Custos must be... secure.
-In addition to the increased security through increased usability
-items discussed above, what does it mean to be a secure key value
-store? Does it mean that the key:value pairs are stored in a manner
-that ensures they remain secure in the event of a server breach? Does
-it mean that the server operator has no ability to access key:value
-pairs directly. Does it merely mean the access to key:value pairs is
-well controlled?
+Being a secure secret store means that Custos must be... secure.  In
+addition to the ``increased security through increased usability''
+items discussed above, what does it mean to be a secure secret store?
+Does it mean that the secrets are stored in a manner that ensures they
+remain secure in the event of a server breach? Does it mean that the
+server operator has no ability to access user secrets directly. Does
+it merely mean the access to secrets is well controlled?
 
 We discuss Custos's security model in detail later in this chapter,
 but Custos adopts the last of the previous questions as the basis for
-its definition of a secure key:value store. A key value storage is
-secure if access to key:value pairs is well regulated. To achieve this
+its definition of a secure secret store. A key value storage is
+secure if access to secrets is well regulated. To achieve this
 level regulation, Custos requires several traits:
 
 \begin{packed_desc}
 \item[Secure Communication Primitives] \hfill \\ The Custos API must
   be protected against eavesdropping and Man-In-The-Middle
   attacks. Custos leverages SSL and the existing PKI systems to
-  achieve these security.
+  achieve this.
 \item[Access Control] \hfill \\ Custos provides the ability to
   regulate key access in a variety of flexible means (see above). It
-  provides access control at the create, read, and modify levels, and
-  provides support for versioning and revocation.
-\item[Access Auditing] \hfill \\ Custos logs access to all key:value
-  pairs, including successful and failed attempts. This allows the
-  user to view a record of who has had access to what version of a
-  specific key, proving the basis for damage assessment and revocation
+  provides access control at a variety of levels, and provides support
+  for versioning and revocation.
+\item[Access Auditing] \hfill \\ Custos logs access to all secrets,
+  including successful and failed attempts. This allows the user to
+  view a record of who has had access to what version of a specific
+  secret, proving the basis for damage assessment and revocation
   analysis.
 \end{packed_desc}
 
-In addition to these times, a Custos server should also follow best
-practices to avoid compromise. A full list of standard server security
-techniques is outside the scope of this paper, but standard industry
-practices like securing physical access, keep software up to date, and
-using proper firewalls and server access controls all apply. Custos is
-only as secure as the server running it (details on this point and the
-full Custos threat model is discussed below).
+In addition to these items, a Custos server operator should also
+follow best practices to avoid server-wide secret compromise. A full
+list of standard server security techniques is outside the scope of
+this paper, but standard industry practices like securing physical
+access, keeping software up to date, and using proper network and
+server access controls all apply. In it's most basic form,
+Custos-stored secrets are only as secure as the server holding them
+(details on this point and the full Custos threat model is discussed
+below).
 
 \section{Application Domains}
 
@@ -224,16 +215,16 @@ domains exhibit the ideal trifecta of Custos-suitability:
   encryption while also remaining easily usable.
 \end{packed_item}
 
-\subsection{File Systems}
+\subsection{Encrypted File Systems}
 
 Modern file systems come in many shapes and sizes. But to most users,
-they are transparent systems through with files are stored on a range
+they are transparent systems through which files are stored on a range
 of media from hard drives to flash sticks to optical disks. In
 addition to their role in storing user data, modern file systems often
 support features like multi-user access and data sharing, multi-device
 syncing, redundancy, and backup. The file system layer is the primary
-entry point to user-stored data. As such, providing a usable method
-for protecting file system data via strong encrypting is highly
+entry point to most user-stored data. As such, providing a usable
+method for protecting file system data via strong encrypting is highly
 desirable. Such protections would help users in the event of the loss,
 theft, or forced confiscation of their devices.
 
@@ -293,7 +284,7 @@ inherent in distributed solutions. Notably, while multi-user use cases
 are better supported, non-interactive use cases are still a
 challenge. Furthermore, full stack distributed file systems tend to be
 wedded with specific storage systems and thus lack support for
-Cloud-based Storage as a Service offerings or alternate underlying
+Cloud-based ``Storage as a Service'' offerings or alternate underlying
 storage technologies. These systems also lack support for most forms
 of ``out-of-band'' file sharing (via e-mail, USB flash drives, etc)
 due to the inability of actors outside of the integrated stack to
@@ -334,7 +325,7 @@ access control rules. Its flexible, centralized nature also strives to
 simplify multi-device syncing and multi-user sharing, as well as
 provide support for a variety of modern and future use cases.
 
-Figure \ref{fig:FS-custos-layered} shows how traditional layered files
+Figure \ref{fig:FS-custos-layered} shows how traditional layered file
 systems (Figure \ref{fig:FS-traditional-layered}) might be improved
 through incorporation with Custos. The logically centralized nature of
 Custos allows Alice to now access her files on a range of devices. It
@@ -412,7 +403,7 @@ wherever the file needs to be accessed.
 Table \ref{tab:comp-fs} shows a side-by-side comparison of the
 features of various encrypted file system architectures. In general,
 Custos is able to leverage its flexibility and centralized nature to
-enable use cases not possible in traditional file systems. We will
+enable use cases not possible in traditional file systems. I will
 discuss the manner in which Custos achieves these features in Chapter
 \ref{chap:platform}.
 
@@ -459,24 +450,41 @@ require a variety of cryptographic keys (e.g. SSH, SSL, AES, VPN, etc)
 to perform their desired roles. Today, these keys must either be
 regenerated on each VM, stored in a non-secure traditional
 configuration service, or manually copied to each machine from a
-secure location (Figure \ref{fig:DC-traditional}). What we need is a
-secure Key Storage as a Service platform through which ephemeral cloud
-resources can easily gain access to the sensitive keys they require
-(Figure \ref{fig:DC-custos}). Others have also realized the
-importance of such a service and a working to build possible
-implementations~\cite{cloudkeep-presentation, cloudkeep,
-  gazzang}. Custos can also be used as the basis of such a service.
+secure location. What we need is a secure Secret Storage as a Service
+platform through which ephemeral cloud resources can easily gain
+access to the sensitive keys they require. Custos can be used as the
+basis of such a service.
 
-In the data center Custos can serve a wide range of use cases. For
-instance, Custos could be used as described in the file system section
-above to enable use of encrypted file systems between multiple VMs or
-across VM instances. Custos could also be used to store SSH keys,
-providing users immediate and simple access to new VM resources as
-soon as they are created. Custos could be used to enable access to
-secure VPN systems, proving users with access to various cloud
-resources by storing the necessary cryptographic keys these resources
-require. Custos could also be used to store and coordinate access to
-private SSL keys across a domain of web services. In all of these
+Take, for example, SSH. As Figure \ref{fig:DC-traditional} shows, SSH
+can pose a challenge in the data center where new instances of VMs are
+constantly being created and destroyed. Since VMs tend to generate
+their SSH keys at install time\footnote{generating SSH keys at install
+  time poses other challenges related to the size of the entropy
+  pool~\cite{Heninger2012} that switching to Custos-stored persistent
+  SSH keys could also help combat.}, each VM instance will present a
+separate SSH server key, making it difficult for the user to verify
+the identity of the VM when trying to connect. Furthermore,
+administrators who use SSH user keys in place of login passwords must
+manually reload each VM with the necessary user keys in order to grant
+users access. This issue can become quite the burden, especially when
+dealing with a multitude of VMs. Custos could be used to provide a
+centralized store for SSH keys across VM instances as shown in Figure
+\ref{fig:DC-custos}, providing users immediate and simple access to
+new VM resources as soon as they are created. It would also allow VMs
+to maintain their cryptographic identities across instances, helping
+users vet a machine before logging in, and would provide
+administrators with a centralized system for managing SSH access to
+all of their VMs.
+
+In addition to SSH key storage, Custos can serve a wide range of
+additional data center use cases. For instance, Custos could be used
+as described in the file system section (above) to enable use of
+encrypted file systems between multiple VMs or across VM
+instances. Custos could be used to enable access to secure VPN
+systems, proving users with access to various cloud resources by
+storing the necessary cryptographic keys these resources
+require. Likewise, Custos could be used to store and coordinate access
+to private SSL keys across a domain of web services. In all of these
 cases, Custos's flexible authentication capabilities, centralized
 nature, and auditing capabilities would contribute to easing the use
 of cryptographic services in the data center.
@@ -539,18 +547,18 @@ auditing capabilities can help cloud providers meet various compliance
 standards and ensure that users feel comfortable storing their data
 securely in the cloud.
 
-\subsection{Secret Stores}
+\subsection{End-User Secret Stores}
 
-Anther possible application for Custos is as a cloud-based secret
-manager. In reality, Custos is always a form of secret store. But in
-encryption-related applications, the secretes Custos is storing are
-private encryption keys, not any actual user data directly. Forgoing
-the encryption-related applications for a moment, Custos's secret
-store capabilities can be leveraged directly to store generic end-user
-data. While Custos has been designed to optimize the storage of
-encryption keys, it is perfectly capable of storing other secrets as
-well. In such a situation, Custos could be used to store passwords,
-personal data, or any other secrets.
+Another possible application for Custos is as a cloud-based end-user
+secret manager. In reality, Custos is always a form of secret
+store. But in encryption-related applications, the secretes Custos is
+storing are private encryption keys, not any actual user data
+directly. Forgoing the encryption-related applications for a moment,
+Custos's secret store capabilities can be leveraged directly to store
+generic end-user data. While Custos has been designed to optimize the
+storage of encryption keys, it is perfectly capable of storing other
+secrets as well. In such a situation, Custos could be used to store
+passwords, personal data, or any other secrets.
 
 In this arrangement Custos could be used to replace existing Password
 mangers like LastPass~\cite{lastpass}, 1Password~\cite{onepassword},
@@ -574,36 +582,38 @@ a central repository of personal data. Instead of reentering this data
 on multiple sites, users could simply leverage the Custos access
 control semantics to grant access to specific pieces of data to
 specific sites. In addition to avoiding the need to constantly reenter
-this data, this system would also make it easy for user's to keep data
+this data, this system would also make it easy for users to keep data
 up to date, allowing them to do things like update their mailing
-address in a single location and and allowing all sites to which they
-have granted address access to simply read the new address form Custos
-when required. Such a system might even disco urge services from
-storing copies of this kind of user data directly at all, as it would
-be easier to stay up-to-date with user data changes if the service
-simply required Custos for the most up to date version of the data
-each time it is required.
+address in a single location, allowing all sites to which they have
+granted address access to simply read the new address from Custos when
+required. Such a system might even discourage services from storing
+copies of user data directly at all, as it would be easier to stay
+up-to-date with user data changes if the service simply queried Custos
+for the most up to date version of the data each time it is
+required. Users could monitor website access to data via Custos,
+allowing them to stay apprised of how their data was being used.
 
 It is worth noting, however, that unlike the encryption key storage
-user cases, using Custos directly as a secret store reduces Custos to
-a single-point-of-failure trust model. In most encryption key storage
-scenarios, an adversary would need to have access to both the
+applications, using Custos directly as a secret store reduces Custos
+to a single-point-of-failure trust model. In most encryption key
+storage scenarios, an adversary would need to have access to both the
 encrypted data and the corresponding encryption keys stored on Custos
-to actually aces a user's information. In the direct secret store
+to actually access a user's information. In the direct secret store
 case, this multi-party attack is no longer necessary. Instead, any
 adversary who gains access to Custos will have direct access to any
 secrets stored there. Thus it might be desirable to keep Custos as a
 specialized encryption key store and defer to separate systems for
 storing actual secrets, which could then be encrypted with keys from
 Custos. We might even consider using two separate Custos providers to
-accomplish such a system: one provider would securely store a a set of
-encrypted secrets (passwords, user info, etc) while the other provider
-stores the encryption keys corresponding to these secrets. This would
-maintain the multi-party trust model that encryption-key storage
-benefits from. It would also allow one service to optimize the storage
-of actual encrypted secretes (which may not necessarily require the
-same level of access control Custos provides) while Custos optimizes
-the storage of encryption keys as in the prior applications.
+accomplish such a system: one provider would securely store a set of
+encrypted user secrets (passwords, user info, etc) while the other
+provider would store the encryption keys corresponding to these
+secrets. This would maintain a multi-party trust model, making it more
+difficult for a single bad actor to compromise user data. It would
+also allow one service to optimize the storage of actual encrypted
+secretes (which may not necessarily require the level of access
+control Custos provides) while Custos optimizes the storage of
+encryption keys as in prior applications.
 
 \begin{table}[!tb]
   \vspace{5ex}
@@ -654,12 +664,11 @@ the storage of encryption keys as in the prior applications.
 
 Table \ref{tab:comp-ss} shows a side-by-side comparison of the
 features of various secret store architectures. As you can see, Custos
-has many of the benefits of a tradition cloud secret store (password
+has many of the benefits of a traditional cloud secret store (password
 manager, etc), with the additional benefits of a standardized API and
 flexible authentication. Custos could be leveraged, either directly or
-as the encryption key access control element of a larger system, to
-greatly simply secret storage, reducing user effort while increasing
-user security.
+as the encryption key store, to greatly simplify end-user secret
+storage, reducing user effort while increasing user security.
 
 \section{Threat Model}
 
@@ -671,19 +680,19 @@ attacks Custos can defend against, etc.
 \subsection{Model}
 
 At the core of the Custos security model is the assumption that a
-Custos provider are themselves trusted and secure. Custos does not
+Custos providers are themselves trusted and secure. Custos does not
 inherently strive to protect users from malevolent Custos providers
-who might intentionally are accidentally leak data stored in Custos, fail
-to enforce the requested ACLs, or make other violations of the intended
-Custos design. Custos provides a means for separating trust from
-functionality and isolating trust to dedicated providers, but Custos
-does not eliminate the need for trust all together. It only aims to
-provide more control over where the trust in placed. This is the price
-we pay for the ease-of-use benefits Custos provides. A trusted Custos
-provider is assumed to:
+who might intentionally or accidentally leak data stored in Custos,
+fail to enforce the requested ACLs, or make other violations of the
+intended Custos design. Custos provides a means for separating trust
+from functionality and isolating trust to dedicated providers, but
+Custos does not eliminate the need for trust all together. It only
+aims to provide more control over where the trust in placed. This is
+the price we pay for the ease-of-use benefits Custos provides. A
+trusted Custos provider is assumed to:
 
 \begin{packed_item}
-\item Securely store Custos key:value pairs
+\item Securely store Custos secrets (key:value pairs)
 \item Faithfully enforce all Custos access control requirements
 \item Securely implement proper verification of authentication attributes
 \item Properly implement appropriate secure communication protocols where
@@ -717,15 +726,15 @@ granted once.
 Custos also leaves authentication requirements and access control up
 to each user. Thus, the burden of ensuring that data is being
 adequately protected, either directly in Custos or via encryption with
-the necessary keys stored in Custos, lies with the user to set the
-necessary authentication and access control requirements. Custos aims
-to make it easy for the user to create and maintain access control
-requirements for specific data, but Custos can not guarantee that the
-user is making intelligent decisions related to the protection of
-their data. Custos provides flexibility and ease of use, which should
-maximize protection while minimizing usage errors, but some level of
-user intelligence and responsibility is still required for secure
-Custos use.
+the necessary keys stored in Custos, lies with the user configuring
+the necessary authentication and access control requirements. Custos
+aims to make it easy for the user to create and maintain access
+control requirements for specific data, but Custos can not guarantee
+that the user is making intelligent decisions related to the
+protection of their data. Custos provides flexibility and ease of use,
+which should maximize protection while minimizing usage errors, but
+some level of user intelligence and responsibility is still required
+for secure Custos use.
 
 \subsection{Mitigation}
 
@@ -734,16 +743,26 @@ are various ways to mitigate these restrictions and further increase
 the security of a Custos-backed system.
 
 While Custos does require Custos providers to generally be trusted, it
-is possible to manage this trust. If a user is unwilling to place full
-trust in a Custos provider to safeguard her data, she has a few
-options. First, when Custos is used to store encrypted data keys and
-not the data itself, a Custos provider only ever has access to part of
-the required information to actually access the user's data. While the
-Custos provider may hold the encryption keys, unless they can also
-gain access to the underlying data itself, these keys are
-useless. Thus, by storing her data locally or with a separate provider
-than the Custos provider, a Custos user can help reduce the damage a
-misbehaving Custos provider could cause.
+is possible to manage this trust. As was mentioned previously,
+building an open market of competing Custos providers would tie
+trustworthiness to monetary competition. If a user finds that a
+specific Custos provider is prone to misbehavior, she can take her
+secrets elsewhere. If a user reports misbehaving providers to other
+market consumers, she can damage the reputation of such providers and
+in the process, discourage other users from using said providers. The
+market for secret storage will create an incentive not to misbehave,
+and the user can rely on this incentive as the basis of provider
+trust.
+
+If a user is unwilling to place full trust in a single Custos provider
+at all, she has a few options. First, when Custos is used to store
+encrypted data keys and not the data itself, a Custos provider only
+ever has access to part of the required information to actually access
+the user's data. While the Custos provider may hold the encryption
+keys, unless they can also gain access to the underlying data itself,
+these keys are useless. Thus, by storing her data locally or with a
+separate provider than the Custos provider, a Custos user can help
+reduce the damage a misbehaving Custos provider could cause.
 
 \begin{figure}[!tb]
   \vspace{5ex}
@@ -755,10 +774,9 @@ misbehaving Custos provider could cause.
   \label{fig:arch-sharded}
 \end{figure}
 
-Second, if a user is unwilling to trust a single Custos provider, she
-can instead opt to securely shard her Custos data (encryption keys,
-etc) across multiple, non-cooperating Custos providers as shown in
-Figure \ref{fig:arch-sharded}. A variety of secure secret-sharing
+Second, a user can opt to securely shard her Custos data (encryption
+keys, etc) across multiple, non-cooperating Custos providers as shown
+in Figure \ref{fig:arch-sharded}. A variety of secure secret-sharing
 systems have been proposed~\cite{Shamir1979, Resch2011, Krawczyk1993},
 and these system could be leveraged by Custos-backed applications to
 split Custos data between multiple Custos providers. Such a system
@@ -774,37 +792,37 @@ on a single Custos provider's availability.
 
 A Custos user could also opt to self-host her own Custos server. This
 might be an appropriate approach for situations requiring retaining
-local control over all data for regulatory or compliance
-reasons. While this does not relive the user from the burden of
-properly secure their won Custos server, it does eliminate the need to
-trust a third party. For many user, operating their own Custos server
-might be too complex a burden. These users will instead opt to
-contract Custos capabilities from one or more trust providers. But for
-user capable and interested in self-hosting a Custos install, there is
-no reason they can not opt to take that route.
+local control over all data for regulatory or compliance related
+reasons. While this does not relieve the user from the burden of
+properly securing her own Custos server, it does eliminate the need to
+trust a third party. For many users, operating their own Custos server
+might be too complex a burden. These users will instead opt to consume
+Custos services from one or more trust providers. But for user's
+capable and interested in self-hosting a Custos install, there is no
+reason they can not opt to take that route.
 
 It's also possible for clients to locally encrypt Custos-stored data
-before shipping it off to a Custos Provider. This action, however
+before shipping it off to a Custos provider. This action, however
 would negate many of the benefits Custos provides and reintroduce the
 inflexible-use-case problems inherent in existing encryption systems
 due to the chicken-and-the-egg problem that would come along with
-it. If you are to encrypt data stored on Custos, where do you store
-those encryption keys? Like the secret sharing option, the Custos
-servers do not need to be aware of whether or not the data they hold
-has already been encrypted on the client side. For some applications,
-client-side encryption of Custos data may be appropriate, but I don't
-feel it will be the most common case due to the additional flexibility
-and key storage problems it poses.
+it. If you encrypt encryption keys stored on Custos, where do you
+store the encryption keys' encryption keys? Like the secret sharing
+option, Custos providers do not need to be aware of whether or not the
+data they hold has already been encrypted on the client side. For some
+applications, client-side encryption of Custos data may be
+appropriate, but I don't feel it will be the most common case due to
+the additional flexibility and key storage problems it poses.
 
 The traditional revocation problems associated with using encryption
 (e.g. inability to revoke access to data a user has already decrypted)
 are not unique to Custos. As such, Custos can mitigate this issue in
-the same manner most system do: through versioning/rotation and lazy
+the same manner most system do: through versioning, rotation, and lazy
 revocation~\cite{Kallahalla2003}. While Custos can not revoke access
-to a data that has already been decrypted and read, Custos can revoke
+to data that has already been decrypted and read, Custos can revoke
 access to all future versions or modifications of that data. This is
 accomplished by having a Custos application re-encrypt the data with a
-new key each time it is update. These new keys are then uploaded to
+new key each time it is updated. These new keys are then uploaded to
 Custos leveraging Custos's versioning support. When a user revokes
 access to a Custos object, Custos blocks all future access to any
 versions of that object uploaded after the revocation occurred. Custos
@@ -812,10 +830,11 @@ can't force users to un-see data they have seen, but it can help
 prevent users from seeing changes to that data. In a similar manner to
 versioning, Custos's auditing capabilities also make it possible for
 users to revoke access to data that has never been previously
-accessed.
+accessed, and to asses the effect revoking access will have on the
+basis of who has and who has not previously access the data.
 
-In terms of Custos server security goes, Custos's backing data store
-could be built atop existing Hardware Security Module (HSM)
+In terms of Custos server security, Custos's backing data store could
+be built atop existing Hardware Security Module (HSM)
 platforms~\cite{fips140}. Such systems utilize hardware-based
 constraints to control access to the data they store. They can help
 mitigate the damage that a compromised Custos server would pose by
@@ -828,4 +847,4 @@ factors users use to evaluate whether to use a specific Custos
 provider and thus could drive the market price such a provider might
 be able to charge.
 
-%%  LocalWords:  dm Plutus LastPass iCloud's
+%%  LocalWords:  dm Plutus LastPass iCloud's VM's
