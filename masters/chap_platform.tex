@@ -845,9 +845,7 @@ associated verbs, and the required permissions are shown in Table
       \\ \hline
       \texttt{/grp/$\langle$grp\_uuid$\rangle$/obj/$\langle$obj\_uuid$\rangle$}
       & \texttt{GET} & \texttt{obj\_read}
-      & return a key:value object (the \texttt{rev=} query string
-        parameter may be used to specify a specific object version,
-        otherwise the latest version is returned)
+      & return a key:value object$^{\ast}$
       \\ \hline
       \texttt{/grp/$\langle$grp\_uuid$\rangle$/obj/$\langle$obj\_uuid$\rangle$}
       & \texttt{DELETE} & \texttt{obj\_delete}
@@ -857,6 +855,9 @@ associated verbs, and the required permissions are shown in Table
   \end{center}
   \caption{Data API Methods}
   \label{tab:methods-data}
+  ${}^\ast$ The \texttt{rev=} query string parameter may be used to
+  specify a specific object version, otherwise the latest version is
+  returned
 \end{table}
 
 The audit endpoints are used to audit data related to a specific
