@@ -11,7 +11,7 @@ doing the same?
 Fortunately, there are methods for securing our data: strong
 cryptography systems like AES or RSA are perfectly capable of allowing
 us to control exactly who can read our data. Unfortunately, these
-systems are often difficult if not impossible for the average end user
+systems are often difficult if not impossible for the average end-user
 to employ properly. Other times, they are simply treated like ``magic
 fairy dust''~\cite{Smith2003, schneier2000secrets} to be applied to
 various products in the name of ``just-add-crypto'' security with
@@ -32,14 +32,14 @@ The work presented in this document provides the following:
 \item A discussion of various application domains in which Custos can
   be used to improve security, privacy, and usability.
 \item A definition of the Custos protocol and message exchange formats.
-\item A prototype Custos server reference implementation.
+\item A prototype Custos server implementation.
 \item Several proof-of-concept applications that leverage Custos to
   add security, increase usability, and enhance features.
 \end{packed_item}
 
 \section{Overview}
 
-At its core, Custos is just another key value store. Actually, it's
+At its core, Custos is just another key-value store. Actually, it's
 not even that. It's just a wrapper around one of several existing
 key-value stores. It is not the method of key-value storage that makes
 Custos unique. Instead, it is its ability to provide flexible,
@@ -47,14 +47,13 @@ fine-grained access control to key-value pairs that make it
 notable. These access control capabilities make Custos an ideal system
 for implementing a secure data storage service. Such a data storage
 service can be leveraged to store and manage a variety of secrets,
-including objects like encryption keys. For it is not cryptography
+including secrets like encryption keys. For it is not cryptography
 itself that leads to usability issues, but the inadequate methods
 available to manage and store the required cryptographic
 keys~\cite{Kher2005}. Custos aims to solve the key-storage problem
 inherent in many modern applications of cryptographic security. In
 doing so, it strives to enable a variety of new use cases and data
-security paradigms not readily available today. In this section, I'll
-discuss the basics of the Custos rational and goals.
+security paradigms not readily available today.
 
 \subsection{Separating Functionality from Trust}
 
@@ -66,8 +65,8 @@ want to use Facebook to communicate with family and friends? Great,
 but you must trust Facebook with your personal data. Want to use Gmail
 for its sleek web interface and cloud-based accessibility? Fine, but
 you must trust Google with all of your email and contacts. Sure, you
-could forgo Facebook or Google or any of a wide variety of web
-services to avoid trusting them with you data, but as you drift toward
+could forgo using Facebook or Google or any of a wide variety of web
+services to avoid trusting them with your data, but as you drift toward
 the hermitage of self-imposed digital exile, the last of your former
 friends slowly fading from memory as they cease to even recall your
 existence absent their normal methods of web-based contact, fumbling
@@ -75,16 +74,16 @@ through the vestigial pages of a phone book vainly hoping to find a
 number for someone's cell phone that has never, and will never, be
 listed there, you may decide that giving up control over whom you
 trust with your data is a perfectly fair price to pay to rejoin the
-21st century land of living, breathing, digitally exposed souls.
+21st century land of living, breathing, digitally-exposed souls.
 
-And even if you could live without modern cloud-based services, even
-good old fashioned computing technology involves placing trust in
-systems or parties beyond your full control. Do you trust your
+And even if you could live without modern cloud-based services, using
+good old fashioned computing technology still involves placing trust
+in systems or parties beyond your full control. Do you trust your
 computer manufacture not to have installed a hardware key logger that
 sends data to a variety of their ``business partners''? Do you trust
 your operating system not to have a government-mandated back door for
 covert access by the local constabulary?  Do you trust yourself not to
-loss your laptop, exposing all of the data on it to whomever might
+lose your laptop, exposing all of the data on it to whomever might
 find it?
 
 \begin{figure}[!tb]
@@ -172,7 +171,7 @@ and use case. For example, today we use systems like
 Dropbox~\cite{dropbox} or Google Drive~\cite{google-drive} to store
 and sync our files across a range of computers and mobile devices, but
 key management limitations mean that few existing encryption schemes
-support this kind multi-device access. When we wish to transfer and
+support this kind of multi-device access. When we wish to transfer and
 share files, we often do it via e-mail attachments or removable media,
 but these forms of ``out-of-band'' sharing are not supported by most
 existing key management and data encryption systems. Many of our
@@ -184,16 +183,15 @@ input in order to securely access encrypted data.
 Most modern encryption systems are built around a ``one size fits
 all'' mentality, leaving the user with very little flexibility to
 control the manner in which her encrypted data might be accessed,
-used, or shared. Nor do such systems acknowledge the fact that not
-all encrypted data need be protected with the same level of
-security. Some data, like social security numbers, must be to be
-shared with a multitude of 3rd parties. Other data, like personal
-photos, should be shared, but only with specific friends or family
-members. Still other data is completely private, and should never be
-shared at all. The user knows how sensitive each piece of data is, and
-how it should be used, but most encryption systems fail to expose a
-flexible method for allowing the user to protect data on the basis of
-sensitivity and desired use.
+used, or shared. Nor do such systems acknowledge the fact that not all
+encrypted data need be protected with the same level of security. Some
+data, like social security numbers, must be shared with a multitude of
+3rd parties. Other data, like personal photos, should be shared, but
+only with specific friends or family members. Still other data is
+completely private, and should never be shared at all. The user knows
+how sensitive each piece of data is, and how it should be used, but
+most encryption systems fail to expose a flexible method for allowing
+the user to protect data on the basis of sensitivity and desired use.
 
 \begin{figure}[!tb]
   \vspace{5ex}
@@ -220,23 +218,23 @@ sensitivity and desired use.
 \end{figure}
 
 It is often said that security and accessibility are at odds. That one
-can not be improved except at the expense of the other. And that this
+can not be improved except at the expense of the other, and that this
 fact makes secure systems inherently challenging to use. While I do
 not believe that security vs accessibility is truly a zero sum game,
 there is some truth to the fact that security and accessibility are
 often at odds. Security and accessibility exist on a continuum, with
-fully accessible, minimally secure system on one side, and minimally
+fully accessible, minimally secure systems on one side, and minimally
 accessible, highly secure systems on the other. Many will say that
 this inherent security vs accessibility trade-off means that secure
 systems will never be easily usable. But it is not this security vs
-accessibility trade-off that leads to usability issues. It is the fact
-that many secure systems lock the user into a specific point on the
-security vs accessibility spectrum that causes usability issues
-(Figure \ref{fig:SvA-traditional}). Such inflexibility forces a user
-to surmount unnecessary hurdles and forgo certain ease of access for
-data that need only be minimally secure while also denying users the
-means to fully secure highly sensitive data. This mismatch between
-user requirements and system capabilities is a sure recipe for
+accessibility trade-off that leads to usability issues. Rather it is
+the fact that many secure systems lock the user into a specific point
+on the security vs accessibility spectrum that causes usability
+problems (Figure \ref{fig:SvA-traditional}). Such inflexibility forces
+a user to surmount unnecessary hurdles and forgo certain ease of
+access for data that need only be minimally secure while also denying
+users the means to fully secure highly sensitive data. This mismatch
+between user requirements and system capabilities is a sure recipe for
 usability challenges.
 
 The inability of existing encryption systems to accommodate a diverse
@@ -295,7 +293,7 @@ implantation of secure of key storage, access control, and auditing.
 Custos builds on a number of existing technologies and systems: from
 basic encryption systems to authentication systems to protocol and
 systems design principles. In some cases these technologies form the
-basis of the Custos architecture, in other, Custos is a direct
+basis of the Custos architecture; in others, Custos is a direct
 reaction to the existing limitations of these systems.
 
 \subsection{Encryption}
@@ -307,13 +305,12 @@ when one key is used to encrypt the data, the other can be used to
 decrypt it, and vice versa. Both encryption systems have a place in
 the modern security landscape: symmetric systems for their high
 resistance to cracking and quick encrypt/decrypt performance, and
-asymmetric systems for their avoidance of the key exchange problem
-that makes them the basis of modern public-key cryptography
-technologies.
+asymmetric systems for their avoidance of the key exchange problem,
+making them the basis of modern public-key cryptography technologies.
 
 Symmetric encryption ciphers like AES (Rijndael)~\cite{Daemen1999},
 Twofish~\cite{Schneier1998}, or Camellia~\cite{Matsui2004} are
-well-established, fast, and secure method for encryption
+well-established, fast, and secure methods for encrypting
 data. Symmetric encryption ciphers use a single key for both
 encryption and decryption. This key must be securely stored, or if
 shared, securely exchanged between parties. Anyone with the key can
@@ -321,22 +318,23 @@ decrypt the corresponding ciphertext the key was used to
 create. Symmetric encryption systems are the preferred means of
 encrypting files, hard disks, and other large chunks of data due to
 their speed and relative simplicity of implementation. They tend to be
-well understood, and generally considered highly secure. The security
-of a symmetric encryption cipher tends to be directly related to the
-length of the encryption key: the longer the key, the more secure the
-data encrypted with it is. Common key lengths generally considered
-secure today include 128-bit keys, 256-bit keys, and 512-bit keys.
+well understood, and are generally considered highly secure. The
+security of a symmetric encryption cipher tends to be directly related
+to the length of the encryption key: the longer the key, the more
+secure the data encrypted with it is. Common key lengths generally
+considered secure today include 128-bit keys, 256-bit keys, and
+512-bit keys.
 
 Asymmetric encryption systems, unlike symmetric encryption systems,
 rely on two keys: when one key is used to encrypt the data, a second,
 related key is used to decrypt the data. This two key system makes
-asymmetric encryption ideal for sharing encrypted data: one key can be
-publicly released, and the other is key privately kept secret. Anyone
-can use the public to encrypt data that only you can decrypt using
+asymmetric encryption ideal for sharing encrypted data: one key is
+publicly released, the other key is privately kept secret. Anyone can
+use the public key to encrypt data that only you can decrypt using
 your private key. Prime-factorization-based asymmetric encryption
 systems like RSA~\cite{Rivest1978} form the basis for modern
 public-key cryptography systems. Asymmetric ciphers tend to be slower
-and more complex than symmetric ciphers. Like asymmetric ciphers, the
+and more complex than symmetric ciphers. Like symmetric ciphers, the
 security of an asymmetric cipher is related to the length of the keys
 in a key pair: longer keys are more secure. Standard key lengths for
 asymmetric keys (or at least those used by common factorization-based
@@ -433,7 +431,7 @@ minimizing unnecessary complexity (the KISS principle).
 Over the years, we have developed a range of authentication techniques
 and protocols. The goal of any authentication system is to confirm the
 validity of a fact. In many authentication systems, the fact they aim
-to confirm is the positive associate between a user's asserted
+to confirm is the positive association between a user's asserted
 identity and the user's actual identity. In short: is an actor who she
 claims to be? Authentication systems can also be used to verify the
 association between an actor and an object (i.e. does a user process
@@ -455,7 +453,7 @@ prove her identity, she provides her password to the system, which
 confirms that it matches the expected password. Often, instead of
 comparing passwords directly, passwords are first hashed before being
 stored. Hashing provides some measure of security against attackers
-wishing to brute-force a leaked password. Hashing operates by
+wishing to brute-force a leaked password list. Hashing operates by
 dissociating the provided password value from the stored password
 value via a one-way hash function. Passwords are often used in an
 interactive manner, where an actor must provide her password at a live
@@ -463,10 +461,10 @@ prompt. But passwords can also be used in non-interactive (albeit
 generally less secure) forms where the necessary password is simply
 stored and automatically provided when required. Passwords, while
 common, have a range of known limitations and issues. From reuse, to
-guess-ability, passwords have a lot of
-problems~\cite{Singer2013, goodin-passwords, goodin-bible}. None
-the less, they remain ubiquitous authentication primitives to this day
-due to their ease of use and user familiarity..
+guess-ability, passwords have a lot of problems~\cite{Singer2013,
+  goodin-passwords, goodin-bible}. None the less, they remain
+ubiquitous authentication primitives to this day due to their ease of
+use and user familiarity.
 
 In addition to passwords, common authentication primitives also
 include asymmetric cryptography certificates, multi factor devices,
@@ -476,9 +474,9 @@ standard asymmetric cryptography certificates as the basis for
 authentication. In such systems, an actor's public key is stored by
 the server. The user must prove they have access to the corresponding
 private key, often by decrypting a message encrypted with their public
-key, in order to authenticate. Certificate based authentication system
-have the benefit of often being non-interactive; the user must simply
-posses the necessary certificate to gain access, no interactive
+key, in order to authenticate. Certificate based authentication
+systems have the benefit of often being non-interactive; the user must
+simply posses the necessary certificate to gain access, no interactive
 password prompt required. They also tend to be far more resistant to
 brute-force attacks given the superior entropy of long,
 randomly-generated certificates over short, human-generated passwords
@@ -486,11 +484,11 @@ randomly-generated certificates over short, human-generated passwords
 Multi factor authentication systems are rising in popularity as a
 mitigation tactic for the risks of password based authentication
 systems. Such systems force the user to prove they have access to an
-object (often a cell phone~\cite{google-auth} or
+object (often a cell phone~\cite{google-auth} or USB
 dongle~\cite{yubikey}) in addition to prompting the user for their
 password or related primitive. Where as a password is ``something you
 know'', a multi factor device is ``something you have'', the
-combination of which make up the multiple factors in multi-factor
+combination of which make up the multiple factors in ``multi-factor''
 authentication.
 
 Biometric authentication systems have also become more common. Many
@@ -515,8 +513,9 @@ token-based single-sign-on access across multiple sites and
 services. Kerberos is still used widely today as part of the Microsoft
 suite of operating systems and in a number Linux and Unix
 environments. Similarly, SAML (Security Assertion Markup
-Language)~\cite{saml}, SASL~\cite{sasl} are standardized formats for
-exchanging authentication and authorization data. SAML is the basis of
+Language)~\cite{saml}, SASL (Simple Authentication and Security
+Layer)~\cite{sasl} are standardized formats for exchanging
+authentication and authorization data. SAML is the basis of
 authentication systems like Shibboleth~\cite{shibboleth, Leandro2012}
 whose aim is to create a standardized federated authentication system
 for use across the Internet. Systems like OAuth~\cite{oauth},
@@ -550,14 +549,14 @@ secured.
 
 \subsection{Secure Storage}
 
-Early storage and file system technologies, lacking robust encryption
-and access control primitives, often simply neglected
-security. Fortunately, today there are a variety of secure storage
-systems available. Some of them are full stack systems that bundle
-security, distribution, and sharing in a single system. Others are
-layered systems, designed to add security atop existing lower level
-file storage technologies. All of them have limitations that Custos
-strives to overcome.
+Early storage and file system technologies often simply neglected
+security, lacking robust encryption and access control primitives.
+Fortunately, today there are a variety of secure storage systems
+available. Some of them are full stack systems that bundle security,
+distribution, and sharing in a single system. Others are layered
+systems, designed to add security atop existing lower level file
+storage technologies. All of them have limitations that Custos strives
+to overcome.
 
 Many modern storage systems include cryptographic security as part of
 their design. Such full stack systems bundle cryptography, distributed
@@ -600,37 +599,38 @@ maintainable systems design~\cite{Wulf1974}. The bundling of key
 storage with the underlying encryption leads to a lack of flexible key
 management and access control capabilities. I am not the first to
 recognize this barrier. The SFS~\cite{Mazieres1999} file system was
-designed to separate key management form file storage, allowing for
+designed to separate key management from file storage, allowing for
 more flexible key management in the process. Likewise,
 Plutus~\cite{Kallahalla2003} strives toward separating key storage and
 access control from the underlying encryption. But both SFS and Plutus
-fail to fully define a standardized and generic external system for
-storing and managing keys, making a true ``Key Storage as a Service''
-architecture impossible to realize.
+fail to fully define a standardized, generic, and flexible external
+system for storing and managing keys, making a true ``Key Storage as a
+Service'' architecture impossible to realize.
 
 \subsection{Password and Secret Mangers}
 
 Password and secret managers represent a class of software designed
 for securely storing user secrets. In the age of
 every-website-needs-a-password and constant prompting for personal
-info like CC numbers or SSNs these systems provide the user with a
-method for managing their secrets in a centralized, secure location.
+info like credit card (CC) numbers or social security numbers (SSNs),
+these systems provide the user with a method for managing their
+secrets in a centralized, secure location.
 
 Password mangers like 1Password~\cite{onepassword},
 LastPass~\cite{lastpass}, or Apple's iCloud Keychain~\cite{icloud}
 provide users with a single repository for storing website
 credentials. These services often integrate with web browsers to allow
 users to atomically populate password and user name fields and log
-into the websites they use. Some web browsers even include password
-management functionality built in. Password managers aim to increase
-user security by allowing users to use a range of unique, complex
-passwords without the added burden of having to memorize a separate
-password for every site. While they do create a
-single-point-of-failure, most security researchers believe using a
-password manager protected by a strong master password and multi
-factor authentication is more secure than using weak, repetitive
-passwords across multiple websites~\cite{schneier-passwords,
-  krebs-passwords, brodkin-passman}.
+into the websites. Many modern web browsers (i.e. Google
+Chrome~\cite{google-chrome}) even include password management
+functionality built in. Password managers aim to increase user
+security by allowing users to use a range of unique, complex passwords
+without the added burden of having to memorize a separate password for
+every site. While they do create a single-point-of-failure, most
+security researchers believe using a password manager protected by a
+strong master password and multi factor authentication is more secure
+than using weak, repetitive passwords across multiple
+websites~\cite{schneier-passwords, krebs-passwords, brodkin-passman}.
 
 Many password managers are also capable of storing common user data
 like SSNs, CC numbers, addresses, and birth dates and filling this
@@ -680,7 +680,7 @@ and provides users with a GUI, email client plugin, and CLI for
 utilizing OpenPGP. On the open source side, GnuPG~\cite{gnupg} is by
 far the most commonly used OpenPGP utility. Like PGP, it provides
 users with a CLI for preforming OpenPGP operations. There are a number
-of third-party front-end of GnuPG enabling GUI based options and mail
+of third-party front-ends for GnuPG enabling GUI-based usage and mail
 client integration. All of these systems, however, lack a standardized
 solution for key storage, offloading the burden of protecting private
 keys to the user.
