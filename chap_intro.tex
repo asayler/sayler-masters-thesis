@@ -598,13 +598,15 @@ stated in the previous section, conflating these two items is to
 conflate policy and mechanism, a well known sin in usable and
 maintainable systems design~\cite{Wulf1974}. The bundling of key
 storage with the underlying encryption leads to a lack of flexible key
-management and access control capabilities. Perhaps the system that
-comes closest to Custos's goal of separating key storage and access
-control from the underlying encryption is
-Plutus~\cite{Kallahalla2003}. But even Plutus fails to fully define a
-standardized and generic external system for storing and managing
-keys, making a true ``Key Storage as a Service'' architecture
-impossible to realize.
+management and access control capabilities. I am not the first to
+recognize this barrier. The SFS~\cite{Mazieres1999} file system was
+designed to separate key management form file storage, allowing for
+more flexible key management in the process. Likewise,
+Plutus~\cite{Kallahalla2003} strives toward separating key storage and
+access control from the underlying encryption. But both SFS and Plutus
+fail to fully define a standardized and generic external system for
+storing and managing keys, making a true ``Key Storage as a Service''
+architecture impossible to realize.
 
 \subsection{Password and Secret Mangers}
 
@@ -700,4 +702,5 @@ broach the larger issue of making encryption available to users across
 a range of arbitrary use cases.
 
 %%  LocalWords:  Mailpile Diffie CryptoCache Plutus LastPass iCloud
-%%  LocalWords:  CloudKeep Rackspace Gazzang Symantec's Enigmail
+%%  LocalWords:  CloudKeep Rackspace Gazzang Symantec's Enigmail AFS
+%%  LocalWords:  Custos Custos's OceanStore SFS
