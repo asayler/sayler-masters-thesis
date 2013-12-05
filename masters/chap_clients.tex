@@ -1,8 +1,8 @@
 \chapter{Applications}
 \label{chap:clients}
 
-In Chapter \ref{chap:purpose} I discussed several potential
-applications for Custos. In Chapter \ref{chap:platform} I discussed
+In Chapter \ref{chap:purpose}, I discussed several potential
+applications for Custos. In Chapter \ref{chap:platform}, I discussed
 the Custos architecture and server API. In this chapter, I'll look
 more closely at several example applications that interface with the
 Custos server and leverage Custos to enhance their functionality. As
@@ -19,14 +19,14 @@ brings.
 As discussed, encrypted file systems are a core Custos use case. As
 such, I have written a layered, encrypted pass-through file system:
 \texttt{EncFS}. This file system leverages Custos for encrypted file
-key storage, and leverage underlying file systems for encrypted file
+key storage, and leverages underlying file systems for encrypted file
 storage. It enables use cases not normally available in other
 encrypted file systems.
 
 The file system is capable of supporting encrypted operation in a wide
 range of scenarios. Since it is a pass-through file system, it can be
-used atop Cloud storage systems like Dropbox~\cite{dropbox}, secure
-storage of a users files in the cloud. Custos enables access to the
+used atop Cloud storage systems like Dropbox~\cite{dropbox}, securing
+storage of a user's files in the cloud. Custos enables access to the
 encrypted files from multiple devices or by multiple users, allowing a
 user to use Dropbox as they normally would to sync files across
 multiple devises or to share files with other, all while still
@@ -60,7 +60,7 @@ operations (read, write, create, etc) and the actual realization of
 these operations on the underlying file system, providing transparent
 encryption in the process. If the user attempts to read a file
 directly from disk without first passing through the \texttt{EncFS}
-layer, they will only received encrypted gibberish. But when the same
+layer, they will only receive encrypted gibberish. But when the same
 file is accessed through the \texttt{EncFS} layer, the user may
 interact with the file as though it were not encrypted at all. As
 such, the user's files are fully protected when the \texttt{EncFS}
@@ -100,11 +100,11 @@ file system framework. I chose a FUSE-based implementation over a
 native Linux kernel-module implementation for \texttt{EncFS} in order
 to allow easy usage of a variety of user-space libraries
 (i.e. \texttt{libcustos}, OpenSSL, etc). The basics of using FUSE to
-create a virtual overlay file system like \texttt{EncFS} are
-described in my previous work: ~\cite{sayler-os-encfs}. FUSE provides
-a series of callbacks that are triggered by various file system
-operations. Each callback is then implemented by \texttt{EncFS} in C
-in order to provided the desired encryption functionality.
+create a virtual overlay file system like \texttt{EncFS} are described
+in my previous work:~\cite{sayler-os-encfs}. FUSE provides a series of
+callbacks that are triggered by various file system operations. Each
+callback is then implemented by \texttt{EncFS} in C in order to
+provided the desired encryption functionality.
 
 All encryption in \texttt{EncFS} uses the AES symmetric encryption
 cipher with 256-bit keys and the CBC encryption mode. Encryption
@@ -133,7 +133,7 @@ objects. When a user wishes to decrypt a file, \texttt{EncFS}
 requested the associated encryption key from the Custos server using
 the UUID stored with the file (either via extended attributes or in a
 header block appended to the encrypted file contents, depending on
-underlying file system support for extended attributes). If
+underlying file system's support for extended attributes). If
 \texttt{EncFS} posses the necessary authentication attributes (either
 supplied by the user at mount time or derived contextually), Custos
 returns the requested encryption key and \texttt{EncFS} proceeds to
@@ -150,7 +150,7 @@ Custos as a dedicated user data store (instead of the more typical
 encryption key store discussed in the previous example). This example
 presents the user with a basic ``Enter your info'' page familiar to
 anyone who has ever signed up for a web site user account. Unlike a
-normal ``Enter your info'' page, however, instead entering their info
+normal ``Enter your info'' page, however, instead entering her info
 directly, the user instead inputs a UUID pointing to the corresponding
 info on a Custos server. If the website wishes to read this info, the
 user must grant them read access to the associated object on the
@@ -180,7 +180,7 @@ these prompts instead of providing the data directly. The user is
 assumed to have already created the corresponding data objects on a
 Custos server (via the management interface discussed next).
 
-When the user is done producing UUIDs, the website attempts to access
+When the user is done providing UUIDs, the website attempts to access
 this data on the Custos server and display it to the user. If the user
 has granted the website read access to the data (e.g. via a unique
 access key displayed to the user when entering the UUIDs, IP address,
@@ -195,12 +195,12 @@ to audit when and how the website is accessing the data.
 \subsection{Implementation}
 
 The website is implemented in Python 2.7 using the
-Flask~\cite{python-flask} microframework (similar to the process
-format used to implement the Custos server in Chapter
-\ref{chap:platform}, but with actual UI elements instead of just a
-RESTful API). The application communicates with the Custos server via
-the Python requests~\cite{python-requests} module. Python's numerous
-standard modules handle JSON processing, Base64 decoding, etc making
+Flask~\cite{python-flask} microframework (similar to the process used
+to implement the Custos server in Chapter \ref{chap:platform}, but
+with actual UI elements instead of just a RESTful API). The
+application communicates with the Custos server via the Python
+requests~\cite{python-requests} module. Python's numerous standard
+modules handle JSON processing, Base64 decoding, etc making
 interfacing a Python application directly with the Custos server far
 easier than implementing a Custos-backed C application. Thus, no
 specialized library (i.e. \texttt{libcustos}) is necessary.
@@ -213,11 +213,11 @@ authentication attribute when limiting access to their data on the
 Custos server to uniquely identify a specific website. When the user
 submits the form, the web app attempts to query the Custos server for
 the provided UUIDs, sending along the secret key it displayed to the
-user as an authentication attribute. If the user has granted the site
-read access to her data, either using this key, the server IP address,
-some other attribute, or a combination of several attributes, the
-Custos server returns the data which is then displayed to the user for
-verification.
+user as the \texttt{user\_id} authentication attribute. If the user
+has granted the site read access to her data, either using this key,
+the server IP address, some other attribute, or a combination of
+several attributes, the Custos server returns the data which is then
+displayed to the user for verification.
 
 \section{Custos Management UI}
 
@@ -225,8 +225,8 @@ In order to make Custos data easy to manage while developing various
 Custos apps that lack built-in management capabilities, I've designed
 a basic management user interface that simplifies the process of
 interacting with the Custos server. It provides a means to directly
-managing the Access Control Specification associated with a given
-Custos key:value object, as well as to directly read and write
+manage the Access Control Specification associated with a given Custos
+key:value object, as well as to directly create, update, and read
 objects.
 
 \subsection{Architecture}
@@ -286,7 +286,7 @@ item, the item is returned. The user can manipulate the existing item
 directly, and if she desires, send it back to Custos, replacing the
 original item, again, assuming the necessary permission. This system,
 while not the most polished, provides the user with the ability to
-fully manipulate any item in the Custos stored object.
+fully manipulate any item stored on a Custos server.
 
 The management interface could also be coded as a command line utility
 with fairly minimal changes. The interface would be similar, just via
@@ -295,4 +295,4 @@ for large scale, production Custos management, but both are adequate
 for basic Custos management while testing or using the system with
 only a few users.
 
-%%  LocalWords:  EncFS libcustos OpenSSL ACSs ACS
+%%  LocalWords:  EncFS libcustos OpenSSL ACSs ACS Custos Custos's
