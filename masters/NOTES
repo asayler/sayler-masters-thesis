@@ -1,12 +1,12 @@
 TODO:
 
-override arg? "ovr="
-
 DONE:
+
+override arg? "ovr="
 
 Update custos.h for update/delete
 
-Add note about runnign Custos on self-hosted server
+Add note about running Custos on self-hosted server
 (you are the trust provider)
 
 conflating mechanism and policy
