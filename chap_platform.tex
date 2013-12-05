@@ -738,10 +738,14 @@ the following keys:
 
 All API requests contain an order-agnostic list of \texttt{Attrs} JSON
 objects passed in a \texttt{aa=} query string parameter attached to
-each request URL. Requests that refer to specific groups pass the
-group UUID as part of the URL. Likewise, requests referencing specific
-objects pass the object UUID as part of the URL. All query string
-parameters are URL encoded prior to being attached.
+each request URL. Requests making use of one the of \texttt{override}
+permission pass an additional \texttt{ovr=true} parameter to signal
+the server that the associated AAs should be processed against the
+appropriate override permission ACC instead of the standard permission
+ACC. All query string parameters are URL encoded prior to being
+attached. Requests that refer to specific groups pass the group UUID
+as part of the URL. Likewise, requests referencing specific objects
+pass the object UUID as part of the URL.
 
 In addition to the above data, Custos requests that create or update
 objects or ACSs pass the object/ACS value in the \texttt{POST} or
