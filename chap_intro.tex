@@ -662,7 +662,7 @@ however, are propriety, closed, and not easily extensible. They also
 lack the generic flexibility of Custos's authentication and access
 control mechanisms.
 
-\subsection{Cryptography Suites}
+\subsection{Cryptography Suites and Key Escrow Systems}
 
 Consumer-oriented cryptography suites exist to make encryption easier
 for the end-user. Unfortunately, as we discussed in previous sections,
@@ -700,6 +700,16 @@ exhibit. They are also all very specific encryption solutions,
 pertaining only to sending and receiving secure email. They do not
 broach the larger issue of making encryption available to users across
 a range of arbitrary use cases.
+
+Custos is not the first system to propose moving key storage to a
+separate third party. Key escrow systems have long used a similar
+approach~\cite{Blaze1996, Denning1996}, specifying dedicated third
+parties for key storage. Most key escrow systems are designed for
+backup, regulatory, or administrative reasons. Thus, they often
+decrease serve to decrease encryption-system security in the spirit of
+administrate overrides or regulator requirements. Custos, on the other
+hand, aims to use dedicated key storage entities to increase end-user
+security.
 
 %%  LocalWords:  Mailpile Diffie CryptoCache Plutus LastPass iCloud
 %%  LocalWords:  CloudKeep Rackspace Gazzang Symantec's Enigmail AFS
