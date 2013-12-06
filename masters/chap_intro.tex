@@ -139,15 +139,16 @@ choosing and paying the companies that use our data to provide us with
 relevant features on the basis of the features they provide. This
 would remove the current coupling of features and trust we see today,
 a coupling that often leads to a conflict of interest between the
-features we desire and the trust we're willing to provide. Instead
-we'd assign trust on the basis of perceived trustworthiness while
-selecting untrusted services on the basis of feature sets; the trusted
-party acting as a gatekeeper between the untrusted party and our
-data. We could even distribute trust across multiple parties to avoid
-having to trust any single party completely, paying each party on the
-relative merit of their perceived trustworthiness and security. Such a
-decoupling of trust and services would provide a lot of flexibility to
-maximize both the security and the utility of our data.
+features we desire and the trust we're willing to
+provide~\cite{Flowerday2006}. Instead we'd assign trust on the basis
+of perceived trustworthiness while selecting untrusted services on the
+basis of feature sets; the trusted party acting as a gatekeeper
+between the untrusted party and our data. We could even distribute
+trust across multiple parties to avoid having to trust any single
+party completely, paying each party on the relative merit of their
+perceived trustworthiness and security. Such a decoupling of trust and
+services would provide a lot of flexibility to maximize both the
+security and the utility of our data.
 
 \subsection{The Importance of Usability}
 
@@ -306,7 +307,8 @@ decrypt it, and vice versa. Both encryption systems have a place in
 the modern security landscape: symmetric systems for their high
 resistance to cracking and quick encrypt/decrypt performance, and
 asymmetric systems for their avoidance of the key exchange problem,
-making them the basis of modern public-key cryptography technologies.
+making them the basis of modern public-key cryptography
+technologies~\cite{Menezes1996}.
 
 Symmetric encryption ciphers like AES (Rijndael)~\cite{Daemen1999},
 Twofish~\cite{Schneier1998}, or Camellia~\cite{Matsui2004} are
@@ -332,7 +334,7 @@ asymmetric encryption ideal for sharing encrypted data: one key is
 publicly released, the other key is privately kept secret. Anyone can
 use the public key to encrypt data that only you can decrypt using
 your private key. Prime-factorization-based asymmetric encryption
-systems like RSA~\cite{Rivest1978} form the basis for modern
+systems like RSA~\cite{Rivest1978, NIST2001} form the basis for modern
 public-key cryptography systems. Asymmetric ciphers tend to be slower
 and more complex than symmetric ciphers. Like symmetric ciphers, the
 security of an asymmetric cipher is related to the length of the keys
@@ -399,12 +401,13 @@ PGP~\cite{openpgp}. The work discusses both UI issues related to the
 PGP GUI, as well as more fundamental difficulties like the fact that
 security is normally a secondary user objective, making it difficult
 to convince users to put effort into attaining it. More recent
-work~\cite{Sweikata2009, Furnell2006, Ibrahim2010} expands on these
-concepts, highlighting the complexity often involved in performing key
-management and in fitting cryptographic systems to existing usage
-patterns. The widespread consensus is that existing encryption systems
-are difficult to use, not well matched to modern user desires, and
-often ignored in favor of simpler, less secure, options.
+work~\cite{Furnell2006, Furnell2006a, Furnell2010, Ibrahim2010,
+  Sweikata2009} expands on these concepts, highlighting the complexity
+often involved in performing key management and in fitting
+cryptographic systems to existing usage patterns. The widespread
+consensus is that existing encryption systems are difficult to use,
+not well matched to modern user desires, and often ignored in favor of
+simpler, less secure, options.
 
 Custos is also concerned with usability from a management
 perspective. Configuration errors are a well known source of security
@@ -461,10 +464,10 @@ prompt. But passwords can also be used in non-interactive (albeit
 generally less secure) forms where the necessary password is simply
 stored and automatically provided when required. Passwords, while
 common, have a range of known limitations and issues. From reuse, to
-guess-ability, passwords have a lot of problems~\cite{Singer2013,
-  goodin-passwords, goodin-bible}. None the less, they remain
-ubiquitous authentication primitives to this day due to their ease of
-use and user familiarity.
+guess-ability, passwords have a lot of
+problems~\cite{goodin-passwords, goodin-bible, Mazurek2013,
+  Singer2013}. None the less, they remain ubiquitous authentication
+primitives to this day due to their ease of use and user familiarity.
 
 In addition to passwords, common authentication primitives also
 include asymmetric cryptography certificates, multi factor devices,
@@ -696,10 +699,12 @@ emphasizing end-user usability of encrypted email. While these systems
 are commendable for striving to make encrypted messaging more
 accessible to end users, they suffer from the same ``ignore key
 management problem'' that the underling OpenPGP tools they use
-exhibit. They are also all very specific encryption solutions,
-pertaining only to sending and receiving secure email. They do not
-broach the larger issue of making encryption available to users across
-a range of arbitrary use cases.
+exhibit. To overcome this shortcoming, research systems like
+STEED~\cite{Koch2011} attempt to expand on the basics of PGP to better
+secure user email in a more usable manner. Still, all of these systems
+are very specific encryption solutions, pertaining only to sending and
+receiving secure email. They do not broach the larger issue of making
+encryption available to users across a range of arbitrary use cases.
 
 Custos is not the first system to propose moving key storage to a
 separate third party. Key escrow systems have long used a similar
