@@ -285,11 +285,11 @@ inherent in distributed solutions. Notably, while multi-user use cases
 are better supported, non-interactive use cases are still a
 challenge. Furthermore, full stack distributed file systems tend to be
 wedded with specific storage systems and thus lack support for
-Cloud-based ``Storage as a Service'' offerings or alternate underlying
-storage technologies. These systems also lack support for most forms
-of ``out-of-band'' file sharing (via e-mail, USB flash drives, etc)
-due to the inability of actors outside of the integrated stack to
-access the necessary encryption keys.
+Cloud-based ``Storage as a Service'' offerings~\cite{amazon-s3} or
+alternate underlying storage technologies. These systems also lack
+support for most forms of ``out-of-band'' file sharing (via e-mail,
+USB flash drives, etc) due to the inability of actors outside of the
+integrated stack to access the necessary encryption keys.
 
 \begin{figure}[!tb]
   \vspace{5ex}
@@ -699,10 +699,10 @@ Custos provides. A trusted Custos provider is assumed to:
 \item Properly implement appropriate secure communication protocols where
   required (SSL, etc)
 \item Accurately log all Custos access information and make this data
-  available to the user.
+  available to the user
 \item Ensure that servers running Custos are kept physically and
   digitally secure to resist attacks on both Custos and non-Custos
-  components
+  components~\cite{Cebula2010}
 \end{packed_item}
 
 Beyond the security of the Custos provider and the data stored there,
@@ -777,19 +777,20 @@ reduce the damage a misbehaving Custos provider could cause.
 
 Second, a user can opt to securely shard her Custos data (encryption
 keys, etc) across multiple, non-cooperating Custos providers as shown
-in Figure \ref{fig:arch-sharded}. A variety of secure secret-sharing
-systems have been proposed~\cite{Shamir1979, Resch2011, Krawczyk1993},
-and these system could be leveraged by Custos-backed applications to
-split Custos data between multiple Custos providers. Such a system
-does not require the Custos's providers to even be aware that they are
-only storing a part of a larger secret. Instead, Custos providers
-behave as they always would, but the user must query multiple Custos
-providers to reassemble the full secret. Such a strategy also
-mitigates a Custos provider being offline or unavailable, since many
-secret sharing systems support reassembly using only K of a larger set
-of N keys. I believe many Custos application will leverage secret
-sharing to avoid placing trust in a single Custos provider or relying
-on a single Custos provider's availability.
+in Figure \ref{fig:arch-sharded}. A variety of secure
+secret-sharing~\cite{Shamir1979, Resch2011, Krawczyk1993}, and
+multi-provider~\cite{Bessani2011} systems have been proposed and these
+system could be leveraged by Custos-backed applications to split
+Custos data between multiple Custos providers. Such a system does not
+require the Custos's providers to even be aware that they are only
+storing a part of a larger secret. Instead, Custos providers behave as
+they always would, but the user must query multiple Custos providers
+to reassemble the full secret. Such a strategy also mitigates a Custos
+provider being offline or unavailable, since many secret sharing
+systems support reassembly using only K of a larger set of N keys. I
+believe many Custos application will leverage secret sharing to avoid
+placing trust in a single Custos provider or relying on a single
+Custos provider's availability.
 
 A Custos user could also opt to self-host her own Custos server. This
 might be an appropriate approach for situations requiring retaining
