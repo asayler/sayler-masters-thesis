@@ -29,6 +29,6 @@ This will produce a `masters.pdf` file (if all goes well).
 Published Copy
 ---------------
 
-See ./masters-final.pdf.
+See [masters-final.pdf](./masters-final.pdf).
 
 Slides available at https://www.andysayler.com/output/.
