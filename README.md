@@ -8,27 +8,45 @@ December 2013
 University of Colorado, Boulder  
 Dept. of Computer Science  
 
-Prereqs
--------
+Building
+--------
+
+### Prereqs ###
 
 + LaTeX
 + Inkscape
 + Uses [CU Thesis LaTeX Class](http://www.colorado.edu/oit/software-hardware/tex-latex/thesis-class)
 
-Building
---------
-
-Run
+### Build Commands ###
 
 ```
 $ make
 ```
 
-This will produce a `masters.pdf` file (if all goes well).
+### Output ###
 
-Published Copy
++ masters.pdf
+
+Final Copy
 ---------------
 
-See [masters-final.pdf](./masters-final.pdf).
++ Thesis: [masters-final.pdf](./masters-final.pdf).
++ Slides: [masters-slides-final.pdf](./masters-slides-final.pdf)
 
-Slides available at https://www.andysayler.com/output/.
+See Also
+--------
+
+For the TRIOS'14 version of this work, see:
+
++ [Custos: Increasing Security with Secret Storage as a Service]
+(https://www.usenix.org/conference/trios14/technical-sessions/presentation/sayler)
+
+This work is built-upon by my subsequent PhD work:
+
++ PhD Prelim (April 2014): https://github.com/asayler/sayler-phd-prelim
++ PhD Proposal (April 2015): https://github.com/asayler/sayler-phd-proposal
++ PhD Dissertation (April 2016): https://github.com/asayler/sayler-phd-dissertation
+
+It also related to a variety of my other work available at:
+
++ https://www.andysayler.com/output/
